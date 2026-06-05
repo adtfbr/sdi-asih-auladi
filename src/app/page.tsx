@@ -51,7 +51,7 @@ export default function Home() {
       {/* Statistics Section */}
       <section className="py-12 bg-white relative z-20 -mt-12">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 bg-white p-8 rounded-3xl shadow-xl shadow-emerald-900/5 border border-slate-100">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 bg-white p-8 rounded-3xl shadow-xl shadow-emerald-900/5 border border-slate-100">
             <div className="flex flex-col items-center text-center space-y-2">
               <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-2">
                 <Users className="h-6 w-6" />
@@ -72,13 +72,6 @@ export default function Home() {
               </div>
               <h3 className="text-3xl font-bold text-slate-900">18</h3>
               <p className="text-sm font-medium text-slate-500">Ruang Kelas</p>
-            </div>
-            <div className="flex flex-col items-center text-center space-y-2">
-              <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-2">
-                <GraduationCap className="h-6 w-6" />
-              </div>
-              <h3 className="text-3xl font-bold text-slate-900">2.5k+</h3>
-              <p className="text-sm font-medium text-slate-500">Alumni Sukses</p>
             </div>
           </div>
         </div>
@@ -176,6 +169,83 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Berita Section */}
+      <section id="berita" className="py-20 bg-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Berita & Pengumuman</h2>
+              <p className="text-slate-600 text-lg max-w-2xl">Ikuti perkembangan terbaru dan informasi penting dari SDI Asih Auladi.</p>
+            </div>
+            <Link href="#berita" className="hidden md:block">
+              <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full">
+                Lihat Semua
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((item) => (
+              <Card key={item} className="overflow-hidden border-slate-100 shadow-sm hover:shadow-md transition-all group">
+                <div className="aspect-[16/9] bg-slate-100 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-emerald-600/5 group-hover:bg-transparent transition-colors z-10"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <BookOpen className="h-12 w-12 text-emerald-200" />
+                  </div>
+                </div>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 text-xs font-medium text-emerald-600 mb-3">
+                    <span className="bg-emerald-50 px-2 py-1 rounded-md">Akademik</span>
+                    <span className="text-slate-400">• 12 Mei 2026</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                    {item === 1 && "Persiapan Menghadapi Ujian Akhir Semester Genap"}
+                    {item === 2 && "Penerimaan Peserta Didik Baru Gelombang 1 Dibuka"}
+                    {item === 3 && "Prestasi Gemilang Siswa/i di Olimpiade Sains Tingkat Kota"}
+                  </h3>
+                  <p className="text-slate-600 text-sm line-clamp-3">
+                    Bismillah, sehubungan dengan akan dilaksanakannya agenda rutin akademik, kami sampaikan informasi penting terkait jadwal kegiatan...
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <Button variant="outline" className="w-full mt-8 md:hidden border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full">
+            Lihat Semua Berita
+          </Button>
+        </div>
+      </section>
+
+      {/* Galeri Section */}
+      <section id="galeri" className="py-20 bg-slate-50 border-t border-slate-100">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Galeri Kegiatan</h2>
+            <p className="text-slate-600 text-lg">Momen-momen berharga dalam proses pembelajaran dan kegiatan siswa di SDI Asih Auladi.</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+              <div key={item} className="aspect-square bg-white rounded-3xl overflow-hidden relative group border border-slate-100 shadow-sm cursor-pointer">
+                <div className="absolute inset-0 bg-emerald-900/0 group-hover:bg-emerald-900/10 transition-colors duration-300 z-10"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Presentation className="h-10 w-10 text-slate-200 group-hover:scale-110 transition-transform duration-500" />
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-12 text-center">
+            <Link href="#galeri">
+              <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full px-8">
+                Lihat Galeri Lengkap
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-emerald-600"></div>
@@ -194,7 +264,7 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="#kontak">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 text-lg border-emerald-400 text-white hover:bg-emerald-600 rounded-full">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 text-lg border-emerald-400 bg-transparent text-white hover:bg-emerald-600 hover:border-emerald-600 hover:text-white rounded-full">
                   Hubungi Panitia
                 </Button>
               </Link>

@@ -272,7 +272,7 @@ Wali dapat:
 
 # 5. Architecture
 
-Menggunakan arsitektur Modular Monolith berbasis Laravel API dan Next.js.
+Menggunakan arsitektur Full-Stack berbasis Next.js 15 (Server Actions & API Routes) dengan Drizzle ORM.
 
 ```mermaid
 sequenceDiagram
@@ -281,22 +281,21 @@ actor Wali
 actor Guru
 actor Siswa
 
-participant Frontend
-participant Laravel API
-participant PostgreSQL
-participant Redis
+participant Next.js (Frontend)
+participant Next.js (Server Actions/API)
+participant PostgreSQL (via Drizzle ORM)
 
-Guru->>Frontend: Input Nilai
-Frontend->>Laravel API: POST Nilai
-Laravel API->>PostgreSQL: Simpan Nilai
-PostgreSQL-->>Laravel API: OK
-Laravel API-->>Frontend: Success
+Guru->>Next.js (Frontend): Input Nilai
+Next.js (Frontend)->>Next.js (Server Actions/API): Server Action: Save Grades
+Next.js (Server Actions/API)->>PostgreSQL (via Drizzle ORM): INSERT Nilai
+PostgreSQL (via Drizzle ORM)-->>Next.js (Server Actions/API): OK
+Next.js (Server Actions/API)-->>Next.js (Frontend): Success
 
-Wali->>Frontend: Lihat Nilai
-Frontend->>Laravel API: GET Nilai
-Laravel API->>PostgreSQL: Query Nilai
-PostgreSQL-->>Laravel API: Data
-Laravel API-->>Frontend: Nilai Anak
+Wali->>Next.js (Frontend): Lihat Nilai
+Next.js (Frontend)->>Next.js (Server Actions/API): Fetch Nilai (React Server Components)
+Next.js (Server Actions/API)->>PostgreSQL (via Drizzle ORM): SELECT Nilai
+PostgreSQL (via Drizzle ORM)-->>Next.js (Server Actions/API): Data
+Next.js (Server Actions/API)-->>Next.js (Frontend): Render Nilai Anak
 ```
 
 ---
@@ -447,7 +446,7 @@ ACADEMIC_YEARS ||--o{ CLASSES : owns
 
 # 8. Tech Stack
 
-## Frontend
+## Full-Stack Framework
 
 ### Next.js 15
 
@@ -457,35 +456,17 @@ Digunakan untuk:
 * Portal Guru
 * Portal Siswa
 * Portal Wali Murid
+* Backend API & Server Actions
 
 Library:
 
 * TypeScript
 * Tailwind CSS v4
 * Shadcn UI
-* TanStack Query
+* Drizzle ORM (Database Access)
+* NextAuth.js / Auth.js (Authentication & RBAC)
 * React Hook Form
 * Zod
-
----
-
-## Backend
-
-### Laravel 12
-
-Digunakan untuk:
-
-* API
-* Business Logic
-* Authorization
-* Background Jobs
-
-Packages:
-
-* Laravel Sanctum
-* Spatie Permission
-* Laravel Horizon
-* Laravel Pulse
 
 ---
 
@@ -529,20 +510,14 @@ Digunakan untuk:
 
 ## Deployment
 
-### Docker + Coolify
+### Docker + Coolify / Vercel
 
 Environment:
 
 ```text
 Cloudflare
 ↓
-Nginx
-↓
-Next.js
-↓
-Laravel API
-↓
-Redis
+Next.js (Server)
 ↓
 PostgreSQL
 ↓
