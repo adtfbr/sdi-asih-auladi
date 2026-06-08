@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,7 @@ export default function PPDBPage() {
                     <h3 className="text-lg font-semibold text-slate-900">Data Pribadi Calon Siswa</h3>
                     <p className="text-sm text-slate-500">Pastikan data yang diisi sesuai dengan Akta Kelahiran dan Kartu Keluarga.</p>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="namaLengkap">Nama Lengkap</Label>
@@ -71,7 +71,7 @@ export default function PPDBPage() {
                       <Label htmlFor="nik">NIK (Nomor Induk Kependudukan)</Label>
                       <Input id="nik" placeholder="16 digit angka NIK" className="h-12 bg-slate-50 border-slate-200 focus-visible:ring-emerald-500" />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label htmlFor="tempatLahir">Tempat Lahir</Label>
                       <Input id="tempatLahir" placeholder="Kota/Kabupaten kelahiran" className="h-12 bg-slate-50 border-slate-200 focus-visible:ring-emerald-500" />
@@ -124,7 +124,7 @@ export default function PPDBPage() {
                     <h3 className="text-lg font-semibold text-slate-900">Data Orang Tua / Wali</h3>
                     <p className="text-sm text-slate-500">Informasi orang tua atau wali untuk keperluan administrasi dan komunikasi.</p>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Ayah */}
                     <div className="md:col-span-2 mt-4">
@@ -190,7 +190,7 @@ export default function PPDBPage() {
                     <h3 className="text-lg font-semibold text-slate-900">Upload Dokumen Persyaratan</h3>
                     <p className="text-sm text-slate-500">Unggah file dokumen yang dibutuhkan dalam format PDF atau JPG/PNG (Maks 2MB).</p>
                   </div>
-                  
+
                   <div className="space-y-4">
                     {/* Dokumen 1 */}
                     <div className="p-4 sm:p-6 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50 flex flex-col sm:flex-row items-center gap-4 hover:border-emerald-300 transition-colors">
@@ -234,12 +234,12 @@ export default function PPDBPage() {
                       </Button>
                     </div>
                   </div>
-                  
+
                   <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-800 text-sm flex gap-3">
                     <div className="shrink-0 mt-0.5">
                       <CheckCircle2 className="h-4 w-4 text-amber-600" />
                     </div>
-                    <p>Dengan menekan tombol "Kirim Pendaftaran", saya menyatakan bahwa seluruh data yang diisikan adalah benar dan dapat dipertanggungjawabkan.</p>
+                    <p>Dengan menekan tombol &quot;Kirim Pendaftaran&quot;, saya menyatakan bahwa seluruh data yang diisikan adalah benar dan dapat dipertanggungjawabkan.</p>
                   </div>
                 </div>
                 <div className="flex justify-between pt-4 border-t border-slate-100">

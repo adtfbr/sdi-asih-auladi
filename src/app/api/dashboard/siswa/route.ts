@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { students, grades, attendanceRecords } from "@/db/schema";
-import { eq, avg, count, and } from "drizzle-orm";
+import { eq, avg, and } from "drizzle-orm";
 
 export async function GET() {
   try {
@@ -49,8 +49,8 @@ export async function GET() {
     };
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

@@ -1,10 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UploadCloud, FileText, File, Video, Trash2, CheckCircle2 } from "lucide-react";
+import { UploadCloud, FileText, Video, Trash2 } from "lucide-react";
 
 export default function UploadMateriPage() {
   const recentUploads = [
@@ -99,11 +99,10 @@ export default function UploadMateriPage() {
               <div className="divide-y divide-slate-50">
                 {recentUploads.map((file) => (
                   <div key={file.id} className="p-4 hover:bg-slate-50/80 transition-colors flex items-start gap-4">
-                    <div className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${
-                      file.type === 'pdf' ? 'bg-rose-100 text-rose-600' :
-                      file.type === 'video' ? 'bg-indigo-100 text-indigo-600' :
-                      'bg-blue-100 text-blue-600'
-                    }`}>
+                    <div className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${file.type === 'pdf' ? 'bg-rose-100 text-rose-600' :
+                        file.type === 'video' ? 'bg-indigo-100 text-indigo-600' :
+                          'bg-blue-100 text-blue-600'
+                      }`}>
                       {file.type === 'video' ? <Video className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
                     </div>
                     <div className="flex-1 min-w-0">

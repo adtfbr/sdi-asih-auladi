@@ -24,9 +24,9 @@ export async function GET(request: NextRequest) {
         : await db.select().from(teachers);
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -48,14 +48,14 @@ export async function POST(request: NextRequest) {
       .returning();
 
     return NextResponse.json(newTeacher, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    if (error.message?.includes("unique")) {
+    if ((error as Error).message?.includes("unique")) {
       return NextResponse.json(
         { error: "NIP atau email sudah terdaftar" },
         { status: 409 }
       );
     }
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

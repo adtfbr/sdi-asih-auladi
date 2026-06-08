@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -37,37 +37,54 @@ export default function InputAbsensiPage() {
       .then((data) => setClasses(Array.isArray(data) ? data : []));
   }, []);
 
-  const fetchStudents = useCallback(async () => {
-    if (!selectedClass) return;
-    setLoading(true);
-    setSaved(false);
-    try {
-      const res = await fetch(`/api/kelas/${selectedClass}/siswa`);
-      const data = await res.json();
-      const studentList = Array.isArray(data) ? data : [];
-      setStudents(studentList);
-      // Default all to "Hadir"
-      const map: Record<number, string> = {};
-      studentList.forEach((s: StudentRow) => { map[s.id] = "Hadir"; });
+  useEffect(() => {
+    let isMounted = true;
 
-      // Fetch existing attendance for this class+date
-      const attRes = await fetch(`/api/absensi?classId=${selectedClass}&date=${date}`);
-      const attData = await attRes.json();
-      if (Array.isArray(attData)) {
-        attData.forEach((a: any) => { map[a.studentId] = a.status; });
+    const fetchStudents = async () => {
+      if (!selectedClass) {
+        setStudents([]);
+        setAttendanceMap({});
+        return;
       }
 
-      setAttendanceMap(map);
-    } catch {
-      setStudents([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedClass, date]);
+      setLoading(true);
+      setSaved(false);
+      try {
+        const res = await fetch(`/api/kelas/${selectedClass}/siswa`);
+        const data = await res.json();
+        const studentList = Array.isArray(data) ? data : [];
+        if (!isMounted) return;
+        
+        setStudents(studentList);
+        
+        // Default all to "Hadir"
+        const map: Record<number, string> = {};
+        studentList.forEach((s: StudentRow) => { map[s.id] = "Hadir"; });
 
-  useEffect(() => {
+        // Fetch existing attendance for this class+date
+        const attRes = await fetch(`/api/absensi?classId=${selectedClass}&date=${date}`);
+        const attData = await attRes.json();
+        if (!isMounted) return;
+
+        if (Array.isArray(attData)) {
+          attData.forEach((a: { studentId: number; status: string }) => { map[a.studentId] = a.status; });
+        }
+
+        setAttendanceMap(map);
+      } catch {
+        if (!isMounted) return;
+        setStudents([]);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
     fetchStudents();
-  }, [fetchStudents]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedClass, date]);
 
   const handleStatusChange = (studentId: number, status: string) => {
     setAttendanceMap((prev) => ({ ...prev, [studentId]: status }));
@@ -94,7 +111,7 @@ export default function InputAbsensiPage() {
 
       if (!res.ok) throw new Error("Gagal menyimpan");
       setSaved(true);
-    } catch (err) {
+    } catch {
       alert("Gagal menyimpan absensi. Coba lagi.");
     } finally {
       setSaving(false);
@@ -181,8 +198,8 @@ export default function InputAbsensiPage() {
                                 onChange={() => handleStatusChange(student.id, s)}
                                 className={
                                   s === "Hadir" ? "text-emerald-600" :
-                                  s === "Izin" ? "text-blue-600" :
-                                  s === "Sakit" ? "text-amber-600" : "text-rose-600"
+                                    s === "Izin" ? "text-blue-600" :
+                                      s === "Sakit" ? "text-amber-600" : "text-rose-600"
                                 }
                               />
                               <span className="text-sm">{s}</span>

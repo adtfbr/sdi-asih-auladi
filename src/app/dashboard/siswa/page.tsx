@@ -1,12 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { BookOpen, CalendarDays, Award, Clock, ArrowRight, MessageSquare } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BookOpen, CalendarDays, Award, Clock, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+interface StudentInfo {
+  greeting: string;
+  message: string;
+  className: string;
+  semester: string;
+}
+
+interface Stats {
+  attendance: string;
+  averageScore: string;
+}
+
+interface NewMaterial {
+  subject: string;
+  topic: string;
+}
+
+interface ScheduleItem {
+  id: number;
+  time: string;
+  subject: string;
+  teacher: string;
+  status: string;
+}
+
+interface AnnouncementItem {
+  id: number;
+  time: string;
+  title: string;
+  content: string;
+}
+
+interface SiswaDashboardData {
+  studentInfo: StudentInfo;
+  stats: Stats;
+  newMaterial: NewMaterial;
+  schedule: ScheduleItem[];
+  announcements: AnnouncementItem[];
+}
+
 export default function SiswaDashboard() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<SiswaDashboardData | null>(null);
 
   useEffect(() => {
     fetch('/api/dashboard/siswa')
@@ -30,15 +70,15 @@ export default function SiswaDashboard() {
             </p>
           </div>
           <div className="flex bg-white/10 backdrop-blur-md rounded-2xl p-4 gap-6 items-center border border-white/20">
-             <div className="text-center">
-               <div className="text-sm text-emerald-100 font-medium mb-1">Kelas</div>
-               <div className="text-2xl font-bold text-white">{data.studentInfo.className}</div>
-             </div>
-             <div className="w-px h-10 bg-white/20"></div>
-             <div className="text-center">
-               <div className="text-sm text-emerald-100 font-medium mb-1">Semester</div>
-               <div className="text-2xl font-bold text-white">{data.studentInfo.semester}</div>
-             </div>
+            <div className="text-center">
+              <div className="text-sm text-emerald-100 font-medium mb-1">Kelas</div>
+              <div className="text-2xl font-bold text-white">{data.studentInfo.className}</div>
+            </div>
+            <div className="w-px h-10 bg-white/20"></div>
+            <div className="text-center">
+              <div className="text-sm text-emerald-100 font-medium mb-1">Semester</div>
+              <div className="text-2xl font-bold text-white">{data.studentInfo.semester}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -98,23 +138,20 @@ export default function SiswaDashboard() {
             </div>
           </CardHeader>
           <CardContent>
-             <div className="space-y-4">
-              {data.schedule.map((schedule: any) => (
-                <div key={schedule.id} className={`flex items-start gap-4 p-4 rounded-2xl border ${
-                  schedule.status === 'current' ? 'border-emerald-200 bg-emerald-50/50' : 'border-slate-100 bg-white'
-                }`}>
-                  <div className={`p-3 rounded-xl flex flex-col items-center justify-center shrink-0 w-20 text-center ${
-                    schedule.status === 'completed' ? 'bg-slate-100 text-slate-500' :
-                    schedule.status === 'current' ? 'bg-emerald-600 text-white shadow-sm' :
-                    'bg-slate-50 text-slate-600'
+            <div className="space-y-4">
+              {data.schedule.map((schedule) => (
+                <div key={schedule.id} className={`flex items-start gap-4 p-4 rounded-2xl border ${schedule.status === 'current' ? 'border-emerald-200 bg-emerald-50/50' : 'border-slate-100 bg-white'
                   }`}>
+                  <div className={`p-3 rounded-xl flex flex-col items-center justify-center shrink-0 w-20 text-center ${schedule.status === 'completed' ? 'bg-slate-100 text-slate-500' :
+                      schedule.status === 'current' ? 'bg-emerald-600 text-white shadow-sm' :
+                        'bg-slate-50 text-slate-600'
+                    }`}>
                     <span className="text-xs font-semibold">{schedule.time.split(' - ')[0]}</span>
                     <span className="text-[10px] opacity-80">{schedule.time.split(' - ')[1]}</span>
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-center h-full pt-1">
-                    <h4 className={`text-base font-bold truncate ${
-                       schedule.status === 'current' ? 'text-emerald-900' : 'text-slate-900'
-                    }`}>{schedule.subject}</h4>
+                    <h4 className={`text-base font-bold truncate ${schedule.status === 'current' ? 'text-emerald-900' : 'text-slate-900'
+                      }`}>{schedule.subject}</h4>
                     <p className="text-sm text-slate-500 mt-1 flex items-center gap-1.5">
                       {schedule.teacher}
                     </p>
@@ -126,7 +163,7 @@ export default function SiswaDashboard() {
                   )}
                 </div>
               ))}
-             </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -140,7 +177,7 @@ export default function SiswaDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {data.announcements.map((announcement: any) => (
+              {data.announcements.map((announcement) => (
                 <div key={announcement.id} className="group block space-y-1 border-b border-slate-100 pb-4 last:border-0">
                   <div className="flex items-center gap-2 text-xs text-slate-500">
                     <Clock className="h-3 w-3" />

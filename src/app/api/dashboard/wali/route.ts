@@ -9,8 +9,8 @@ export async function GET() {
     const parentData = await db.select().from(parents).where(eq(parents.name, 'Bapak Santoso')).limit(1);
     const parent = parentData[0];
     
-    let children: any[] = [];
-    let recentGrades: any[] = [];
+    const children: { id: number; name: string; class: string; avatarSeed: string }[] = [];
+    let recentGrades: { id: number; subject: string | null; type: string; score: number | null; date: string }[] = [];
     let avgScore = 0;
     
     if (parent) {
@@ -74,8 +74,8 @@ export async function GET() {
     };
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

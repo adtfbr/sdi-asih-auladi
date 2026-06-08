@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -29,8 +29,8 @@ export default function SiswaMateriPage() {
         <CardContent className="p-4 flex flex-col md:flex-row gap-4">
           <div className="flex items-center gap-2 flex-1 relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-            <Input 
-              placeholder="Cari judul materi atau mata pelajaran..." 
+            <Input
+              placeholder="Cari judul materi atau mata pelajaran..."
               className="pl-10 h-10 bg-slate-50 border-slate-200"
             />
           </div>
@@ -65,11 +65,10 @@ export default function SiswaMateriPage() {
         {materials.map((materi) => (
           <Card key={materi.id} className="border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all group overflow-hidden flex flex-col">
             <CardHeader className="pb-3 flex flex-row items-start justify-between gap-4">
-              <div className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${
-                materi.type === 'pdf' ? 'bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-colors' :
-                materi.type === 'video' ? 'bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors' :
-                'bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors'
-              }`}>
+              <div className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${materi.type === 'pdf' ? 'bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-colors' :
+                  materi.type === 'video' ? 'bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors' :
+                    'bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors'
+                }`}>
                 {materi.type === 'video' ? <Video className="h-6 w-6" /> : <FileText className="h-6 w-6" />}
               </div>
               {materi.isNew && (
@@ -95,8 +94,8 @@ export default function SiswaMateriPage() {
                 <span>{materi.size}</span>
               </div>
               <Button size="sm" variant={materi.type === 'video' ? 'default' : 'outline'} className={
-                materi.type === 'video' 
-                  ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm' 
+                materi.type === 'video'
+                  ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm'
                   : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50 shadow-sm'
               }>
                 {materi.type === 'video' ? (

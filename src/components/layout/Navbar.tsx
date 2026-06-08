@@ -13,10 +13,11 @@ import {
 
 const navLinks = [
   { name: "Beranda", href: "/" },
-  { name: "Profil", href: "#profil" },
-  { name: "Berita", href: "#berita" },
-  { name: "Galeri", href: "#galeri" },
-  { name: "Kontak", href: "#kontak" },
+  { name: "Profil", href: "/profil" },
+  { name: "Visi Misi", href: "/visi-misi" },
+  { name: "Berita", href: "/berita" },
+  { name: "Galeri", href: "/galeri" },
+  { name: "Kontak", href: "/kontak" },
 ];
 
 export function Navbar() {

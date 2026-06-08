@@ -14,9 +14,9 @@ export async function GET(request: NextRequest) {
       : await db.select().from(subjects);
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -34,14 +34,14 @@ export async function POST(request: NextRequest) {
 
     const [newSubject] = await db.insert(subjects).values(parsed.data).returning();
     return NextResponse.json(newSubject, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    if (error.message?.includes("unique")) {
+    if ((error as Error).message?.includes("unique")) {
       return NextResponse.json(
         { error: "Kode mata pelajaran sudah terdaftar" },
         { status: 409 }
       );
     }
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

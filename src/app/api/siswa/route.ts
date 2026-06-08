@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { students, classStudents, classes } from "@/db/schema";
-import { eq, ilike, and, count, sql } from "drizzle-orm";
+import { eq, ilike, and } from "drizzle-orm";
 import { createStudentSchema } from "@/lib/validations";
 
 export async function GET(request: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get("status");
     const classId = searchParams.get("classId");
 
-    let query = db
+    const query = db
       .select({
         id: students.id,
         nis: students.nis,
@@ -46,9 +46,9 @@ export async function GET(request: NextRequest) {
         : await query;
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -80,14 +80,14 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(newStudent, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    if (error.message?.includes("unique")) {
+    if ((error as Error).message?.includes("unique")) {
       return NextResponse.json(
         { error: "NIS atau NISN sudah terdaftar" },
         { status: 409 }
       );
     }
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

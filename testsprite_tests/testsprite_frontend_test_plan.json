@@ -1,0 +1,1048 @@
+[
+  {
+    "id": "TC001",
+    "title": "Block unauthorized access to protected dashboards",
+    "description": "A visitor who is not logged in is prevented from viewing protected dashboard pages and is sent to the login page.",
+    "category": "Role-Based Login and Access Control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access is blocked and the login page is shown"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Sign in as an admin and reach the admin dashboard",
+    "description": "An admin can log in with valid credentials and arrive at the admin dashboard with role-appropriate access.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify admin-only dashboard access is granted"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Log in and reach the correct role dashboard",
+    "description": "A user can log in successfully and land on the dashboard appropriate to their role.",
+    "category": "Role-Based Login and Access Control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the target role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the correct role dashboard"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Browse the public school website across all main information pages",
+    "description": "A visitor can move through the public site from the landing page to profile, vision and mission, news, gallery, and contact pages and see each page’s content load successfully.",
+    "category": "Public School Website",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the landing page content is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the school profile page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the school profile content is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the vision and mission page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vision and mission content is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the news page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the news list is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the gallery page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the gallery content is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the contact page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the contact information is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Browse the public school pages",
+    "description": "A visitor can move through the public website pages and reach the profile, vision and mission, news, gallery, and contact sections.",
+    "category": "Public Website Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the profile page link"
+      },
+      {
+        "type": "action",
+        "description": "Click the vision and mission page link"
+      },
+      {
+        "type": "action",
+        "description": "Click the news page link"
+      },
+      {
+        "type": "action",
+        "description": "Click the gallery page link"
+      },
+      {
+        "type": "action",
+        "description": "Click the contact page link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each public information page displays its expected content"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Teacher saves student grades for a class and subject",
+    "description": "This test verifies that a teacher can select a class and subject, enter grades for students, save the session, and see the recorded grades reflected in the list.",
+    "category": "Teacher Grade Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for a teacher account"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/guru/nilai"
+      },
+      {
+        "type": "action",
+        "description": "Select a class"
+      },
+      {
+        "type": "action",
+        "description": "Select a subject"
+      },
+      {
+        "type": "action",
+        "description": "Enter grades for the students"
+      },
+      {
+        "type": "action",
+        "description": "Save the grade data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the recorded grades are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated grade list is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Record attendance for a class on a chosen date",
+    "description": "A teacher can select a class and date, mark student attendance, and save the attendance session successfully.",
+    "category": "Teacher Attendance",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the attendance page"
+      },
+      {
+        "type": "action",
+        "description": "Select a class"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid date"
+      },
+      {
+        "type": "action",
+        "description": "Set attendance statuses for students"
+      },
+      {
+        "type": "action",
+        "description": "Save the attendance session"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved attendance session is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the student attendance entries are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Enter and save student grades for a class",
+    "description": "A teacher can choose a class, enter grades for students, and save the grade session so the entered records are shown afterward.",
+    "category": "Teacher Grades",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the grades page"
+      },
+      {
+        "type": "action",
+        "description": "Select a class"
+      },
+      {
+        "type": "action",
+        "description": "Enter grades for students"
+      },
+      {
+        "type": "action",
+        "description": "Save the grade session"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved grade records are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the grade entry form remains available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Record attendance for a class session",
+    "description": "A teacher can select a class and date, mark student attendance, save the session, and see the recorded attendance summary.",
+    "category": "Teacher Attendance Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for a teacher user"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the attendance management link"
+      },
+      {
+        "type": "action",
+        "description": "Select a class"
+      },
+      {
+        "type": "action",
+        "description": "Select a date"
+      },
+      {
+        "type": "action",
+        "description": "Change attendance status for students"
+      },
+      {
+        "type": "action",
+        "description": "Save the attendance data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the attendance summary for the session is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Block a logged-in user from accessing an admin-only dashboard",
+    "description": "A logged-in user who is not an admin is prevented from opening the admin dashboard and is shown an access restriction state.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the admin dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an access restriction message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard content is not displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Review and update a PPDB application status",
+    "description": "An admin can filter PPDB applications, open one record, change its verification status, and save the update successfully.",
+    "category": "PPDB Verification Workflow",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the PPDB verification page"
+      },
+      {
+        "type": "action",
+        "description": "Select a status filter"
+      },
+      {
+        "type": "action",
+        "description": "Open a PPDB application record"
+      },
+      {
+        "type": "action",
+        "description": "Change the verification status"
+      },
+      {
+        "type": "action",
+        "description": "Save the verification update"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated application status is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the filtered PPDB list remains visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Add a new student record from the admin student list",
+    "description": "An admin can create a new student record from the student management page and see the updated list afterward.",
+    "category": "Admin Student Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the student management page"
+      },
+      {
+        "type": "action",
+        "description": "Start adding a new student record"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the student details form with valid data"
+      },
+      {
+        "type": "action",
+        "description": "Save the student record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new student appears in the student list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the student list remains accessible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Add a new teacher record",
+    "description": "An admin can create a new teacher record and see it appear in the teacher list.",
+    "category": "Admin Teacher Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for an admin user"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the teacher management link"
+      },
+      {
+        "type": "action",
+        "description": "Start adding a new teacher"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the teacher details"
+      },
+      {
+        "type": "action",
+        "description": "Save the teacher record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new teacher appears in the teacher list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Teacher can review the grade form before saving",
+    "description": "This test verifies that a teacher can reach the grade entry screen and see the student list after choosing a class and subject.",
+    "category": "Teacher Grade Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for a teacher account"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/guru/nilai"
+      },
+      {
+        "type": "action",
+        "description": "Select a class"
+      },
+      {
+        "type": "action",
+        "description": "Select a subject"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the student list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the grade entry controls are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Manage teacher records from the admin teacher page",
+    "description": "An admin can create, edit, and delete a teacher record from the teacher management page and see the list update accordingly.",
+    "category": "Admin Teacher Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the teacher management page"
+      },
+      {
+        "type": "action",
+        "description": "Start adding a new teacher record"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the teacher details form with valid data"
+      },
+      {
+        "type": "action",
+        "description": "Save the teacher record"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit form for the created teacher"
+      },
+      {
+        "type": "action",
+        "description": "Update the teacher record with valid changes"
+      },
+      {
+        "type": "action",
+        "description": "Save the updated teacher record"
+      },
+      {
+        "type": "action",
+        "description": "Delete the teacher record after confirming the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the teacher list updates after each saved change"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the teacher record is removed from the list after deletion"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Teacher saves updated grades after editing existing entries",
+    "description": "This test verifies that a teacher can modify previously entered grades and save the updated values successfully.",
+    "category": "Teacher Grade Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for a teacher account"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/guru/nilai"
+      },
+      {
+        "type": "action",
+        "description": "Select a class"
+      },
+      {
+        "type": "action",
+        "description": "Select a subject"
+      },
+      {
+        "type": "action",
+        "description": "Change one or more existing grades"
+      },
+      {
+        "type": "action",
+        "description": "Save the grade data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated grades are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Reject invalid login credentials",
+    "description": "A user who enters invalid credentials is denied access and stays on the login experience with an access denied indication.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with invalid@example.com"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with invalid-password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an access denied or invalid credentials message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the protected dashboard is not displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Edit an existing teacher record",
+    "description": "An admin can update an existing teacher record and see the changes reflected in the teacher list.",
+    "category": "Admin Teacher Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for an admin user"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the teacher management link"
+      },
+      {
+        "type": "action",
+        "description": "Choose a teacher record to edit"
+      },
+      {
+        "type": "action",
+        "description": "Update the teacher details"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated teacher information is shown in the teacher list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Delete a teacher record",
+    "description": "An admin can remove a teacher record after confirming the deletion and see it disappear from the list.",
+    "category": "Admin Teacher Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for an admin user"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the teacher management link"
+      },
+      {
+        "type": "action",
+        "description": "Choose a teacher record to remove"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the teacher is removed from the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Student views the class schedule",
+    "description": "This test verifies that a logged-in student can open the schedule page and see their class timetable.",
+    "category": "Student Schedule View",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for a student account"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/siswa/jadwal"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the class schedule is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Search for an existing student by name",
+    "description": "An admin can search the student list by name and see only matching student records.",
+    "category": "Admin Student Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the student management page"
+      },
+      {
+        "type": "action",
+        "description": "Enter a student name in the search field"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching student records are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify non-matching student records are not displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC022",
+    "title": "Filter PPDB applications by status",
+    "description": "An admin can filter the PPDB application list by status and see only matching applications.",
+    "category": "Admin PPDB Verification",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for an admin user"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the PPDB verification link"
+      },
+      {
+        "type": "action",
+        "description": "Select a status filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the application list updates to show matching applications"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC023",
+    "title": "View the student class schedule",
+    "description": "A student can open the schedule page and see the class schedule content displayed.",
+    "category": "Student Schedule View",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the student schedule page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the class schedule is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify schedule entries are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC024",
+    "title": "Teacher sees the schedule for their class",
+    "description": "This test verifies that a teacher can open the schedule page and view the timetable information for their assigned classes.",
+    "category": "Teacher Grade Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for a teacher account"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/guru/jadwal"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the schedule is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC025",
+    "title": "Student schedule page shows available timetable information",
+    "description": "This test verifies that the student schedule view renders timetable content when a student opens the page.",
+    "category": "Student Schedule View",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for a student account"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/siswa/jadwal"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify timetable entries are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC026",
+    "title": "Show an empty state when no student search results match",
+    "description": "An admin searching for a student name that has no matches sees an empty state instead of unrelated records.",
+    "category": "Admin Student Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to the student management page"
+      },
+      {
+        "type": "action",
+        "description": "Enter a name that does not match any student record in the search field"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no student records are displayed"
+      }
+    ],
+    "priority": "Medium"
+  }
+]

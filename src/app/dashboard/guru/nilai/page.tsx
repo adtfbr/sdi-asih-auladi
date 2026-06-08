@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ interface StudentRow { id: number; nis: string; name: string; }
 export default function InputNilaiPage() {
   const [classes, setClasses] = useState<ClassOption[]>([]);
   const [subjects, setSubjects] = useState<SubjectOption[]>([]);
-  const [teachers, setTeachers] = useState<TeacherOption[]>([]);
+  const [, setTeachers] = useState<TeacherOption[]>([]);
   const [students, setStudents] = useState<StudentRow[]>([]);
 
   const [selectedClass, setSelectedClass] = useState("");
@@ -46,28 +46,42 @@ export default function InputNilaiPage() {
     });
   }, []);
 
-  const fetchStudents = useCallback(async () => {
-    if (!selectedClass) return;
-    setLoading(true);
-    setSaved(false);
-    try {
-      const res = await fetch(`/api/kelas/${selectedClass}/siswa`);
-      const data = await res.json();
-      const list = Array.isArray(data) ? data : [];
-      setStudents(list);
-      const map: Record<number, string> = {};
-      list.forEach((s: StudentRow) => { map[s.id] = ""; });
-      setScoresMap(map);
-    } catch {
-      setStudents([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedClass]);
-
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchStudents = async () => {
+      if (!selectedClass) {
+        setStudents([]);
+        setScoresMap({});
+        return;
+      }
+
+      setLoading(true);
+      setSaved(false);
+      try {
+        const res = await fetch(`/api/kelas/${selectedClass}/siswa`);
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : [];
+        if (!isMounted) return;
+        
+        setStudents(list);
+        const map: Record<number, string> = {};
+        list.forEach((s: StudentRow) => { map[s.id] = ""; });
+        setScoresMap(map);
+      } catch {
+        if (!isMounted) return;
+        setStudents([]);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
     fetchStudents();
-  }, [fetchStudents]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedClass]);
 
   const handleSave = async () => {
     if (!selectedSubject || !selectedTeacher) {

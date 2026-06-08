@@ -31,9 +31,9 @@ export async function PUT(
     }
 
     return NextResponse.json(updated);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -53,8 +53,8 @@ export async function DELETE(
     }
 
     return NextResponse.json({ message: "Record berhasil dihapus" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

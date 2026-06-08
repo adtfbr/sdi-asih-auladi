@@ -25,9 +25,9 @@ export async function GET(
       .where(eq(classStudents.classId, classId));
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -51,9 +51,9 @@ export async function POST(
       .returning();
 
     return NextResponse.json(record, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -81,8 +81,8 @@ export async function DELETE(
       );
 
     return NextResponse.json({ message: "Siswa dikeluarkan dari kelas" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

@@ -76,17 +76,16 @@ export default function DataSiswaPage() {
     }
   }, [search, filterStatus, filterClass]);
 
-  const fetchClasses = async () => {
-    try {
-      const res = await fetch("/api/kelas");
-      const data = await res.json();
-      setClasses(Array.isArray(data) ? data : []);
-    } catch {
-      setClasses([]);
-    }
-  };
-
   useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const res = await fetch("/api/kelas");
+        const data = await res.json();
+        setClasses(Array.isArray(data) ? data : []);
+      } catch {
+        setClasses([]);
+      }
+    };
     fetchClasses();
   }, []);
 
@@ -150,8 +149,8 @@ export default function DataSiswaPage() {
 
       setDialogOpen(false);
       fetchStudents();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setSaving(false);
     }
@@ -169,8 +168,8 @@ export default function DataSiswaPage() {
       setDeleteDialogOpen(false);
       setDeletingStudent(null);
       fetchStudents();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setDeleting(false);
     }
@@ -244,7 +243,7 @@ export default function DataSiswaPage() {
           ) : students.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-slate-400">
               <p className="text-lg font-medium">Belum ada data siswa</p>
-              <p className="text-sm">Klik "Tambah Siswa" untuk menambahkan data.</p>
+              <p className="text-sm">Klik &quot;Tambah Siswa&quot; untuk menambahkan data.</p>
             </div>
           ) : (
             <Table>

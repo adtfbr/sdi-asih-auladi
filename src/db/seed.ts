@@ -39,7 +39,7 @@ async function main() {
     { name: 'Ayah Budi', email: 'ayah.budi@gmail.com', password: 'password123', role: 'wali' },
   ]).returning();
 
-  const [adminUser, guruUser, guruUser2, siswaUser, waliUser] = insertedUsers;
+  const [, guruUser, guruUser2, siswaUser, waliUser] = insertedUsers;
 
   // 3. Insert Academic Year
   console.log('Inserting academic years...');
@@ -92,7 +92,7 @@ async function main() {
     { nis: '2024103', nisn: '0101234572', name: 'Nadia Safira', gender: 'Perempuan', birthDate: '2018-04-05', address: 'Jl. Mawar No. 9', status: 'Pindah' },
     { nis: '2023088', nisn: '0101234573', name: 'Kevin Sanjaya', gender: 'Laki-laki', birthDate: '2017-09-30', address: 'Jl. Flamboyan No. 2', status: 'Aktif' },
   ]).returning();
-  const [budi, ahmad, siti, aisyah, reza, nadia, kevin] = insertedStudents;
+  const [budi, ahmad, siti, aisyah, reza, , kevin] = insertedStudents;
 
   // 8. Assign Students to Classes
   console.log('Assigning students to classes...');

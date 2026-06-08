@@ -7,9 +7,9 @@ export async function GET() {
   try {
     const result = await db.select().from(academicYears);
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
       .returning();
 
     return NextResponse.json(newYear, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

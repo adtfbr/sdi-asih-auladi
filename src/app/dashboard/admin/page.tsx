@@ -5,8 +5,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, GraduationCap, ClipboardCheck, FileText, ArrowUpRight, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+interface StatValue {
+  value: string | number;
+  trend?: string;
+  description?: string;
+  verified?: number;
+}
+
+interface AdminDashboardData {
+  stats: {
+    totalStudents: StatValue;
+    totalTeachers: StatValue;
+    attendanceRate: StatValue;
+    ppdbApplicants: StatValue;
+  };
+  recentPpdb: { id: number; name: string; date: string; status: string }[];
+}
+
 export default function AdminDashboard() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<AdminDashboardData | null>(null);
 
   useEffect(() => {
     fetch('/api/dashboard/admin')
@@ -115,7 +132,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {data.recentPpdb.map((item: any) => (
+              {data.recentPpdb.map((item) => (
                 <div key={item.id} className="flex items-center justify-between border-b border-slate-50 pb-4 last:border-0 last:pb-0">
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-slate-900">{item.name}</span>

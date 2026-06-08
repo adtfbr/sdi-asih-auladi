@@ -14,7 +14,7 @@ export async function GET() {
     const teacher = teacherData[0];
     
     // Get their classes (as homeroom teacher)
-    let schedule: any[] = [];
+    let schedule: { id: number; time: string; subject: string; class: string; status: string }[] = [];
     if (teacher) {
        const homeroomClasses = await db.select({
          id: classes.id,
@@ -51,8 +51,8 @@ export async function GET() {
     };
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

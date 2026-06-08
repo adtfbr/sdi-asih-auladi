@@ -1,13 +1,55 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { User, ClipboardCheck, TrendingUp, AlertCircle, ChevronDown, CheckCircle2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+
+interface Child {
+  id: number;
+  name: string;
+  class: string;
+  avatarSeed: string;
+}
+
+interface TodayStatus {
+  status: string;
+  time: string;
+}
+
+interface SelectedChildStats {
+  attendance: string;
+  averageScore: string;
+  todayStatus: TodayStatus;
+}
+
+interface GradeItem {
+  id: number;
+  subject: string;
+  type: string;
+  date: string;
+  score: number | string;
+}
+
+interface NotificationItem {
+  id: number;
+  type: string;
+  title: string;
+  content: string;
+  time: string;
+}
+
+interface WaliDashboardData {
+  children: Child[];
+  selectedChildStats: SelectedChildStats;
+  recentGrades: GradeItem[];
+  notifications: NotificationItem[];
+}
 
 export default function WaliDashboard() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<WaliDashboardData | null>(null);
 
   useEffect(() => {
     fetch('/api/dashboard/wali')
@@ -26,7 +68,7 @@ export default function WaliDashboard() {
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">Portal Wali Murid</h2>
           <p className="text-slate-500">Pantau perkembangan dan aktivitas anak Anda.</p>
         </div>
-        
+
         {/* Child Selector Mockup */}
         <div className="relative">
           <Button variant="outline" className="w-full sm:w-auto h-12 bg-white border-slate-200 justify-between gap-4 hover:bg-slate-50">
@@ -88,7 +130,7 @@ export default function WaliDashboard() {
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-4">
-                {data.recentGrades.map((item: any) => (
+                {data.recentGrades.map((item) => (
                   <div key={item.id} className="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-slate-50 hover:bg-slate-100/50 transition-colors">
                     <div>
                       <div className="font-semibold text-sm text-slate-900">{item.subject}</div>
@@ -134,7 +176,7 @@ export default function WaliDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {data.notifications.map((notification: any) => (
+                {data.notifications.map((notification) => (
                   <div key={notification.id} className="flex gap-3">
                     <div className="mt-0.5 shrink-0">
                       {notification.type === 'warning' ? (
@@ -159,7 +201,3 @@ export default function WaliDashboard() {
   );
 }
 
-// Needed to add a quick Badge component mockup for this file since we are using it
-function Badge({ children, variant, className }: any) {
-  return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${className}`}>{children}</span>
-}

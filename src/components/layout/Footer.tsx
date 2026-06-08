@@ -14,11 +14,11 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-slate-400 mb-6 leading-relaxed">
-              Membentuk generasi qur'ani yang cerdas, berakhlak mulia, dan siap menghadapi tantangan masa depan.
+              Membentuk generasi qur&apos;ani yang cerdas, berakhlak mulia, dan siap menghadapi tantangan masa depan.
             </p>
 
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Tautan Cepat</h3>
             <ul className="space-y-3 text-sm">

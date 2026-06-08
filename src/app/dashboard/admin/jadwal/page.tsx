@@ -1,14 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Edit2, Trash2, CalendarDays } from "lucide-react";
+import { Plus, Edit2, CalendarDays } from "lucide-react";
 
 interface ClassOption { id: number; name: string; }
 interface AcademicYearOption { id: number; name: string; }
+
+interface Session { subject: string; teacher: string; }
+interface ScheduleRow {
+  type?: string;
+  name?: string;
+  Senin?: Session;
+  Selasa?: Session;
+  Rabu?: Session;
+  Kamis?: Session;
+  Jumat?: Session;
+}
 
 export default function JadwalAdminPage() {
   const [classes, setClasses] = useState<ClassOption[]>([]);
@@ -28,7 +39,7 @@ export default function JadwalAdminPage() {
   ];
 
   // Dummy Schedule for Kelas 4B
-  const schedule: Record<string, any> = {
+  const schedule: Record<string, ScheduleRow> = {
     "07:30 - 09:00": {
       Senin: { subject: "Matematika", teacher: "Usth. Siti Aminah" },
       Selasa: { subject: "B. Indonesia", teacher: "Usth. Rina Wati" },

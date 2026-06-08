@@ -4,10 +4,34 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ClipboardList, BookOpen, Clock, FileText, ArrowRight, Users } from "lucide-react";
-import Link from "next/link";
+
+interface ScheduleItem {
+  id: number;
+  subject: string;
+  class: string;
+  time: string;
+  status: string;
+}
+
+interface AnnouncementItem {
+  id: number;
+  type: string;
+  title: string;
+  content: string;
+  date: string;
+}
+
+interface GuruDashboardData {
+  teacherInfo: {
+    name: string;
+    currentDate: string;
+  };
+  schedule: ScheduleItem[];
+  announcements: AnnouncementItem[];
+}
 
 export default function GuruDashboard() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<GuruDashboardData | null>(null);
 
   useEffect(() => {
     fetch('/api/dashboard/guru')
@@ -90,18 +114,16 @@ export default function GuruDashboard() {
           </CardHeader>
           <CardContent>
             <div className="relative border-l-2 border-slate-100 ml-3 md:ml-4 space-y-6 pb-4">
-              {data.schedule.map((schedule: any) => (
+              {data.schedule.map((schedule) => (
                 <div key={schedule.id} className="relative pl-6 md:pl-8">
-                  <div className={`absolute -left-[9px] top-1.5 h-4 w-4 rounded-full border-2 border-white ${
-                    schedule.status === 'completed' ? 'bg-slate-300' :
-                    schedule.status === 'current' ? 'bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.2)]' :
-                    'bg-white border-2 border-slate-300'
-                  }`}></div>
-                  
-                  <div className={`p-4 rounded-xl border ${
-                    schedule.status === 'current' ? 'bg-emerald-50/50 border-emerald-200 shadow-sm' :
-                    'bg-white border-slate-100'
-                  }`}>
+                  <div className={`absolute -left-[9px] top-1.5 h-4 w-4 rounded-full border-2 border-white ${schedule.status === 'completed' ? 'bg-slate-300' :
+                      schedule.status === 'current' ? 'bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.2)]' :
+                        'bg-white border-2 border-slate-300'
+                    }`}></div>
+
+                  <div className={`p-4 rounded-xl border ${schedule.status === 'current' ? 'bg-emerald-50/50 border-emerald-200 shadow-sm' :
+                      'bg-white border-slate-100'
+                    }`}>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                       <div>
                         <div className="text-sm font-semibold text-slate-900">{schedule.subject}</div>
@@ -109,17 +131,16 @@ export default function GuruDashboard() {
                           <Users className="h-3 w-3" /> {schedule.class}
                         </div>
                       </div>
-                      <div className={`text-sm font-medium flex items-center gap-1.5 ${
-                        schedule.status === 'current' ? 'text-emerald-700' : 'text-slate-600'
-                      }`}>
+                      <div className={`text-sm font-medium flex items-center gap-1.5 ${schedule.status === 'current' ? 'text-emerald-700' : 'text-slate-600'
+                        }`}>
                         <Clock className="h-3.5 w-3.5" />
                         {schedule.time}
                       </div>
                     </div>
                     {schedule.status === 'current' && (
                       <div className="mt-4 pt-3 border-t border-emerald-100/50 flex gap-2">
-                         <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs">Mulai Kelas</Button>
-                         <Button size="sm" variant="outline" className="text-emerald-700 border-emerald-200 text-xs">Isi Absen</Button>
+                        <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs">Mulai Kelas</Button>
+                        <Button size="sm" variant="outline" className="text-emerald-700 border-emerald-200 text-xs">Isi Absen</Button>
                       </div>
                     )}
                   </div>
@@ -136,7 +157,7 @@ export default function GuruDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {data.announcements.map((announcement: any) => (
+              {data.announcements.map((announcement) => (
                 <div key={announcement.id} className={`p-3 rounded-xl border ${announcement.type === 'warning' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'}`}>
                   <div className={`text-xs font-semibold mb-1 ${announcement.type === 'warning' ? 'text-amber-800' : 'text-blue-800'}`}>{announcement.title}</div>
                   <div className="text-sm text-slate-700">{announcement.content}</div>

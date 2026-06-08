@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { classes, academicYears, teachers, classStudents } from "@/db/schema";
-import { eq, count, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { createClassSchema } from "@/lib/validations";
 
 export async function GET(request: NextRequest) {
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const academicYearId = searchParams.get("academicYearId");
 
-    let baseQuery = db
+    const baseQuery = db
       .select({
         id: classes.id,
         name: classes.name,
@@ -31,9 +31,9 @@ export async function GET(request: NextRequest) {
       : await baseQuery;
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
 
     const [newClass] = await db.insert(classes).values(parsed.data).returning();
     return NextResponse.json(newClass, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

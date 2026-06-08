@@ -46,6 +46,7 @@ export const updateSubjectSchema = createSubjectSchema.partial();
 // ─── Academic Year ───────────────────────────────────────────
 export const createAcademicYearSchema = z.object({
   name: z.string().min(1, 'Nama tahun ajaran wajib diisi'),
+  semester: z.enum(['Ganjil', 'Genap']).default('Ganjil'),
   isActive: z.boolean().default(false),
 });
 

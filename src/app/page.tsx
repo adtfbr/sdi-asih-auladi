@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,22 +14,22 @@ export default function Home() {
         <div className="absolute top-0 left-0 translate-y-24 -translate-x-1/3">
           <div className="w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
         </div>
-        
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-8">
             <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-100/50 px-3 py-1 text-sm text-emerald-800 backdrop-blur-sm">
               <span className="flex h-2 w-2 rounded-full bg-emerald-600 mr-2"></span>
               Pendaftaran Tahun Ajaran 2026/2027 Dibuka
             </div>
-            
+
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 leading-tight">
               Sistem Informasi <span className="text-emerald-600">Terpadu</span> SDI Asih Auladi
             </h1>
-            
+
             <p className="text-lg md:text-xl text-slate-600 max-w-2xl">
               Platform manajemen sekolah berbasis web yang mendigitalisasi operasional sekolah dasar Islam dalam satu sistem cerdas, interaktif, dan terintegrasi.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <Link href="/ppdb" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full h-12 px-8 text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">
@@ -91,15 +90,15 @@ export default function Home() {
               </div>
               <div className="absolute -bottom-6 -right-6 h-48 w-48 bg-emerald-50 rounded-full -z-10 blur-2xl"></div>
             </div>
-            
+
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Membentuk Generasi Qur'ani</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Membentuk Generasi Qur&apos;ani</h2>
                 <p className="text-lg text-slate-600 leading-relaxed">
                   SDI Asih Auladi berkomitmen untuk menyelenggarakan pendidikan dasar Islam yang berkualitas dengan mengintegrasikan kurikulum nasional dan kurikulum keislaman.
                 </p>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
                   <CheckCircle2 className="h-6 w-6 text-emerald-600 shrink-0 mt-0.5" />
@@ -128,7 +127,7 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Satu Platform, Beragam Kemudahan</h2>
             <p className="text-slate-600 text-lg">Platform ini dirancang khusus untuk memenuhi kebutuhan seluruh ekosistem sekolah, dari guru hingga wali murid.</p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="bg-white border-slate-100 shadow-md shadow-slate-200/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <CardHeader>
@@ -184,7 +183,7 @@ export default function Home() {
               </Button>
             </Link>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[1, 2, 3].map((item) => (
               <Card key={item} className="overflow-hidden border-slate-100 shadow-sm hover:shadow-md transition-all group">
@@ -224,7 +223,7 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Galeri Kegiatan</h2>
             <p className="text-slate-600 text-lg">Momen-momen berharga dalam proses pembelajaran dan kegiatan siswa di SDI Asih Auladi.</p>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
               <div key={item} className="aspect-square bg-white rounded-3xl overflow-hidden relative group border border-slate-100 shadow-sm cursor-pointer">
@@ -235,7 +234,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          
+
           <div className="mt-12 text-center">
             <Link href="#galeri">
               <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full px-8">
@@ -250,7 +249,7 @@ export default function Home() {
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-emerald-600"></div>
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="bg-emerald-700/30 backdrop-blur-sm border border-emerald-500/30 rounded-3xl p-8 md:p-16 text-center max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Bergabunglah Bersama Kami</h2>

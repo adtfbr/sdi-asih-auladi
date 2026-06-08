@@ -32,9 +32,9 @@ export async function GET(request: NextRequest) {
       .where(conditions.length > 0 ? and(...conditions) : undefined);
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -76,8 +76,8 @@ export async function POST(request: NextRequest) {
       .returning();
 
     return NextResponse.json(inserted, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

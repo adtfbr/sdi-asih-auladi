@@ -1,0 +1,17 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "executionArgs": {
+    "projectName": "sdi-asih-auladi",
+    "projectPath": "d:\\Sites\\sdi-asih-auladi",
+    "testIds": [],
+    "additionalInstruction": "",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-D3W9sT_LZGNdfWNF2Ujp7EuKk7WNmja1WGVbw6VFa0UNyEUSnIDlCbsSOFbfYTiigdubu3MYot2NVko_1NuV2GSzFoq9GvKQcmhIgGIh9Jt4bBUWclmROfJP_TFcjuj_FUQ"
+    }
+  },
+  "serverPort": 61368
+}

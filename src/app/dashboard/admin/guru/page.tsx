@@ -112,8 +112,8 @@ export default function DataGuruPage() {
 
       setDialogOpen(false);
       fetchTeachers();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setSaving(false);
     }
@@ -131,8 +131,8 @@ export default function DataGuruPage() {
       setDeleteDialogOpen(false);
       setDeletingTeacher(null);
       fetchTeachers();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setDeleting(false);
     }
@@ -209,7 +209,7 @@ export default function DataGuruPage() {
           ) : teachers.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-slate-400">
               <p className="text-lg font-medium">Belum ada data guru</p>
-              <p className="text-sm">Klik "Tambah Guru" untuk menambahkan data.</p>
+              <p className="text-sm">Klik &quot;Tambah Guru&quot; untuk menambahkan data.</p>
             </div>
           ) : (
             <Table>

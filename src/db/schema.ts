@@ -44,6 +44,7 @@ export const parents = pgTable('parents', {
 export const academicYears = pgTable('academic_years', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull(),
+  semester: varchar('semester', { length: 20 }).notNull().default('Ganjil'), // Ganjil, Genap
   isActive: boolean('is_active').default(false).notNull(),
 });
 
