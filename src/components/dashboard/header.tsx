@@ -43,7 +43,7 @@ export function Header() {
             <Menu className="h-5 w-5 text-slate-600" />
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-64">
-            <Sidebar />
+            <Sidebar className="flex border-none w-full" />
           </SheetContent>
         </Sheet>
         

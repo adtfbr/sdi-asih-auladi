@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { classes, academicYears, teachers, classStudents } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { createClassSchema } from "@/lib/validations";
 
 export async function GET(request: NextRequest) {

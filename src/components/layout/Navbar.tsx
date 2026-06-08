@@ -50,9 +50,11 @@ export function Navbar() {
           <Link href="/login">
             <Button variant="ghost" className="text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50">Login</Button>
           </Link>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-6">
-            PPDB Online
-          </Button>
+          <Link href="/ppdb">
+            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-6">
+              PPDB Online
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Nav */}
@@ -61,7 +63,7 @@ export function Navbar() {
             <Menu className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
           </SheetTrigger>
-          <SheetContent side="right" className="flex flex-col justify-between">
+          <SheetContent side="right" className="flex flex-col justify-between overflow-y-auto">
             <SheetTitle className="sr-only">Navigasi Utama</SheetTitle>
             <div>
               <Link
@@ -89,9 +91,11 @@ export function Navbar() {
               <Link href="/login" onClick={() => setIsOpen(false)}>
                 <Button variant="outline" className="w-full">Login Portal</Button>
               </Link>
-              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
-                PPDB Online
-              </Button>
+              <Link href="/ppdb" onClick={() => setIsOpen(false)}>
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                  PPDB Online
+                </Button>
+              </Link>
             </div>
           </SheetContent>
         </Sheet>

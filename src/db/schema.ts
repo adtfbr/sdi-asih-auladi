@@ -53,6 +53,7 @@ export const classes = pgTable('classes', {
   academicYearId: integer('academic_year_id').references(() => academicYears.id).notNull(),
   name: varchar('name', { length: 100 }).notNull(),
   level: integer('level').notNull(),
+  capacity: integer('capacity').default(30).notNull(),
   homeroomTeacherId: integer('homeroom_teacher_id').references(() => teachers.id),
 });
 
@@ -89,11 +90,39 @@ export const ppdbApplications = pgTable('ppdb_applications', {
   id: serial('id').primaryKey(),
   registrationNumber: varchar('registration_number', { length: 50 }).notNull().unique(),
   studentName: text('student_name').notNull(),
+  nik: varchar('nik', { length: 20 }),
+  birthPlace: text('birth_place'),
+  religion: varchar('religion', { length: 50 }),
   parentName: text('parent_name'),
+  fatherName: text('father_name'),
+  fatherJob: text('father_job'),
+  fatherSalary: text('father_salary'),
+  motherName: text('mother_name'),
+  motherJob: text('mother_job'),
   parentPhone: varchar('parent_phone', { length: 20 }),
   birthDate: date('birth_date'),
   gender: varchar('gender', { length: 10 }),
   address: text('address'),
+  kkDocumentUrl: text('kk_document_url'),
+  aktaDocumentUrl: text('akta_document_url'),
+  photoUrl: text('photo_url'),
   status: varchar('status', { length: 20 }).notNull(), // Draft, Submitted, Verified, Accepted, Rejected
   submittedAt: timestamp('submitted_at').defaultNow(),
+});
+
+export const announcements = pgTable('announcements', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  content: text('content').notNull(),
+  targetRole: varchar('target_role', { length: 50 }).notNull().default('semua'), // semua, guru, siswa, wali
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const systemSettings = pgTable('system_settings', {
+  id: serial('id').primaryKey(),
+  schoolName: varchar('school_name', { length: 255 }).notNull().default('SDI Asih Auladi'),
+  npsn: varchar('npsn', { length: 50 }),
+  address: text('address'),
+  ppdbStatus: varchar('ppdb_status', { length: 50 }).notNull().default('closed'), // open, closed
+  ppdbWave: varchar('ppdb_wave', { length: 100 }),
 });

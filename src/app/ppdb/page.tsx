@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +12,7 @@ import { ArrowLeft, CheckCircle2, FileText, Upload, User, Users } from "lucide-r
 import Link from "next/link";
 
 export default function PPDBPage() {
+  const [activeTab, setActiveTab] = useState("data-diri");
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header Banner */}
@@ -30,22 +34,22 @@ export default function PPDBPage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 md:px-6 relative z-20 -mt-16 pb-24">
         <Card className="border-slate-100 shadow-xl shadow-slate-200/50 max-w-4xl mx-auto rounded-3xl overflow-hidden">
-          <Tabs defaultValue="data-diri" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="bg-white border-b border-slate-100 px-6 pt-6">
-              <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1 rounded-xl h-auto">
-                <TabsTrigger value="data-diri" className="rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm">
+              <TabsList className="flex flex-row overflow-x-auto justify-start md:grid md:grid-cols-3 bg-slate-100 p-1 rounded-xl h-auto w-full no-scrollbar">
+                <TabsTrigger value="data-diri" className="shrink-0 rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm">
                   <div className="flex flex-col md:flex-row items-center gap-2">
                     <User className="h-4 w-4" />
                     <span className="text-sm font-semibold">Data Diri</span>
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="data-ortu" className="rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm">
+                <TabsTrigger value="data-ortu" className="shrink-0 rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm">
                   <div className="flex flex-col md:flex-row items-center gap-2">
                     <Users className="h-4 w-4" />
                     <span className="text-sm font-semibold">Data Orang Tua</span>
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="dokumen" className="rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm">
+                <TabsTrigger value="dokumen" className="shrink-0 rounded-lg py-3 data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm">
                   <div className="flex flex-col md:flex-row items-center gap-2">
                     <FileText className="h-4 w-4" />
                     <span className="text-sm font-semibold">Dokumen</span>
@@ -112,7 +116,7 @@ export default function PPDBPage() {
                   </div>
                 </div>
                 <div className="flex justify-end pt-4">
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 h-12 px-8 text-white rounded-full">
+                  <Button onClick={() => setActiveTab("data-ortu")} className="bg-emerald-600 hover:bg-emerald-700 h-12 px-8 text-white rounded-full">
                     Selanjutnya: Data Orang Tua
                   </Button>
                 </div>
@@ -175,10 +179,10 @@ export default function PPDBPage() {
                   </div>
                 </div>
                 <div className="flex justify-between pt-4">
-                  <Button variant="outline" className="h-12 px-8 rounded-full border-slate-200">
+                  <Button variant="outline" onClick={() => setActiveTab("data-diri")} className="h-12 px-8 rounded-full border-slate-200">
                     Sebelumnya
                   </Button>
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 h-12 px-8 text-white rounded-full">
+                  <Button onClick={() => setActiveTab("dokumen")} className="bg-emerald-600 hover:bg-emerald-700 h-12 px-8 text-white rounded-full">
                     Selanjutnya: Dokumen
                   </Button>
                 </div>
@@ -243,7 +247,7 @@ export default function PPDBPage() {
                   </div>
                 </div>
                 <div className="flex justify-between pt-4 border-t border-slate-100">
-                  <Button variant="outline" className="h-12 px-8 rounded-full border-slate-200">
+                  <Button variant="outline" onClick={() => setActiveTab("data-ortu")} className="h-12 px-8 rounded-full border-slate-200">
                     Sebelumnya
                   </Button>
                   <Button className="bg-emerald-600 hover:bg-emerald-700 h-12 px-8 text-white rounded-full font-semibold">
