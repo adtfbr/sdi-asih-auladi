@@ -20,12 +20,27 @@ export default function WaliAbsensiPage() {
   const [records, setRecords] = useState<AttendanceRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [session, setSession] = useState<{studentId?: number} | null>(null);
+
   useEffect(() => {
-    fetch("/api/absensi")
+    fetch('/api/auth/session')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) setSession(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!session?.studentId) return;
+    setLoading(true);
+    const url = `/api/absensi?studentId=${session.studentId}`;
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => setRecords(Array.isArray(data) ? data : []))
       .finally(() => setLoading(false));
-  }, []);
+  }, [session?.studentId]);
 
   // Count stats
   const hadirCount = records.filter((r) => r.status === "Hadir").length;
@@ -71,9 +86,11 @@ export default function WaliAbsensiPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900">Rekap Kehadiran Anak</h2>
-        <p className="text-slate-500">Pantau absensi harian anak Anda di sekolah.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Rekap Kehadiran Anak</h2>
+          <p className="text-slate-500">Pantau absensi harian anak Anda di sekolah.</p>
+        </div>
       </div>
 
       {/* Summary Cards */}

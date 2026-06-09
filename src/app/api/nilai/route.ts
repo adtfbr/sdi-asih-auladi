@@ -1,38 +1,65 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { grades, students, subjects, teachers } from "@/db/schema";
+import { grades, classes, subjects, students } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { bulkCreateGradeSchema } from "@/lib/validations";
+import { bulkGradeSchema } from "@/lib/validations";
+import { getServerSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await getServerSession();
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const { searchParams } = new URL(request.url);
-    const studentId = searchParams.get("studentId");
+    const classId = searchParams.get("classId");
     const subjectId = searchParams.get("subjectId");
+    const studentId = searchParams.get("studentId");
+    const semester = searchParams.get("semester");
     const type = searchParams.get("type");
 
-    const conditions = [];
-    if (studentId) conditions.push(eq(grades.studentId, Number(studentId)));
-    if (subjectId) conditions.push(eq(grades.subjectId, Number(subjectId)));
-    if (type) conditions.push(eq(grades.type, type));
+    // Extra Backend Protection
+    if (session.role === "siswa" || session.role === "wali") {
+      if (studentId && Number(studentId) !== session.studentId) {
+        return NextResponse.json({ error: "Forbidden: You cannot view other students' grades." }, { status: 403 });
+      }
+    }
 
-    const result = await db
+    const baseQuery = db
       .select({
         id: grades.id,
         studentId: grades.studentId,
         studentName: students.name,
+        classId: grades.classId,
+        className: classes.name,
         subjectId: grades.subjectId,
         subjectName: subjects.name,
         teacherId: grades.teacherId,
-        teacherName: teachers.name,
-        score: grades.score,
+        semester: grades.semester,
         type: grades.type,
+        score: grades.score,
+        notes: grades.notes,
       })
       .from(grades)
       .leftJoin(students, eq(grades.studentId, students.id))
-      .leftJoin(subjects, eq(grades.subjectId, subjects.id))
-      .leftJoin(teachers, eq(grades.teacherId, teachers.id))
-      .where(conditions.length > 0 ? and(...conditions) : undefined);
+      .leftJoin(classes, eq(grades.classId, classes.id))
+      .leftJoin(subjects, eq(grades.subjectId, subjects.id));
+
+    let conditions = [];
+    if (classId) conditions.push(eq(grades.classId, Number(classId)));
+    if (subjectId) conditions.push(eq(grades.subjectId, Number(subjectId)));
+    if (studentId) conditions.push(eq(grades.studentId, Number(studentId)));
+    if (semester) conditions.push(eq(grades.semester, semester));
+    if (type) conditions.push(eq(grades.type, type));
+
+    let result;
+    if (conditions.length > 0) {
+      result = await baseQuery.where(and(...conditions));
+    } else {
+      result = await baseQuery;
+    }
+
+    // sort by studentName mostly
+    result.sort((a, b) => (a.studentName || "").localeCompare(b.studentName || ""));
 
     return NextResponse.json(result);
   } catch (error: unknown) {
@@ -43,8 +70,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession();
+    if (!session || (session.role !== "admin" && session.role !== "guru")) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const body = await request.json();
-    const parsed = bulkCreateGradeSchema.safeParse(body);
+    const parsed = bulkGradeSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
@@ -53,18 +85,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { subjectId, teacherId, type, records } = parsed.data;
+    const { classId, subjectId, teacherId, semester, type, records } = parsed.data;
 
-    const values = records.map((r) => ({
-      studentId: r.studentId,
+    // We do bulk upsert by deleting existing records for the same class+subject+semester+type
+    await db
+      .delete(grades)
+      .where(
+        and(
+          eq(grades.classId, classId),
+          eq(grades.subjectId, subjectId),
+          eq(grades.semester, semester),
+          eq(grades.type, type)
+        )
+      );
+
+    if (records.length === 0) {
+      return NextResponse.json({ message: "No records to insert, existing cleared." });
+    }
+
+    const recordsToInsert = records.map(r => ({
+      classId,
       subjectId,
       teacherId,
-      score: r.score,
+      semester,
       type,
+      studentId: r.studentId,
+      score: r.score.toString(), // numeric maps to string in Postgres usually, but Drizzle might accept number
+      notes: r.notes
     }));
 
-    const inserted = await db.insert(grades).values(values).returning();
-    return NextResponse.json(inserted, { status: 201 });
+    await db.insert(grades).values(recordsToInsert as any);
+
+    return NextResponse.json({ message: "Grades saved successfully" }, { status: 201 });
   } catch (error: unknown) {
     console.error(error);
     return NextResponse.json({ error: (error as Error).message }, { status: 500 });

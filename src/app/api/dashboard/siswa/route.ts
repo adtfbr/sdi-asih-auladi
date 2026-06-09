@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { students, grades, attendanceRecords } from "@/db/schema";
-import { eq, avg, and } from "drizzle-orm";
+import { eq, avg, and, count } from "drizzle-orm";
 
 export async function GET() {
   try {

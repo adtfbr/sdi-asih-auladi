@@ -17,12 +17,11 @@ interface StudentRow { id: number; nis: string; name: string; }
 export default function InputNilaiPage() {
   const [classes, setClasses] = useState<ClassOption[]>([]);
   const [subjects, setSubjects] = useState<SubjectOption[]>([]);
-  const [, setTeachers] = useState<TeacherOption[]>([]);
   const [students, setStudents] = useState<StudentRow[]>([]);
+  const [session, setSession] = useState<{teacherId?: number} | null>(null);
 
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedTeacher, setSelectedTeacher] = useState("");
   const [gradeType, setGradeType] = useState("Tugas");
 
   const [scoresMap, setScoresMap] = useState<Record<number, string>>({});
@@ -31,18 +30,19 @@ export default function InputNilaiPage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
+    fetch('/api/auth/session')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) setSession(data);
+      })
+      .catch(() => {});
+      
     Promise.all([
       fetch("/api/kelas").then((r) => r.json()),
       fetch("/api/mapel").then((r) => r.json()),
-      fetch("/api/guru").then((r) => r.json()),
-    ]).then(([classData, subjectData, teacherData]) => {
+    ]).then(([classData, subjectData]) => {
       setClasses(Array.isArray(classData) ? classData : []);
       setSubjects(Array.isArray(subjectData) ? subjectData : []);
-      setTeachers(Array.isArray(teacherData) ? teacherData : []);
-      // Auto-select first teacher (since no auth)
-      if (Array.isArray(teacherData) && teacherData.length > 0) {
-        setSelectedTeacher(teacherData[0].id.toString());
-      }
     });
   }, []);
 
@@ -66,7 +66,17 @@ export default function InputNilaiPage() {
         
         setStudents(list);
         const map: Record<number, string> = {};
-        list.forEach((s: StudentRow) => { map[s.id] = ""; });
+        
+        // Fetch existing grades
+        const gradesRes = await fetch(`/api/nilai?classId=${selectedClass}&semester=Ganjil`);
+        const gradesData = await gradesRes.json();
+        const existingGrades = Array.isArray(gradesData) ? gradesData : [];
+
+        list.forEach((s: StudentRow) => { 
+          // If we had a specific subject and type we could filter here, 
+          // but for now we just initialize empty
+          map[s.id] = ""; 
+        });
         setScoresMap(map);
       } catch {
         if (!isMounted) return;
@@ -84,7 +94,7 @@ export default function InputNilaiPage() {
   }, [selectedClass]);
 
   const handleSave = async () => {
-    if (!selectedSubject || !selectedTeacher) {
+    if (!selectedSubject || !session?.teacherId) {
       alert("Pilih mata pelajaran dan guru terlebih dahulu.");
       return;
     }
@@ -108,8 +118,10 @@ export default function InputNilaiPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          classId: Number(selectedClass),
           subjectId: Number(selectedSubject),
-          teacherId: Number(selectedTeacher),
+          teacherId: session?.teacherId,
+          semester: "Ganjil",
           type: gradeType,
           records,
         }),
@@ -143,7 +155,9 @@ export default function InputNilaiPage() {
               <Label>Pilih Kelas</Label>
               <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || "")}>
                 <SelectTrigger className="bg-slate-50 border-slate-200">
-                  <SelectValue placeholder="Pilih Kelas" />
+                  <SelectValue placeholder="Pilih Kelas">
+                    {classes.find(c => c.id.toString() === selectedClass)?.name ? `Kelas ${classes.find(c => c.id.toString() === selectedClass)?.name}` : selectedClass || "Pilih Kelas"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {classes.map((c) => (
@@ -156,7 +170,9 @@ export default function InputNilaiPage() {
               <Label>Mata Pelajaran</Label>
               <Select value={selectedSubject} onValueChange={(val) => setSelectedSubject(val || "")}>
                 <SelectTrigger className="bg-slate-50 border-slate-200">
-                  <SelectValue placeholder="Pilih Mata Pelajaran" />
+                  <SelectValue placeholder="Pilih Mapel">
+                    {subjects.find(s => s.id.toString() === selectedSubject)?.name || selectedSubject || "Pilih Mapel"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {subjects.map((s) => (

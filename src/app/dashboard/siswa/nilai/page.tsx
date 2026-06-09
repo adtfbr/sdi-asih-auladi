@@ -24,15 +24,29 @@ export default function ViewNilaiPage() {
   const [grades, setGrades] = useState<Grade[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [session, setSession] = useState<{studentId?: number} | null>(null);
+
   useEffect(() => {
-    // Fetch all grades for the first student (no auth, so use studentId=1 or fetch all)
-    fetch("/api/nilai")
+    fetch('/api/auth/session')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) setSession(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!session?.studentId) return;
+    setLoading(true);
+    const url = `/api/nilai?studentId=${session.studentId}`;
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setGrades(Array.isArray(data) ? data : []);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [session?.studentId]);
 
   // Group grades by subject
   const subjectMap = new Map<string, { subject: string; teacher: string; grades: Record<string, number> }>();
@@ -67,7 +81,7 @@ export default function ViewNilaiPage() {
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">Transkrip Nilai</h2>
           <p className="text-slate-500">Pantau perkembangan akademik dan hasil evaluasi belajar.</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Select defaultValue="semester-ganjil">
             <SelectTrigger className="w-[180px] bg-white border-slate-200">
               <SelectValue placeholder="Pilih Semester" />

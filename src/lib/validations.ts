@@ -109,3 +109,66 @@ export const createPpdbSchema = z.object({
 });
 
 export const updatePpdbSchema = createPpdbSchema.partial();
+
+// ─── Schedule ───────────────────────────────────────────────
+export const createScheduleSchema = z.object({
+  classId: z.number({ message: 'Kelas wajib dipilih' }),
+  subjectId: z.number({ message: 'Mata pelajaran wajib dipilih' }),
+  teacherId: z.number({ message: 'Guru wajib dipilih' }),
+  dayOfWeek: z.number().min(1).max(7),
+  startTime: z.string().min(5, 'Waktu mulai wajib diisi (HH:MM)'),
+  endTime: z.string().min(5, 'Waktu selesai wajib diisi (HH:MM)'),
+});
+
+export const updateScheduleSchema = createScheduleSchema.partial();
+
+// ─── Announcement ─────────────────────────────────────────────
+export const createAnnouncementSchema = z.object({
+  title: z.string().min(1, 'Judul wajib diisi'),
+  content: z.string().min(1, 'Konten wajib diisi'),
+  targetRole: z.enum(['semua', 'guru', 'siswa', 'wali']).default('semua'),
+});
+
+export const updateAnnouncementSchema = createAnnouncementSchema.partial();
+
+// ─── Learning Material ─────────────────────────────────────────
+export const createMaterialSchema = z.object({
+  title: z.string().min(1, 'Judul materi wajib diisi'),
+  description: z.string().optional(),
+  fileUrl: z.string().min(1, 'URL File wajib diisi'),
+  classId: z.number().optional().nullable(),
+  subjectId: z.number({ message: 'Mata pelajaran wajib dipilih' }),
+  teacherId: z.number({ message: 'Guru wajib dipilih' }),
+});
+
+export const updateMaterialSchema = createMaterialSchema.partial();
+
+// ─── Attendance ────────────────────────────────────────────────
+export const attendanceRecordSchema = z.object({
+  studentId: z.number(),
+  status: z.enum(['Hadir', 'Izin', 'Sakit', 'Alpha']),
+});
+
+export const bulkAttendanceSchema = z.object({
+  classId: z.number(),
+  date: z.string(), // YYYY-MM-DD
+  records: z.array(attendanceRecordSchema),
+});
+
+// ─── Grades / Nilai ────────────────────────────────────────────
+export const gradeRecordSchema = z.object({
+  studentId: z.number(),
+  score: z.number().min(0).max(100),
+  notes: z.string().optional().nullable(),
+});
+
+export const bulkGradeSchema = z.object({
+  classId: z.number(),
+  subjectId: z.number(),
+  teacherId: z.number(),
+  semester: z.string(),
+  type: z.string(),
+  records: z.array(gradeRecordSchema),
+});
+
+

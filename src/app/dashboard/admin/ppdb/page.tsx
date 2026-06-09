@@ -129,7 +129,7 @@ export default function AdminPPDBPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val || "semua")}>
                 <SelectTrigger className="w-[180px] bg-white">
                   <SelectValue placeholder="Semua Status" />
                 </SelectTrigger>

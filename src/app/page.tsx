@@ -2,8 +2,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, GraduationCap, BookOpen, Presentation, CheckCircle2, ArrowRight } from "lucide-react";
+import { db } from "@/db";
+import { news, galleries } from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
 
-export default function Home() {
+export const revalidate = 60;
+
+export default async function Home() {
+  const latestNews = await db.select().from(news).where(eq(news.status, 'published')).orderBy(desc(news.createdAt)).limit(3);
+  const latestGalleries = await db.select().from(galleries).orderBy(desc(galleries.createdAt)).limit(8);
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -185,30 +192,41 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
-              <Card key={item} className="overflow-hidden border-slate-100 shadow-sm hover:shadow-md transition-all group">
-                <div className="aspect-[16/9] bg-slate-100 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-emerald-600/5 group-hover:bg-transparent transition-colors z-10"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <BookOpen className="h-12 w-12 text-emerald-200" />
-                  </div>
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 text-xs font-medium text-emerald-600 mb-3">
-                    <span className="bg-emerald-50 px-2 py-1 rounded-md">Akademik</span>
-                    <span className="text-slate-400">• 12 Mei 2026</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
-                    {item === 1 && "Persiapan Menghadapi Ujian Akhir Semester Genap"}
-                    {item === 2 && "Penerimaan Peserta Didik Baru Gelombang 1 Dibuka"}
-                    {item === 3 && "Prestasi Gemilang Siswa/i di Olimpiade Sains Tingkat Kota"}
-                  </h3>
-                  <p className="text-slate-600 text-sm line-clamp-3">
-                    Bismillah, sehubungan dengan akan dilaksanakannya agenda rutin akademik, kami sampaikan informasi penting terkait jadwal kegiatan...
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+            {latestNews.length === 0 ? (
+              <div className="col-span-3 text-center text-slate-500 py-10">Belum ada berita yang dipublikasikan.</div>
+            ) : (
+              latestNews.map((item) => (
+                <Link href={`/berita/${item.slug}`} key={item.id} className="group block">
+                  <Card className="overflow-hidden border-slate-100 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
+                    <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-100 group">
+                      {item.imageUrl ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={item.imageUrl} alt={item.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
+                      ) : (
+                        <>
+                          <div className="absolute inset-0 bg-emerald-600/5 group-hover:bg-transparent transition-colors z-10"></div>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <BookOpen className="h-12 w-12 text-emerald-200" />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <CardContent className="p-6 flex-1 flex flex-col">
+                      <div className="flex items-center gap-2 text-xs font-medium text-emerald-600 mb-3">
+                        <span className="bg-emerald-50 px-2 py-1 rounded-md">Berita</span>
+                        <span className="text-slate-400">• {item.createdAt ? new Date(item.createdAt).toLocaleDateString('id-ID') : '-'}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-slate-600 text-sm line-clamp-3 mt-auto">
+                        {item.content}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))
+            )}
           </div>
           <Button variant="outline" className="w-full mt-8 md:hidden border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full">
             Lihat Semua Berita
@@ -225,14 +243,19 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-              <div key={item} className="aspect-square bg-white rounded-3xl overflow-hidden relative group border border-slate-100 shadow-sm cursor-pointer">
-                <div className="absolute inset-0 bg-emerald-900/0 group-hover:bg-emerald-900/10 transition-colors duration-300 z-10"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Presentation className="h-10 w-10 text-slate-200 group-hover:scale-110 transition-transform duration-500" />
+            {latestGalleries.length === 0 ? (
+               <div className="col-span-2 md:col-span-4 text-center text-slate-500 py-10">Belum ada foto galeri.</div>
+            ) : (
+              latestGalleries.map((item) => (
+                <div key={item.id} className="aspect-square bg-slate-100 rounded-3xl overflow-hidden relative group border border-slate-100 shadow-sm cursor-pointer">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={item.imageUrl} alt={item.title} className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                    <h4 className="text-white font-medium text-sm md:text-base truncate">{item.title}</h4>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           <div className="mt-12 text-center">

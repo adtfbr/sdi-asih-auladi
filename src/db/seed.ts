@@ -124,16 +124,16 @@ async function main() {
   // 11. Insert Grades
   console.log('Inserting grades...');
   await db.insert(schema.grades).values([
-    { studentId: budi.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, score: 88, type: 'Tugas' },
-    { studentId: budi.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, score: 90, type: 'Quiz' },
-    { studentId: budi.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, score: 85, type: 'UTS' },
-    { studentId: budi.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: 92, type: 'Tugas' },
-    { studentId: budi.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: 85, type: 'Quiz' },
-    { studentId: budi.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: 94, type: 'UTS' },
-    { studentId: budi.id, subjectId: insertedSubjects[2].id, teacherId: insertedTeachers[2].id, score: 90, type: 'Tugas' },
-    { studentId: budi.id, subjectId: insertedSubjects[2].id, teacherId: insertedTeachers[2].id, score: 92, type: 'Quiz' },
-    { studentId: kevin.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: 78, type: 'Tugas' },
-    { studentId: kevin.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: 82, type: 'UTS' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, score: '88', type: 'Tugas', semester: 'Ganjil' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, score: '90', type: 'Quiz', semester: 'Ganjil' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, score: '85', type: 'UTS', semester: 'Ganjil' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: '92', type: 'Tugas', semester: 'Ganjil' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: '85', type: 'Quiz', semester: 'Ganjil' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: '94', type: 'UTS', semester: 'Ganjil' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[2].id, teacherId: insertedTeachers[2].id, score: '90', type: 'Tugas', semester: 'Ganjil' },
+    { studentId: budi.id, classId: class4B.id, subjectId: insertedSubjects[2].id, teacherId: insertedTeachers[2].id, score: '92', type: 'Quiz', semester: 'Ganjil' },
+    { studentId: kevin.id, classId: class4B.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: '78', type: 'Tugas', semester: 'Ganjil' },
+    { studentId: kevin.id, classId: class4B.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, score: '82', type: 'UTS', semester: 'Ganjil' },
   ]);
 
   // 12. Insert PPDB Applications
@@ -143,6 +143,15 @@ async function main() {
     { registrationNumber: 'PPDB-2026-002', studentName: 'Siti Fatimah', parentName: 'Ibu Fatimah', parentPhone: '081444555666', gender: 'Perempuan', status: 'Submitted' },
     { registrationNumber: 'PPDB-2026-003', studentName: 'Dian Permata', parentName: 'Bp. Permata', parentPhone: '081777888999', gender: 'Perempuan', status: 'Accepted' },
     { registrationNumber: 'PPDB-2026-004', studentName: 'Farhan Rizki', parentName: 'Ibu Rizki', gender: 'Laki-laki', status: 'Draft' },
+  ]);
+
+  // 13. Insert Schedules
+  console.log('Inserting schedules...');
+  await db.insert(schema.schedules).values([
+    { classId: class4B.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, dayOfWeek: 1, startTime: '07:30', endTime: '09:00' },
+    { classId: class4B.id, subjectId: insertedSubjects[1].id, teacherId: usthSiti.id, dayOfWeek: 1, startTime: '09:30', endTime: '11:00' },
+    { classId: class4B.id, subjectId: insertedSubjects[2].id, teacherId: insertedTeachers[2].id, dayOfWeek: 2, startTime: '07:30', endTime: '09:00' },
+    { classId: class1A.id, subjectId: insertedSubjects[0].id, teacherId: ustAhmad.id, dayOfWeek: 1, startTime: '09:30', endTime: '11:00' },
   ]);
 
   console.log('✅ Seeding finished successfully!');

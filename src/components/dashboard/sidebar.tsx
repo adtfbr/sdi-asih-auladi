@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
@@ -12,7 +13,9 @@ import {
   FileText,
   MessageSquare,
   ClipboardList,
-  LogOut
+  LogOut,
+  Newspaper,
+  Image as ImageIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +28,10 @@ const roleMenus = {
     { name: "Mata Pelajaran", href: "/dashboard/admin/mapel", icon: BookOpen },
     { name: "Jadwal", href: "/dashboard/admin/jadwal", icon: CalendarDays },
     { name: "PPDB", href: "/dashboard/admin/ppdb", icon: FileText },
+    { name: "Pengumuman", href: "/dashboard/admin/pengumuman", icon: MessageSquare },
+    { name: "Berita", href: "/dashboard/admin/berita", icon: Newspaper },
+    { name: "Galeri", href: "/dashboard/admin/galeri", icon: ImageIcon },
+    { name: "Tahun Ajaran", href: "/dashboard/admin/tahun-ajaran", icon: CalendarDays },
     { name: "Pengaturan", href: "/dashboard/admin/settings", icon: Settings },
   ],
   guru: [
@@ -57,6 +64,19 @@ export function Sidebar({ className }: { className?: string }) {
   if (pathname?.includes("/dashboard/guru")) currentRole = "guru";
   else if (pathname?.includes("/dashboard/siswa")) currentRole = "siswa";
   else if (pathname?.includes("/dashboard/wali")) currentRole = "wali";
+
+  const [user, setUser] = React.useState<{name: string, role: string} | null>(null);
+
+  React.useEffect(() => {
+    fetch('/api/auth/session')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && data.name) {
+          setUser(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const menuItems = roleMenus[currentRole];
 
@@ -101,21 +121,23 @@ export function Sidebar({ className }: { className?: string }) {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3 px-2">
             <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
-              {currentRole.charAt(0).toUpperCase()}
+              {user ? user.name.charAt(0).toUpperCase() : currentRole.charAt(0).toUpperCase()}
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-900 capitalize">{currentRole} User</span>
-              <span className="text-xs text-slate-500 capitalize">{currentRole}</span>
+              <span className="text-sm font-semibold text-slate-900 line-clamp-1">{user ? user.name : `${currentRole} User`}</span>
+              <span className="text-xs text-slate-500 capitalize">{user ? user.role : currentRole}</span>
             </div>
           </div>
-          <Link 
-            href="/login" 
-            onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); }} 
+          <button 
+            onClick={async () => { 
+              await fetch('/api/auth/logout', { method: 'POST' }); 
+              window.location.href = '/login';
+            }} 
             className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 hover:text-rose-700 rounded-xl transition-colors"
           >
             <LogOut className="h-4 w-4" />
             Keluar
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

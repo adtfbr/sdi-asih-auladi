@@ -1,23 +1,37 @@
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Calendar, Bell } from "lucide-react";
+import { Calendar, Bell, Loader2 } from "lucide-react";
+
+interface Announcement {
+  id: number;
+  title: string;
+  content: string;
+  targetRole: string;
+  createdAt: string;
+}
 
 export default function SiswaPengumumanPage() {
-  const announcements = [
-    {
-      id: 1,
-      title: "Libur Nasional Maulid Nabi",
-      date: "12 Okt 2025",
-      content: "Diberitahukan kepada seluruh siswa bahwa kegiatan belajar mengajar diliburkan pada hari Kamis terkait libur nasional Maulid Nabi.",
-    },
-    {
-      id: 2,
-      title: "Jadwal Ujian Tengah Semester",
-      date: "25 Sep 2025",
-      content: "Ujian Tengah Semester (UTS) akan dilaksanakan mulai minggu depan. Siswa diharapkan mempersiapkan diri dengan baik dan mengecek jadwal ujian di portal.",
-    },
-  ];
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/pengumuman?targetRole=siswa");
+      const json = await res.json();
+      setAnnouncements(Array.isArray(json) ? json : []);
+    } catch {
+      setAnnouncements([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -27,7 +41,16 @@ export default function SiswaPengumumanPage() {
       </div>
 
       <div className="grid gap-4">
-        {announcements.map((item) => (
+        {loading ? (
+           <div className="flex items-center justify-center h-48 text-slate-400">
+             <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat pengumuman...
+           </div>
+        ) : announcements.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-48 text-slate-400 bg-white rounded-xl border border-slate-100">
+            <Bell className="h-10 w-10 mb-3 text-slate-300" />
+            <p className="text-lg font-medium">Belum ada pengumuman</p>
+          </div>
+        ) : announcements.map((item) => (
           <Card key={item.id} className="border-slate-100 shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="pb-3 border-b border-slate-50">
               <div className="flex items-start justify-between gap-4">
@@ -39,14 +62,14 @@ export default function SiswaPengumumanPage() {
                     <CardTitle className="text-lg">{item.title}</CardTitle>
                     <CardDescription className="flex items-center gap-1 mt-1">
                       <Calendar className="h-3.5 w-3.5" />
-                      {item.date}
+                      {new Date(item.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}
                     </CardDescription>
                   </div>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="pt-4">
-              <p className="text-slate-700 leading-relaxed text-sm">
+              <p className="text-slate-700 leading-relaxed text-sm whitespace-pre-wrap">
                 {item.content}
               </p>
             </CardContent>

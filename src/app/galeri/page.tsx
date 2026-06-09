@@ -1,19 +1,17 @@
 import { Badge } from "@/components/ui/badge";
+import { db } from "@/db";
+import { galleries } from "@/db/schema";
+import { desc } from "drizzle-orm";
 
 export const metadata = {
   title: "Galeri Kegiatan | SDI Asih Auladi",
 };
 
-const DUMMY_GALLERY = [
-  { id: 1, title: "Belajar Mengajar di Kelas", category: "Akademik", image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800&auto=format&fit=crop" },
-  { id: 2, title: "Lomba Cerdas Cermat", category: "Prestasi", image: "https://images.unsplash.com/photo-1544604862-2f3b92f444c1?q=80&w=800&auto=format&fit=crop" },
-  { id: 3, title: "Ekskul Memanah", category: "Ekstrakurikuler", image: "https://images.unsplash.com/photo-1590409949688-6ea5ba3f350c?q=80&w=800&auto=format&fit=crop" },
-  { id: 4, title: "Praktikum IPA", category: "Akademik", image: "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=800&auto=format&fit=crop" },
-  { id: 5, title: "Upacara Bendera", category: "Kegiatan", image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop" },
-  { id: 6, title: "Tadarus Pagi", category: "Keagamaan", image: "https://images.unsplash.com/photo-1584553421349-355fbac8c571?q=80&w=800&auto=format&fit=crop" },
-];
+export const revalidate = 60;
 
-export default function GaleriPage() {
+export default async function GaleriPage() {
+  const allGalleries = await db.select().from(galleries).orderBy(desc(galleries.createdAt));
+
   return (
     <div className="py-12 md:py-20 bg-white min-h-screen">
       <div className="container mx-auto px-4 md:px-6">
@@ -31,24 +29,31 @@ export default function GaleriPage() {
           </p>
         </div>
 
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {DUMMY_GALLERY.map((item) => (
-            <div key={item.id} className="group relative rounded-3xl overflow-hidden aspect-square bg-slate-100 shadow-sm cursor-pointer">
-              <img 
-                src={item.image} 
-                alt={item.title}
-                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                <Badge className="w-fit mb-3 bg-emerald-500 hover:bg-emerald-500 border-none text-white">
-                  {item.category}
-                </Badge>
-                <h3 className="text-white text-xl font-bold">{item.title}</h3>
+        {allGalleries.length === 0 ? (
+          <div className="text-center py-20 text-slate-500 text-lg">Belum ada dokumentasi galeri.</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allGalleries.map((item) => (
+              <div key={item.id} className="group relative rounded-3xl overflow-hidden aspect-square bg-slate-100 shadow-sm cursor-pointer border border-slate-100">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={item.imageUrl} 
+                  alt={item.title}
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                  <Badge className="w-fit mb-3 bg-emerald-500 hover:bg-emerald-500 border-none text-white">
+                    Kegiatan
+                  </Badge>
+                  <h3 className="text-white text-xl font-bold">{item.title}</h3>
+                  {item.description && (
+                    <p className="text-slate-200 text-sm mt-2 line-clamp-2">{item.description}</p>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </div>

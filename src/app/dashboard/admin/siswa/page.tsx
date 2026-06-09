@@ -210,7 +210,9 @@ export default function DataSiswaPage() {
             <div className="flex items-center gap-2">
               <Select value={filterClass} onValueChange={(val) => setFilterClass(val || "")}>
                 <SelectTrigger className="w-[140px] bg-slate-50 border-slate-200">
-                  <SelectValue placeholder="Pilih Kelas" />
+                  <SelectValue placeholder="Pilih Kelas">
+                    {filterClass === "all-class" ? "Semua Kelas" : filterClass ? `Kelas ${classes.find(c => c.id.toString() === filterClass)?.name || filterClass}` : "Pilih Kelas"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all-class">Semua Kelas</SelectItem>

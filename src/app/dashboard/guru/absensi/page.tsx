@@ -132,7 +132,9 @@ export default function InputAbsensiPage() {
               <Label>Pilih Kelas</Label>
               <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || "")}>
                 <SelectTrigger className="bg-slate-50 border-slate-200">
-                  <SelectValue placeholder="Pilih Kelas" />
+                  <SelectValue placeholder="Pilih Kelas">
+                    {classes.find(c => c.id.toString() === selectedClass)?.name ? `Kelas ${classes.find(c => c.id.toString() === selectedClass)?.name}` : selectedClass || "Pilih Kelas"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {classes.map((c) => (

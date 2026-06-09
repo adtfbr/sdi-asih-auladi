@@ -44,6 +44,7 @@ export async function GET() {
         
         recentGrades = gradesList.map(g => ({
           ...g,
+          score: g.score ? Number(g.score) : null,
           date: 'Tercatat'
         }));
       }

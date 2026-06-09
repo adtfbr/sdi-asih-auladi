@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { usePathname } from "next/navigation";
 import { Bell, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,11 +20,18 @@ import Link from "next/link";
 export function Header() {
   const pathname = usePathname();
   
-  // Determine role based on the URL path for mockup purposes
-  let currentRole = "admin";
-  if (pathname?.includes("/dashboard/guru")) currentRole = "guru";
-  else if (pathname?.includes("/dashboard/siswa")) currentRole = "siswa";
-  else if (pathname?.includes("/dashboard/wali")) currentRole = "wali";
+  const [user, setUser] = React.useState<{name: string, email: string, role: string} | null>(null);
+
+  React.useEffect(() => {
+    fetch('/api/auth/session')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && data.name) {
+          setUser(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Simple title mapping
   const titleMap: Record<string, string> = {
@@ -72,30 +80,36 @@ export function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="ghost" className="relative h-10 w-10 rounded-full" />}>
             <Avatar className="h-10 w-10 border-2 border-emerald-100">
-              <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${currentRole}&backgroundColor=10b981`} alt="User" />
+              <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${user ? user.name : 'User'}&backgroundColor=10b981`} alt="User" />
               <AvatarFallback className="bg-emerald-100 text-emerald-700">
-                {currentRole.charAt(0).toUpperCase()}
+                {user ? user.name.charAt(0).toUpperCase() : 'U'}
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none capitalize">{currentRole} User</p>
+                <p className="text-sm font-medium leading-none line-clamp-1">{user ? user.name : "User"}</p>
                 <p className="text-xs leading-none text-slate-500">
-                  {currentRole}@sdi-asih-auladi.sch.id
+                  {user ? user.email : "user@sdi-asih-auladi.sch.id"}
                 </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href={`/dashboard/${currentRole}/profile`} className="cursor-pointer" />}>
+            <DropdownMenuItem render={<Link href={`/dashboard/${user ? user.role : 'admin'}/profile`} className="cursor-pointer" />}>
               Profil Saya
             </DropdownMenuItem>
-            <DropdownMenuItem render={<Link href={`/dashboard/${currentRole}/settings`} className="cursor-pointer" />}>
+            <DropdownMenuItem render={<Link href={`/dashboard/${user ? user.role : 'admin'}/settings`} className="cursor-pointer" />}>
               Pengaturan
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href="/" className="cursor-pointer text-red-600 focus:text-red-600" />}>
+            <DropdownMenuItem 
+              onClick={async () => {
+                await fetch('/api/auth/logout', { method: 'POST' });
+                window.location.href = '/login';
+              }}
+              className="cursor-pointer text-red-600 focus:text-red-600"
+            >
               Keluar
             </DropdownMenuItem>
           </DropdownMenuContent>

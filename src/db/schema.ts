@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, date, integer, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, varchar, date, integer, timestamp, boolean, time, numeric } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -80,10 +80,13 @@ export const attendanceRecords = pgTable('attendance_records', {
 export const grades = pgTable('grades', {
   id: serial('id').primaryKey(),
   studentId: integer('student_id').references(() => students.id).notNull(),
+  classId: integer('class_id').references(() => classes.id).notNull(),
   subjectId: integer('subject_id').references(() => subjects.id).notNull(),
   teacherId: integer('teacher_id').references(() => teachers.id).notNull(),
-  score: integer('score').notNull(),
+  semester: varchar('semester', { length: 20 }).notNull().default('Ganjil'), // Ganjil, Genap
   type: varchar('type', { length: 50 }).notNull(), // Tugas, Quiz, UTS, UAS, Rapor
+  score: numeric('score').notNull(),
+  notes: text('notes'),
 });
 
 export const ppdbApplications = pgTable('ppdb_applications', {
@@ -126,3 +129,53 @@ export const systemSettings = pgTable('system_settings', {
   ppdbStatus: varchar('ppdb_status', { length: 50 }).notNull().default('closed'), // open, closed
   ppdbWave: varchar('ppdb_wave', { length: 100 }),
 });
+
+export const news = pgTable('news', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
+  content: text('content').notNull(),
+  imageUrl: text('image_url'),
+  status: varchar('status', { length: 20 }).notNull().default('draft'), // draft, published
+  authorId: integer('author_id').references(() => users.id),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const galleries = pgTable('galleries', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+  imageUrl: text('image_url').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const schedules = pgTable('schedules', {
+  id: serial('id').primaryKey(),
+  classId: integer('class_id').references(() => classes.id).notNull(),
+  subjectId: integer('subject_id').references(() => subjects.id).notNull(),
+  teacherId: integer('teacher_id').references(() => teachers.id).notNull(),
+  dayOfWeek: integer('day_of_week').notNull(), // 1=Senin, 2=Selasa, etc.
+  startTime: time('start_time').notNull(),
+  endTime: time('end_time').notNull(),
+});
+
+export const learningMaterials = pgTable('learning_materials', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+  fileUrl: text('file_url').notNull(),
+  classId: integer('class_id').references(() => classes.id),
+  subjectId: integer('subject_id').references(() => subjects.id).notNull(),
+  teacherId: integer('teacher_id').references(() => teachers.id).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const notifications = pgTable('notifications', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id).notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  message: text('message').notNull(),
+  isRead: boolean('is_read').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
