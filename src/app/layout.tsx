@@ -21,7 +21,12 @@ export default async function RootLayout({
   try {
     const [dbSettings] = await db.select().from(systemSettings).limit(1);
     if (dbSettings) {
-      settings = { ...settings, ...dbSettings };
+      settings = {
+        schoolName: dbSettings.schoolName || settings.schoolName,
+        address: dbSettings.address || settings.address,
+        ppdbStatus: dbSettings.ppdbStatus || settings.ppdbStatus,
+        ppdbWave: dbSettings.ppdbWave || settings.ppdbWave
+      };
     }
   } catch (error) {
     console.error("Layout failed to fetch systemSettings", error);
