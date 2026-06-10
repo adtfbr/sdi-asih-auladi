@@ -464,7 +464,7 @@ Library:
 * Tailwind CSS v4
 * Shadcn UI
 * Drizzle ORM (Database Access)
-* NextAuth.js / Auth.js (Authentication & RBAC)
+* Custom Session Auth with Cookies (Authentication & RBAC)
 * React Hook Form
 * Zod
 
@@ -485,20 +485,19 @@ Alasan:
 
 ## Cache & Queue
 
-### Redis
+### PostgreSQL
 
 Digunakan untuk:
 
-* Session
-* Cache
-* Queue
-* Notification
+* Session (Via Cookies)
+* Queue (Database Table)
+* Notification (Database Table)
 
 ---
 
 ## File Storage
 
-### Cloudflare R2
+### Local Storage (public/uploads)
 
 Digunakan untuk:
 
@@ -517,11 +516,9 @@ Environment:
 ```text
 Cloudflare
 ↓
-Next.js (Server)
+Next.js (Server) + Local Storage
 ↓
 PostgreSQL
-↓
-Cloudflare R2
 ```
 
 ---

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, GraduationCap, BookOpen, Presentation, CheckCircle2, ArrowRight } from "lucide-react";
 import { db } from "@/db";
-import { news, galleries } from "@/db/schema";
+import { news, galleries, systemSettings } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 
 export const revalidate = 60;
@@ -11,6 +11,9 @@ export const revalidate = 60;
 export default async function Home() {
   const latestNews = await db.select().from(news).where(eq(news.status, 'published')).orderBy(desc(news.createdAt)).limit(3);
   const latestGalleries = await db.select().from(galleries).orderBy(desc(galleries.createdAt)).limit(8);
+  const [settingsResult] = await db.select().from(systemSettings).limit(1);
+  const settings = settingsResult || { schoolName: "SDI Asih Auladi", ppdbStatus: "open", ppdbWave: "Gelombang 1" };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -24,13 +27,15 @@ export default async function Home() {
 
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-8">
-            <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-100/50 px-3 py-1 text-sm text-emerald-800 backdrop-blur-sm">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-600 mr-2"></span>
-              Pendaftaran Tahun Ajaran 2026/2027 Dibuka
-            </div>
+            {settings.ppdbStatus === "open" && (
+              <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-100/50 px-3 py-1 text-sm text-emerald-800 backdrop-blur-sm">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-600 mr-2"></span>
+                Pendaftaran PPDB {settings.ppdbWave} Dibuka
+              </div>
+            )}
 
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 leading-tight">
-              Sistem Informasi <span className="text-emerald-600">Terpadu</span> SDI Asih Auladi
+              Sistem Informasi <span className="text-emerald-600">Terpadu</span> <br/>{settings.schoolName}
             </h1>
 
             <p className="text-lg md:text-xl text-slate-600 max-w-2xl">
@@ -38,13 +43,15 @@ export default async function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <Link href="/ppdb" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full h-12 px-8 text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">
-                  Daftar PPDB Online
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="#profil" className="w-full sm:w-auto">
+              {settings.ppdbStatus === "open" && (
+                <Link href="/ppdb" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full h-12 px-8 text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">
+                    Daftar PPDB Online
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              )}
+              <Link href="/profil" className="w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="w-full h-12 px-8 text-base border-emerald-200 text-emerald-800 hover:bg-emerald-50 rounded-full">
                   Pelajari Lebih Lanjut
                 </Button>
@@ -102,7 +109,7 @@ export default async function Home() {
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Membentuk Generasi Qur&apos;ani</h2>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  SDI Asih Auladi berkomitmen untuk menyelenggarakan pendidikan dasar Islam yang berkualitas dengan mengintegrasikan kurikulum nasional dan kurikulum keislaman.
+                  {settings.schoolName} berkomitmen untuk menyelenggarakan pendidikan dasar Islam yang berkualitas dengan mengintegrasikan kurikulum nasional dan kurikulum keislaman.
                 </p>
               </div>
 
@@ -181,9 +188,9 @@ export default async function Home() {
           <div className="flex justify-between items-end mb-12">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Berita & Pengumuman</h2>
-              <p className="text-slate-600 text-lg max-w-2xl">Ikuti perkembangan terbaru dan informasi penting dari SDI Asih Auladi.</p>
+              <p className="text-slate-600 text-lg max-w-2xl">Ikuti perkembangan terbaru dan informasi penting dari {settings.schoolName}.</p>
             </div>
-            <Link href="#berita" className="hidden md:block">
+            <Link href="/berita" className="hidden md:block">
               <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full">
                 Lihat Semua
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -239,7 +246,7 @@ export default async function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Galeri Kegiatan</h2>
-            <p className="text-slate-600 text-lg">Momen-momen berharga dalam proses pembelajaran dan kegiatan siswa di SDI Asih Auladi.</p>
+            <p className="text-slate-600 text-lg">Momen-momen berharga dalam proses pembelajaran dan kegiatan siswa di {settings.schoolName}.</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -259,7 +266,7 @@ export default async function Home() {
           </div>
 
           <div className="mt-12 text-center">
-            <Link href="#galeri">
+            <Link href="/galeri">
               <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full px-8">
                 Lihat Galeri Lengkap
               </Button>
@@ -277,15 +284,23 @@ export default async function Home() {
           <div className="bg-emerald-700/30 backdrop-blur-sm border border-emerald-500/30 rounded-3xl p-8 md:p-16 text-center max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Bergabunglah Bersama Kami</h2>
             <p className="text-emerald-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-              Pendaftaran Peserta Didik Baru (PPDB) Tahun Ajaran 2026/2027 telah dibuka. Daftarkan putra/putri Anda sekarang melalui sistem online kami.
+              {settings.ppdbStatus === "open" 
+                ? `Pendaftaran Peserta Didik Baru (PPDB) ${settings.ppdbWave} telah dibuka. Daftarkan putra/putri Anda sekarang melalui sistem online kami.`
+                : "Saat ini pendaftaran siswa baru sedang ditutup. Silakan pantau terus website kami untuk informasi pembukaan gelombang selanjutnya."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/ppdb">
-                <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-lg bg-white text-emerald-700 hover:bg-emerald-50 rounded-full">
-                  Daftar PPDB Sekarang
+              {settings.ppdbStatus === "open" ? (
+                <Link href="/ppdb">
+                  <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-lg bg-white text-emerald-700 hover:bg-emerald-50 rounded-full">
+                    Daftar PPDB Sekarang
+                  </Button>
+                </Link>
+              ) : (
+                <Button size="lg" disabled className="w-full sm:w-auto h-14 px-8 text-lg bg-slate-300 text-slate-600 rounded-full cursor-not-allowed">
+                  Pendaftaran Ditutup
                 </Button>
-              </Link>
-              <Link href="#kontak">
+              )}
+              <Link href="/kontak">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 text-lg border-emerald-400 bg-transparent text-white hover:bg-emerald-600 hover:border-emerald-600 hover:text-white rounded-full">
                   Hubungi Panitia
                 </Button>

@@ -1,0 +1,45 @@
+{
+  "public_pages": {
+    "/": 200,
+    "/profil": 200,
+    "/visi-misi": 200,
+    "/berita": 200,
+    "/galeri": 200,
+    "/kontak": 200,
+    "/ppdb": 200,
+    "/login": 200
+  },
+  "admin_dashboard": {
+    "/dashboard/admin": 200,
+    "/dashboard/admin/siswa": 200,
+    "/dashboard/admin/guru": 200,
+    "/dashboard/admin/kelas": 200,
+    "/dashboard/admin/mapel": 200,
+    "/dashboard/admin/tahun-ajaran": 200,
+    "/dashboard/admin/jadwal": 200,
+    "/dashboard/admin/ppdb": 200,
+    "/dashboard/admin/pengumuman": 200,
+    "/dashboard/admin/berita": 200,
+    "/dashboard/admin/galeri": 200,
+    "/dashboard/admin/settings": 200
+  },
+  "guru_dashboard": {
+    "/dashboard/guru": 200,
+    "/dashboard/guru/absensi": 200,
+    "/dashboard/guru/jadwal": 200,
+    "/dashboard/guru/materi": 200,
+    "/dashboard/guru/nilai": 200
+  },
+  "siswa_dashboard": {},
+  "wali_dashboard": {},
+  "errors": [
+    {
+      "type": "SISWA_TEST_ERROR",
+      "message": "Navigation timeout of 30000 ms exceeded"
+    },
+    {
+      "type": "WALI_TEST_ERROR",
+      "message": "Navigation timeout of 30000 ms exceeded"
+    }
+  ]
+}

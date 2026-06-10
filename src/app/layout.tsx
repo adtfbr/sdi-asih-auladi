@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
+import { db } from "@/db";
+import { systemSettings } from "@/db/schema";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -10,15 +12,24 @@ export const metadata: Metadata = {
   description: "Platform manajemen sekolah berbasis web untuk mendigitalisasi operasional SDI Asih Auladi.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let settings = { schoolName: "SDI Asih Auladi", address: "Jl. Pendidikan No. 123", ppdbStatus: "open", ppdbWave: "Gelombang 1" };
+  try {
+    const [dbSettings] = await db.select().from(systemSettings).limit(1);
+    if (dbSettings) {
+      settings = { ...settings, ...dbSettings };
+    }
+  } catch (error) {
+    console.error("Layout failed to fetch systemSettings", error);
+  }
   return (
     <html lang="id" className="scroll-smooth">
       <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
-        <ConditionalLayout>
+        <ConditionalLayout settings={settings}>
           {children}
         </ConditionalLayout>
       </body>
