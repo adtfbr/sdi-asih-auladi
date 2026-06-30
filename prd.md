@@ -197,10 +197,12 @@ Dashboard menampilkan:
 
 Guru dapat:
 
-* Mengelola absensi
-* Menginput nilai
-* Upload materi
-* Melihat jadwal
+* Mengelola absensi harian kelas
+* Mengirimkan notifikasi absensi _real-time_ otomatis ke Wali Murid
+* Menginput Nilai Akademik & Rapor Kurikulum Merdeka (Penilaian Sikap/Karakter, Target Hafalan Tahfidz)
+* Mengunggah materi pembelajaran dan tugas
+* Mengakses **Buku Penghubung Digital** untuk mengirimkan catatan khusus/teguran/apresiasi kepada Wali Murid secara personal
+* Melihat jadwal mengajar
 
 ---
 
@@ -208,10 +210,10 @@ Guru dapat:
 
 Siswa dapat:
 
-* Melihat nilai
-* Mengakses materi
-* Melihat jadwal
-* Membaca pengumuman
+* Melihat nilai dan rapor capaian akademik
+* Mengakses materi dan mengumpulkan tugas
+* Melihat jadwal pelajaran
+* Membaca pengumuman sekolah
 
 ---
 
@@ -219,23 +221,26 @@ Siswa dapat:
 
 Wali dapat:
 
-* Melihat nilai anak
-* Melihat absensi anak
-* Melihat pengumuman sekolah
+* Melihat nilai rapor anak (Akademik, Sikap, dan Tahfidz)
+* Melihat rekap absensi anak & menerima notifikasi kehadiran harian secara _real-time_
+* Memantau **Buku Penghubung Digital**, membalas pesan dari guru, dan mengajukan izin sakit/absen harian
+* **Manajemen Keuangan:** Melihat tagihan SPP bulanan, riwayat pembayaran, dan mengunggah bukti bayar secara mandiri
+* Melihat pengumuman sekolah terpusat
 
 ---
 
 # 4. User Flow
 
-## A. Alur PPDB
+## A. Alur PPDB *(Fitur Disembunyikan Sementara)*
 
-1. Calon siswa membuka halaman PPDB.
-2. Mengisi formulir pendaftaran.
-3. Mengunggah dokumen persyaratan.
-4. Sistem membuat nomor pendaftaran.
-5. Operator melakukan verifikasi.
-6. Status pendaftaran diperbarui.
-7. Calon siswa melihat hasil seleksi.
+1. Calon siswa (orang tua) membuka halaman PPDB.
+2. Mengisi formulir pendaftaran awal (Nama, Kontak, Asal Sekolah).
+3. Sistem membuat **Nomor Tagihan/Virtual Account** untuk biaya pendaftaran.
+4. Orang tua melakukan pembayaran dan mengunggah **Bukti Bayar**.
+5. Operator/Bendahara melakukan **Verifikasi Pembayaran**.
+6. Setelah lunas, orang tua melengkapi biodata lengkap dan mengunggah dokumen persyaratan (KK, Akta).
+7. Operator memverifikasi kelengkapan berkas akademik.
+8. Status pendaftaran diperbarui dan hasil seleksi diumumkan ke Dasbor Calon Siswa.
 
 ---
 
@@ -243,33 +248,36 @@ Wali dapat:
 
 1. Login ke dashboard.
 2. Memilih kelas.
-3. Mengisi absensi harian.
-4. Menginput nilai siswa.
-5. Mengunggah materi pembelajaran.
+3. Mengisi **absensi harian** (sistem otomatis men- _trigger_ notifikasi _real-time_ ke HP Wali Murid yang anaknya alpa/terlambat).
+4. Menginput **nilai akademik** dan **nilai sikap/tahfidz** (Kurikulum Merdeka).
+5. Mengelola **Buku Penghubung Digital** (menulis catatan personal untuk anak tertentu, membaca permohonan izin dari wali).
+6. Mengunggah materi pembelajaran dan penugasan.
 
 ---
 
 ## C. Alur Wali Murid
 
 1. Login portal wali.
-2. Memilih anak yang terhubung.
-3. Melihat:
-
-   * Absensi
-   * Nilai
-   * Pengumuman
-4. Menerima notifikasi jika ada informasi baru.
+2. Memilih profil anak yang terhubung.
+3. Mengecek **Riwayat Tagihan SPP**:
+   * Melihat tagihan aktif bulan berjalan.
+   * Mengunggah bukti bayar cicilan/SPP.
+   * Mengecek riwayat konfirmasi lunas dari Bendahara.
+4. Melihat pembaruan *real-time*:
+   * Notifikasi Kehadiran & Absensi harian.
+   * Pesan langsung dari guru di **Buku Penghubung** dan membalasnya.
+   * Nilai terbaru & capaian karakter/hafalan anak.
+   * Pengumuman terpusat sekolah.
 
 ---
 
-## D. Alur Operator
+## D. Alur Operator / Admin
 
 1. Login dashboard.
-2. Mengelola data siswa.
-3. Mengelola data guru.
-4. Mengelola jadwal.
-5. Memverifikasi PPDB.
-6. Membuat pengumuman.
+2. **Manajemen Pengguna & Akademik:** Mengelola data siswa, guru, kelas, dan jadwal pelajaran.
+3. **Manajemen PPDB:** Mengontrol alur seleksi pendaftaran, dan memverifikasi kelengkapan berkas pendaftar baru.
+4. **Manajemen Keuangan:** Menerbitkan *invoice* SPP bulanan untuk seluruh siswa, memverifikasi unggahan bukti bayar SPP/PPDB, dan mengecek laporan pemasukan.
+5. Mempublikasikan berita & pengumuman di _website_ sekolah.
 
 ---
 
