@@ -19,7 +19,19 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Simple password check (in real app, use bcrypt)
-    if (user.password !== password) {
+    // Update: now using bcryptjs for hashed passwords.
+    // If the hash doesn't start with '$2' it's a plain text password (for legacy test accounts)
+    const isHashed = user.password.startsWith("$2");
+    
+    let isMatch = false;
+    if (isHashed) {
+      const bcrypt = await import("bcryptjs");
+      isMatch = await bcrypt.compare(password, user.password);
+    } else {
+      isMatch = user.password === password;
+    }
+
+    if (!isMatch) {
       return NextResponse.json({ error: "Password salah" }, { status: 401 });
     }
 
