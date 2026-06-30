@@ -217,6 +217,20 @@ Siswa dapat:
 
 ---
 
+## Portal Admin (Operator Utama)
+
+Admin dapat:
+
+* **Manajemen Pengguna (Wajib):** Membuat, mengedit, dan mengelola akun untuk Guru, Siswa, dan Wali Murid secara terpusat (tidak ada pendaftaran mandiri selain PPDB)
+* Mengelola data master siswa
+* Mengelola data master guru
+* Mengelola jadwal pelajaran
+* Melakukan verifikasi pembayaran PPDB & mengelola SPP bulanan
+* Menerbitkan pengumuman sekolah dan artikel berita
+* Mengatur *settings* website (nama, kontak, logo sekolah)
+
+---
+
 ## Portal Wali Murid
 
 Wali dapat:
@@ -274,10 +288,11 @@ Wali dapat:
 ## D. Alur Operator / Admin
 
 1. Login dashboard.
-2. **Manajemen Pengguna & Akademik:** Mengelola data siswa, guru, kelas, dan jadwal pelajaran.
-3. **Manajemen PPDB:** Mengontrol alur seleksi pendaftaran, dan memverifikasi kelengkapan berkas pendaftar baru.
-4. **Manajemen Keuangan:** Menerbitkan *invoice* SPP bulanan untuk seluruh siswa, memverifikasi unggahan bukti bayar SPP/PPDB, dan mengecek laporan pemasukan.
-5. Mempublikasikan berita & pengumuman di _website_ sekolah.
+2. **Pembuatan & Manajemen Akun (Wajib):** Mendaftarkan (membuatkan) *username* dan *password* unik untuk setiap Guru, Siswa, dan Wali Murid secara manual atau impor dari _database_ penerimaan siswa baru, kemudian membagikannya ke masing-masing pihak.
+3. **Manajemen Akademik:** Mengelola data master siswa, guru, kelas, dan jadwal pelajaran.
+4. **Manajemen PPDB:** Mengontrol alur seleksi pendaftaran, dan memverifikasi kelengkapan berkas pendaftar baru.
+5. **Manajemen Keuangan:** Menerbitkan *invoice* SPP bulanan untuk seluruh siswa, memverifikasi unggahan bukti bayar SPP/PPDB, dan mengecek laporan pemasukan.
+6. Mempublikasikan berita & pengumuman di _website_ sekolah.
 
 ---
 
