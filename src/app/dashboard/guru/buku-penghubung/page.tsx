@@ -210,7 +210,7 @@ export default function BukuPenghubungGuruPage() {
                               </div>
                             </div>
                           </div>
-                          {!isFromMe && !note.isReadByTeacher && (
+                          {!note.isReadByTeacher && (
                             <Button size="sm" variant="outline" className="text-xs" onClick={() => handleMarkAsRead(note.id)}>
                               <CheckCircle2 className="mr-1 h-3 w-3" /> Tandai Dibaca
                             </Button>

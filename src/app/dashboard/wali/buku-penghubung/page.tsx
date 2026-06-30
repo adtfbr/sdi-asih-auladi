@@ -149,7 +149,7 @@ export default function BukuPenghubungWaliPage() {
                         </div>
                       </div>
                     </div>
-                    {!isFromMe && !note.isReadByParent && (
+                    {!note.isReadByParent && (
                       <Button size="sm" variant="outline" className="text-xs" onClick={() => handleMarkAsRead(note.id)}>
                         <CheckCircle2 className="mr-1 h-3 w-3" /> Tandai Dibaca
                       </Button>
