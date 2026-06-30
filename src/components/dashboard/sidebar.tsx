@@ -40,6 +40,7 @@ const roleMenus = {
     { name: "Absensi", href: "/dashboard/guru/absensi", icon: ClipboardList },
     { name: "Input Nilai", href: "/dashboard/guru/nilai", icon: FileText },
     { name: "Materi", href: "/dashboard/guru/materi", icon: BookOpen },
+    { name: "Buku Penghubung", href: "/dashboard/guru/buku-penghubung", icon: MessageSquare },
   ],
   siswa: [
     { name: "Dashboard", href: "/dashboard/siswa", icon: LayoutDashboard },
@@ -53,6 +54,7 @@ const roleMenus = {
     { name: "Absensi Anak", href: "/dashboard/wali/absensi", icon: ClipboardList },
     { name: "Nilai & Rapor", href: "/dashboard/wali/nilai", icon: FileText },
     { name: "Pengumuman", href: "/dashboard/wali/pengumuman", icon: MessageSquare },
+    { name: "Buku Penghubung", href: "/dashboard/wali/buku-penghubung", icon: MessageSquare },
   ]
 };
 
