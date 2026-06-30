@@ -179,3 +179,16 @@ export const notifications = pgTable('notifications', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+export const communicationBooks = pgTable('communication_books', {
+  id: serial('id').primaryKey(),
+  studentId: integer('student_id').references(() => students.id).notNull(),
+  teacherId: integer('teacher_id').references(() => teachers.id).notNull(),
+  type: varchar('type', { length: 50 }).notNull(), // Info, Teguran, Apresiasi, Izin
+  message: text('message').notNull(),
+  reply: text('reply'),
+  senderRole: varchar('sender_role', { length: 20 }).notNull(), // guru, wali
+  isReadByParent: boolean('is_read_by_parent').default(false).notNull(),
+  isReadByTeacher: boolean('is_read_by_teacher').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
