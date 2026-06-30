@@ -179,37 +179,37 @@ export default function DataSiswaPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Data Siswa</h2>
-          <p className="text-slate-500">Kelola data induk siswa, kelas, dan status akademik.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Data Siswa</h2>
+          <p className="text-stone-500">Kelola data induk siswa, kelas, dan status akademik.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" className="border-slate-200">
+          <Button variant="outline" className="border-stone-200">
             <Upload className="mr-2 h-4 w-4" /> Import Excel
           </Button>
-          <Button variant="outline" className="border-slate-200">
+          <Button variant="outline" className="border-stone-200">
             <Download className="mr-2 h-4 w-4" /> Export
           </Button>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={openCreate}>
+          <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={openCreate}>
             <Plus className="mr-2 h-4 w-4" /> Tambah Siswa
           </Button>
         </div>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
-        <CardHeader className="pb-3 border-b border-slate-50">
+      <Card className="border-stone-100 shadow-sm">
+        <CardHeader className="pb-3 border-b border-stone-50">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-2 flex-1 max-w-sm relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-stone-400" />
               <Input
                 placeholder="Cari nama atau NIS..."
-                className="pl-9 bg-slate-50 border-slate-200"
+                className="pl-9 bg-stone-50 border-stone-200"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
               <Select value={filterClass} onValueChange={(val) => setFilterClass(val || "")}>
-                <SelectTrigger className="w-[140px] bg-slate-50 border-slate-200">
+                <SelectTrigger className="w-[140px] bg-stone-50 border-stone-200">
                   <SelectValue placeholder="Pilih Kelas">
                     {filterClass === "all-class" ? "Semua Kelas" : filterClass ? `Kelas ${classes.find(c => c.id.toString() === filterClass)?.name || filterClass}` : "Pilih Kelas"}
                   </SelectValue>
@@ -224,7 +224,7 @@ export default function DataSiswaPage() {
                 </SelectContent>
               </Select>
               <Select value={filterStatus} onValueChange={(val) => setFilterStatus(val || "")}>
-                <SelectTrigger className="w-[140px] bg-slate-50 border-slate-200">
+                <SelectTrigger className="w-[140px] bg-stone-50 border-stone-200">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -239,17 +239,17 @@ export default function DataSiswaPage() {
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
             </div>
           ) : students.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-400">
+            <div className="flex flex-col items-center justify-center h-48 text-stone-400">
               <p className="text-lg font-medium">Belum ada data siswa</p>
               <p className="text-sm">Klik &quot;Tambah Siswa&quot; untuk menambahkan data.</p>
             </div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead className="w-[80px]">NIS</TableHead>
                   <TableHead>Nama Lengkap</TableHead>
@@ -261,9 +261,9 @@ export default function DataSiswaPage() {
               </TableHeader>
               <TableBody>
                 {students.map((student) => (
-                  <TableRow key={student.id} className="hover:bg-slate-50/50">
-                    <TableCell className="font-medium text-slate-600">{student.nis}</TableCell>
-                    <TableCell className="font-semibold text-slate-900">{student.name}</TableCell>
+                  <TableRow key={student.id} className="hover:bg-stone-50/50">
+                    <TableCell className="font-medium text-stone-600">{student.nis}</TableCell>
+                    <TableCell className="font-semibold text-stone-900">{student.name}</TableCell>
                     <TableCell>{student.className || "-"}</TableCell>
                     <TableCell>{student.gender === "Laki-laki" ? "L" : "P"}</TableCell>
                     <TableCell>
@@ -271,9 +271,9 @@ export default function DataSiswaPage() {
                         variant="outline"
                         className={
                           student.status === "Aktif"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            ? "bg-teal-50 text-teal-700 border-teal-200"
                             : student.status === "Lulus"
-                            ? "bg-blue-50 text-blue-700 border-blue-200"
+                            ? "bg-sky-50 text-sky-700 border-sky-200"
                             : "bg-rose-50 text-rose-700 border-rose-200"
                         }
                       >
@@ -282,7 +282,7 @@ export default function DataSiswaPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600">
+                        <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-stone-100 text-stone-400 hover:text-stone-600">
                           <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -379,7 +379,7 @@ export default function DataSiswaPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSave} disabled={saving}>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={handleSave} disabled={saving}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {dialogMode === "create" ? "Simpan" : "Perbarui"}
             </Button>

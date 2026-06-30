@@ -140,21 +140,21 @@ export default function AdminBeritaPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Kelola Berita</h2>
-          <p className="text-slate-500">Tambahkan dan atur berita atau artikel untuk website.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Kelola Berita</h2>
+          <p className="text-stone-500">Tambahkan dan atur berita atau artikel untuk website.</p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleOpenDialog()}>
+        <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" /> Tambah Berita
         </Button>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
+      <Card className="border-stone-100 shadow-sm">
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-8 flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-slate-300" /></div>
+            <div className="p-8 flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-stone-300" /></div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead className="w-[80px]">Gambar</TableHead>
                   <TableHead>Judul</TableHead>
@@ -166,36 +166,36 @@ export default function AdminBeritaPage() {
               <TableBody>
                 {newsList.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-slate-500 py-8">Belum ada berita.</TableCell>
+                    <TableCell colSpan={5} className="text-center text-stone-500 py-8">Belum ada berita.</TableCell>
                   </TableRow>
                 ) : (
                   newsList.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell>
                         {item.imageUrl ? (
-                          <div className="w-12 h-12 rounded bg-slate-100 overflow-hidden">
+                          <div className="w-12 h-12 rounded bg-stone-100 overflow-hidden">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={item.imageUrl} alt="Thumbnail" className="w-full h-full object-cover" />
                           </div>
                         ) : (
-                          <div className="w-12 h-12 rounded bg-slate-100 flex items-center justify-center text-slate-400">
+                          <div className="w-12 h-12 rounded bg-stone-100 flex items-center justify-center text-stone-400">
                             <ImageIcon className="h-5 w-5" />
                           </div>
                         )}
                       </TableCell>
-                      <TableCell className="font-medium text-slate-900">{item.title}</TableCell>
+                      <TableCell className="font-medium text-stone-900">{item.title}</TableCell>
                       <TableCell>
-                        <Badge className={item.status === 'published' ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none' : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-none'}>
+                        <Badge className={item.status === 'published' ? 'bg-teal-100 text-teal-800 hover:bg-teal-200 border-none' : 'bg-stone-100 text-stone-800 hover:bg-stone-200 border-none'}>
                           {item.status === 'published' ? 'Dipublikasi' : 'Draft'}
                         </Badge>
                       </TableCell>
                       <TableCell>{new Date(item.createdAt).toLocaleDateString("id-ID")}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(item)} className="text-slate-500 hover:text-blue-600">
+                          <Button variant="ghost" size="icon" onClick={() => handleOpenDialog(item)} className="text-stone-500 hover:text-sky-600">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleOpenDelete(item)} className="text-slate-500 hover:text-rose-600">
+                          <Button variant="ghost" size="icon" onClick={() => handleOpenDelete(item)} className="text-stone-500 hover:text-rose-600">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -232,7 +232,7 @@ export default function AdminBeritaPage() {
               <Label>Gambar Thumbnail</Label>
               <Input type="file" accept="image/*" onChange={(e) => setFileToUpload(e.target.files?.[0] || null)} />
               {currentItem?.imageUrl && !fileToUpload && (
-                <p className="text-xs text-slate-500 mt-1">Gambar saat ini: <a href={currentItem.imageUrl || undefined} target="_blank" className="text-blue-600 hover:underline">Lihat Gambar</a></p>
+                <p className="text-xs text-stone-500 mt-1">Gambar saat ini: <a href={currentItem.imageUrl || undefined} target="_blank" className="text-sky-600 hover:underline">Lihat Gambar</a></p>
               )}
             </div>
 
@@ -251,7 +251,7 @@ export default function AdminBeritaPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Batal</Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+            <Button onClick={handleSave} disabled={saving} className="bg-teal-600 hover:bg-teal-700 text-white">
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Simpan
             </Button>

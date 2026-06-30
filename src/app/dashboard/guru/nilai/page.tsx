@@ -140,21 +140,21 @@ export default function InputNilaiPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Input Nilai</h2>
-          <p className="text-slate-500">Kelola dan masukkan nilai siswa untuk berbagai jenis evaluasi.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Input Nilai</h2>
+          <p className="text-stone-500">Kelola dan masukkan nilai siswa untuk berbagai jenis evaluasi.</p>
         </div>
-        <Button variant="outline" className="border-slate-200 w-full md:w-auto">
+        <Button variant="outline" className="border-stone-200 w-full md:w-auto">
           <UploadCloud className="mr-2 h-4 w-4" /> Import Nilai (Excel)
         </Button>
       </div>
 
-      <Card className="border-slate-100 shadow-sm bg-white">
-        <CardHeader className="pb-4 border-b border-slate-50">
+      <Card className="border-stone-100 shadow-sm bg-white">
+        <CardHeader className="pb-4 border-b border-stone-50">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <Label>Pilih Kelas</Label>
               <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || "")}>
-                <SelectTrigger className="bg-slate-50 border-slate-200">
+                <SelectTrigger className="bg-stone-50 border-stone-200">
                   <SelectValue placeholder="Pilih Kelas">
                     {classes.find(c => c.id.toString() === selectedClass)?.name ? `Kelas ${classes.find(c => c.id.toString() === selectedClass)?.name}` : selectedClass || "Pilih Kelas"}
                   </SelectValue>
@@ -169,7 +169,7 @@ export default function InputNilaiPage() {
             <div className="space-y-2">
               <Label>Mata Pelajaran</Label>
               <Select value={selectedSubject} onValueChange={(val) => setSelectedSubject(val || "")}>
-                <SelectTrigger className="bg-slate-50 border-slate-200">
+                <SelectTrigger className="bg-stone-50 border-stone-200">
                   <SelectValue placeholder="Pilih Mapel">
                     {subjects.find(s => s.id.toString() === selectedSubject)?.name || selectedSubject || "Pilih Mapel"}
                   </SelectValue>
@@ -184,7 +184,7 @@ export default function InputNilaiPage() {
             <div className="space-y-2">
               <Label>Jenis Penilaian</Label>
               <Select value={gradeType} onValueChange={(val) => setGradeType(val || "")}>
-                <SelectTrigger className="bg-slate-50 border-slate-200">
+                <SelectTrigger className="bg-stone-50 border-stone-200">
                   <SelectValue placeholder="Pilih Jenis" />
                 </SelectTrigger>
                 <SelectContent>
@@ -200,21 +200,21 @@ export default function InputNilaiPage() {
 
         <CardContent className="pt-6">
           {!selectedClass ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               Pilih kelas untuk menampilkan daftar siswa.
             </div>
           ) : loading ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data siswa...
             </div>
           ) : students.length === 0 ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               Tidak ada siswa di kelas ini.
             </div>
           ) : (
             <>
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-stone-50">
                   <TableRow>
                     <TableHead className="w-[60px]">No</TableHead>
                     <TableHead className="w-[120px]">NIS</TableHead>
@@ -225,9 +225,9 @@ export default function InputNilaiPage() {
                 <TableBody>
                   {students.map((student, index) => (
                     <TableRow key={student.id}>
-                      <TableCell className="font-medium text-slate-500">{index + 1}</TableCell>
-                      <TableCell className="text-slate-600">{student.nis}</TableCell>
-                      <TableCell className="font-semibold text-slate-900">{student.name}</TableCell>
+                      <TableCell className="font-medium text-stone-500">{index + 1}</TableCell>
+                      <TableCell className="text-stone-600">{student.nis}</TableCell>
+                      <TableCell className="font-semibold text-stone-900">{student.name}</TableCell>
                       <TableCell>
                         <Input
                           type="number"
@@ -238,7 +238,7 @@ export default function InputNilaiPage() {
                             setScoresMap((prev) => ({ ...prev, [student.id]: e.target.value }));
                             setSaved(false);
                           }}
-                          className="h-10 text-center font-medium border-slate-200 bg-white"
+                          className="h-10 text-center font-medium border-stone-200 bg-white"
                           placeholder="0"
                         />
                       </TableCell>
@@ -249,12 +249,12 @@ export default function InputNilaiPage() {
 
               <div className="mt-6 flex items-center justify-end gap-3">
                 {saved && (
-                  <span className="flex items-center text-sm text-emerald-600 font-medium">
+                  <span className="flex items-center text-sm text-teal-600 font-medium">
                     <CheckCircle2 className="h-4 w-4 mr-1" /> Nilai tersimpan!
                   </span>
                 )}
                 <Button
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white h-10 px-8 rounded-full"
+                  className="bg-teal-600 hover:bg-teal-700 text-white h-10 px-8 rounded-full"
                   onClick={handleSave}
                   disabled={saving}
                 >

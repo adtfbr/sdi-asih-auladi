@@ -121,17 +121,17 @@ export default function InputAbsensiPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900">Input Absensi</h2>
-        <p className="text-slate-500">Catat kehadiran harian siswa untuk kelas yang Anda ajar.</p>
+        <h2 className="text-2xl font-bold tracking-tight text-stone-900">Input Absensi</h2>
+        <p className="text-stone-500">Catat kehadiran harian siswa untuk kelas yang Anda ajar.</p>
       </div>
 
-      <Card className="border-slate-100 shadow-sm bg-white">
-        <CardHeader className="pb-4 border-b border-slate-50">
+      <Card className="border-stone-100 shadow-sm bg-white">
+        <CardHeader className="pb-4 border-b border-stone-50">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <Label>Pilih Kelas</Label>
               <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || "")}>
-                <SelectTrigger className="bg-slate-50 border-slate-200">
+                <SelectTrigger className="bg-stone-50 border-stone-200">
                   <SelectValue placeholder="Pilih Kelas">
                     {classes.find(c => c.id.toString() === selectedClass)?.name ? `Kelas ${classes.find(c => c.id.toString() === selectedClass)?.name}` : selectedClass || "Pilih Kelas"}
                   </SelectValue>
@@ -146,12 +146,12 @@ export default function InputAbsensiPage() {
             <div className="space-y-2">
               <Label>Tanggal Absensi</Label>
               <div className="relative">
-                <CalendarDays className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <CalendarDays className="absolute left-3 top-2.5 h-4 w-4 text-stone-400" />
                 <Input
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="pl-10 bg-slate-50 border-slate-200"
+                  className="pl-10 bg-stone-50 border-stone-200"
                 />
               </div>
             </div>
@@ -160,21 +160,21 @@ export default function InputAbsensiPage() {
 
         <CardContent className="pt-6">
           {!selectedClass ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               Pilih kelas untuk menampilkan daftar siswa.
             </div>
           ) : loading ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data siswa...
             </div>
           ) : students.length === 0 ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               Tidak ada siswa di kelas ini.
             </div>
           ) : (
             <>
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-stone-50">
                   <TableRow>
                     <TableHead className="w-[60px]">No</TableHead>
                     <TableHead className="w-[120px]">NIS</TableHead>
@@ -185,9 +185,9 @@ export default function InputAbsensiPage() {
                 <TableBody>
                   {students.map((student, index) => (
                     <TableRow key={student.id}>
-                      <TableCell className="font-medium text-slate-500">{index + 1}</TableCell>
-                      <TableCell className="text-slate-600">{student.nis}</TableCell>
-                      <TableCell className="font-semibold text-slate-900">{student.name}</TableCell>
+                      <TableCell className="font-medium text-stone-500">{index + 1}</TableCell>
+                      <TableCell className="text-stone-600">{student.nis}</TableCell>
+                      <TableCell className="font-semibold text-stone-900">{student.name}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           {["Hadir", "Izin", "Sakit", "Alpha"].map((s) => (
@@ -199,8 +199,8 @@ export default function InputAbsensiPage() {
                                 checked={attendanceMap[student.id] === s}
                                 onChange={() => handleStatusChange(student.id, s)}
                                 className={
-                                  s === "Hadir" ? "text-emerald-600" :
-                                    s === "Izin" ? "text-blue-600" :
+                                  s === "Hadir" ? "text-teal-600" :
+                                    s === "Izin" ? "text-sky-600" :
                                       s === "Sakit" ? "text-amber-600" : "text-rose-600"
                                 }
                               />
@@ -216,12 +216,12 @@ export default function InputAbsensiPage() {
 
               <div className="mt-6 flex items-center justify-end gap-3">
                 {saved && (
-                  <span className="flex items-center text-sm text-emerald-600 font-medium">
+                  <span className="flex items-center text-sm text-teal-600 font-medium">
                     <CheckCircle2 className="h-4 w-4 mr-1" /> Absensi tersimpan!
                   </span>
                 )}
                 <Button
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white h-10 px-8 rounded-full"
+                  className="bg-teal-600 hover:bg-teal-700 text-white h-10 px-8 rounded-full"
                   onClick={handleSave}
                   disabled={saving}
                 >

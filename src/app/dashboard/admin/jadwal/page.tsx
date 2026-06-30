@@ -189,25 +189,25 @@ export default function JadwalAdminPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Jadwal Pelajaran</h2>
-          <p className="text-slate-500">Kelola dan susun jadwal mata pelajaran untuk setiap kelas.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Jadwal Pelajaran</h2>
+          <p className="text-stone-500">Kelola dan susun jadwal mata pelajaran untuk setiap kelas.</p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={openCreate}>
+        <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" /> Tambah Sesi Jadwal
         </Button>
       </div>
 
-      <Card className="border-slate-100 shadow-sm bg-white overflow-hidden">
-        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
+      <Card className="border-stone-100 shadow-sm bg-white overflow-hidden">
+        <CardHeader className="bg-stone-50/50 border-b border-stone-100 pb-4">
           <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
             <div className="flex items-center gap-2">
-              <CalendarDays className="h-5 w-5 text-slate-400" />
-              <CardTitle className="text-lg text-slate-900">Daftar Jadwal</CardTitle>
+              <CalendarDays className="h-5 w-5 text-stone-400" />
+              <CardTitle className="text-lg text-stone-900">Daftar Jadwal</CardTitle>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-slate-500">Filter Kelas:</span>
+              <span className="text-sm text-stone-500">Filter Kelas:</span>
               <Select value={selectedClassFilter} onValueChange={(val) => setSelectedClassFilter(val || "all")}>
-                <SelectTrigger className="w-[180px] bg-white border-slate-200 font-semibold text-emerald-700">
+                <SelectTrigger className="w-[180px] bg-white border-stone-200 font-semibold text-teal-700">
                   <SelectValue placeholder="Semua Kelas">
                     {selectedClassFilter === "all" ? "Semua Kelas" : classes.find(c => c.id.toString() === selectedClassFilter)?.name || selectedClassFilter}
                   </SelectValue>
@@ -225,18 +225,18 @@ export default function JadwalAdminPage() {
         
         <CardContent className="p-0 overflow-x-auto">
           {loading ? (
-             <div className="flex items-center justify-center h-48 text-slate-400">
+             <div className="flex items-center justify-center h-48 text-stone-400">
                <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat jadwal...
              </div>
           ) : schedules.length === 0 && selectedClassFilter === "all" ? (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-400">
-              <CalendarDays className="h-10 w-10 mb-3 text-slate-300" />
+            <div className="flex flex-col items-center justify-center h-48 text-stone-400">
+              <CalendarDays className="h-10 w-10 mb-3 text-stone-300" />
               <p className="text-lg font-medium">Belum ada sesi jadwal</p>
               <p className="text-sm">Klik "Tambah Sesi Jadwal" untuk membuat jadwal baru.</p>
             </div>
           ) : selectedClassFilter === "all" ? (
             <Table>
-              <TableHeader className="bg-slate-100">
+              <TableHeader className="bg-stone-100">
                 <TableRow>
                   <TableHead>Hari</TableHead>
                   <TableHead>Jam</TableHead>
@@ -248,21 +248,21 @@ export default function JadwalAdminPage() {
               </TableHeader>
               <TableBody>
                 {schedules.map((s) => (
-                  <TableRow key={s.id} className="hover:bg-slate-50/50 group">
-                    <TableCell className="font-semibold text-slate-800">
+                  <TableRow key={s.id} className="hover:bg-stone-50/50 group">
+                    <TableCell className="font-semibold text-stone-800">
                       {daysMap[s.dayOfWeek]}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="bg-white border-slate-200 text-slate-600 font-medium">
+                      <Badge variant="outline" className="bg-white border-stone-200 text-stone-600 font-medium">
                         <Clock className="w-3 h-3 mr-1 inline" /> {s.startTime.slice(0, 5)} - {s.endTime.slice(0, 5)}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-medium text-emerald-700">{s.className}</TableCell>
+                    <TableCell className="font-medium text-teal-700">{s.className}</TableCell>
                     <TableCell className="font-medium">{s.subjectName}</TableCell>
-                    <TableCell className="text-slate-600">{s.teacherName}</TableCell>
+                    <TableCell className="text-stone-600">{s.teacherName}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="icon" className="text-blue-600 hover:bg-blue-50" onClick={() => openEdit(s)}>
+                        <Button variant="ghost" size="icon" className="text-sky-600 hover:bg-sky-50" onClick={() => openEdit(s)}>
                           <Edit2 className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon" className="text-rose-600 hover:bg-rose-50" onClick={() => openDelete(s)}>
@@ -276,11 +276,11 @@ export default function JadwalAdminPage() {
             </Table>
           ) : (
             <Table className="min-w-[800px]">
-              <TableHeader className="bg-slate-100">
+              <TableHeader className="bg-stone-100">
                 <TableRow>
-                  <TableHead className="w-[140px] font-bold text-slate-700 border-r border-slate-200 text-center">Waktu</TableHead>
+                  <TableHead className="w-[140px] font-bold text-stone-700 border-r border-stone-200 text-center">Waktu</TableHead>
                   {[1, 2, 3, 4, 5, 6].map((dayIdx) => (
-                    <TableHead key={dayIdx} className="text-center font-bold text-slate-700 border-r border-slate-200 last:border-0 w-[16%]">
+                    <TableHead key={dayIdx} className="text-center font-bold text-stone-700 border-r border-stone-200 last:border-0 w-[16%]">
                       {daysMap[dayIdx]}
                     </TableHead>
                   ))}
@@ -289,21 +289,21 @@ export default function JadwalAdminPage() {
               <TableBody>
                 {Array.from(new Set(schedules.map(s => `${s.startTime.slice(0,5)} - ${s.endTime.slice(0,5)}`))).sort().map((timeLabel, idx) => (
                   <TableRow key={idx}>
-                    <TableCell className="font-semibold text-slate-700 text-center border-r border-slate-200 whitespace-nowrap bg-slate-50">
+                    <TableCell className="font-semibold text-stone-700 text-center border-r border-stone-200 whitespace-nowrap bg-stone-50">
                       {timeLabel}
                     </TableCell>
                     {[1, 2, 3, 4, 5, 6].map((dayIdx) => {
                       const session = schedules.find(s => s.dayOfWeek === dayIdx && `${s.startTime.slice(0,5)} - ${s.endTime.slice(0,5)}` === timeLabel);
                       return (
-                        <TableCell key={dayIdx} className="border-r border-slate-100 last:border-0 p-3 align-top group hover:bg-emerald-50/50 transition-colors">
+                        <TableCell key={dayIdx} className="border-r border-stone-100 last:border-0 p-3 align-top group hover:bg-teal-50/50 transition-colors">
                           {session ? (
                             <div className="h-full flex flex-col justify-between">
                               <div>
-                                <div className="font-bold text-slate-800 text-sm">{session.subjectName}</div>
-                                <div className="text-xs text-slate-500 mt-1">{session.teacherName}</div>
+                                <div className="font-bold text-stone-800 text-sm">{session.subjectName}</div>
+                                <div className="text-xs text-stone-500 mt-1">{session.teacherName}</div>
                               </div>
                               <div className="mt-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Button size="sm" variant="outline" onClick={() => openEdit(session)} className="h-6 w-full text-[10px] bg-white text-blue-600 border-blue-200 hover:bg-blue-50">
+                                <Button size="sm" variant="outline" onClick={() => openEdit(session)} className="h-6 w-full text-[10px] bg-white text-sky-600 border-sky-200 hover:bg-sky-50">
                                   <Edit2 className="h-3 w-3 mr-1" /> Edit
                                 </Button>
                               </div>
@@ -317,7 +317,7 @@ export default function JadwalAdminPage() {
                                  setEditingId(null);
                                  setError("");
                                  setDialogOpen(true);
-                               }} className="text-emerald-600 hover:bg-emerald-50 h-8 text-xs border border-dashed border-emerald-300 w-full">
+                               }} className="text-teal-600 hover:bg-teal-50 h-8 text-xs border border-dashed border-teal-300 w-full">
                                   <Plus className="h-3 w-3 mr-1" /> Isi Jadwal
                                </Button>
                             </div>
@@ -329,8 +329,8 @@ export default function JadwalAdminPage() {
                 ))}
                 {schedules.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-slate-500">
-                      Tidak ada jadwal untuk kelas ini. <Button variant="link" onClick={openCreate} className="text-emerald-600 p-0 h-auto">Buat jadwal baru</Button>
+                    <TableCell colSpan={7} className="h-32 text-center text-stone-500">
+                      Tidak ada jadwal untuk kelas ini. <Button variant="link" onClick={openCreate} className="text-teal-600 p-0 h-auto">Buat jadwal baru</Button>
                     </TableCell>
                   </TableRow>
                 )}
@@ -413,7 +413,7 @@ export default function JadwalAdminPage() {
           
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSave} disabled={saving}>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={handleSave} disabled={saving}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {dialogMode === "create" ? "Simpan Jadwal" : "Perbarui Jadwal"}
             </Button>

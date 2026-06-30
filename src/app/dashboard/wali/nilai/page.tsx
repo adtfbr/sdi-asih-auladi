@@ -71,12 +71,12 @@ export default function WaliNilaiPage() {
     <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Nilai Akademik Anak</h2>
-          <p className="text-slate-500">Pantau perkembangan akademik anak Anda.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Nilai Akademik Anak</h2>
+          <p className="text-stone-500">Pantau perkembangan akademik anak Anda.</p>
         </div>
         <div className="flex items-center gap-3">
           <Select defaultValue="semester-ganjil">
-            <SelectTrigger className="w-[180px] bg-white border-slate-200">
+            <SelectTrigger className="w-[180px] bg-white border-stone-200">
               <SelectValue placeholder="Pilih Semester" />
             </SelectTrigger>
             <SelectContent>
@@ -84,7 +84,7 @@ export default function WaliNilaiPage() {
               <SelectItem value="semester-genap-25">Semester Genap 2025</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" className="border-slate-200 bg-white text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+          <Button variant="outline" className="border-stone-200 bg-white text-sky-600 hover:text-sky-700 hover:bg-sky-50">
             <Download className="mr-2 h-4 w-4" /> Download PDF
           </Button>
         </div>
@@ -92,7 +92,7 @@ export default function WaliNilaiPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white border-none shadow-md">
+        <Card className="bg-gradient-to-br from-sky-600 to-indigo-700 text-white border-none shadow-md">
           <CardContent className="p-6 flex flex-col justify-between h-full">
             <div className="flex justify-between items-start mb-4">
               <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -101,55 +101,55 @@ export default function WaliNilaiPage() {
             </div>
             <div>
               <div className="text-3xl font-bold">{overallAvg.toFixed(1)}</div>
-              <div className="text-blue-100 font-medium mt-1">Nilai Rata-rata Anak</div>
+              <div className="text-sky-100 font-medium mt-1">Nilai Rata-rata Anak</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-slate-100 shadow-sm">
+        <Card className="bg-white border-stone-100 shadow-sm">
           <CardContent className="p-6 flex items-center gap-4 h-full">
-            <div className="h-12 w-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+            <div className="h-12 w-12 rounded-xl bg-teal-100 flex items-center justify-center text-teal-600 shrink-0">
               <TrendingUp className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-sm font-medium text-slate-500">Perkembangan Terbaik</div>
-              <div className="text-lg font-bold text-slate-900 line-clamp-1">{bestSubject.subject}</div>
-              <div className="text-xs text-emerald-600 font-medium mt-0.5">Nilai: {bestSubject.average.toFixed(1)}</div>
+              <div className="text-sm font-medium text-stone-500">Perkembangan Terbaik</div>
+              <div className="text-lg font-bold text-stone-900 line-clamp-1">{bestSubject.subject}</div>
+              <div className="text-xs text-teal-600 font-medium mt-0.5">Nilai: {bestSubject.average.toFixed(1)}</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-slate-100 shadow-sm">
+        <Card className="bg-white border-stone-100 shadow-sm">
           <CardContent className="p-6 flex items-center gap-4 h-full">
             <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
               <Award className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-sm font-medium text-slate-500">Total Mata Pelajaran</div>
-              <div className="text-2xl font-bold text-slate-900">{subjectList.length}</div>
-              <div className="text-xs text-slate-500 mt-0.5">Semester Ganjil</div>
+              <div className="text-sm font-medium text-stone-500">Total Mata Pelajaran</div>
+              <div className="text-2xl font-bold text-stone-900">{subjectList.length}</div>
+              <div className="text-xs text-stone-500 mt-0.5">Semester Ganjil</div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-slate-100 shadow-sm bg-white overflow-hidden">
-        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
-          <CardTitle className="text-lg text-slate-900">Daftar Nilai per Mata Pelajaran</CardTitle>
+      <Card className="border-stone-100 shadow-sm bg-white overflow-hidden">
+        <CardHeader className="bg-stone-50/50 border-b border-stone-100 pb-4">
+          <CardTitle className="text-lg text-stone-900">Daftar Nilai per Mata Pelajaran</CardTitle>
           <CardDescription>Berdasarkan rentang nilai 0-100. KKM: 75.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
             </div>
           ) : subjectList.length === 0 ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               Belum ada data nilai.
             </div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead className="w-[280px]">Mata Pelajaran</TableHead>
                   <TableHead className="text-center">Tugas</TableHead>
@@ -162,16 +162,16 @@ export default function WaliNilaiPage() {
               </TableHeader>
               <TableBody>
                 {subjectList.map((entry, idx) => (
-                  <TableRow key={idx} className="hover:bg-slate-50/50">
+                  <TableRow key={idx} className="hover:bg-stone-50/50">
                     <TableCell>
-                      <div className="font-semibold text-slate-900">{entry.subject}</div>
-                      <div className="text-xs text-slate-500 mt-1">Guru: {entry.teacher}</div>
+                      <div className="font-semibold text-stone-900">{entry.subject}</div>
+                      <div className="text-xs text-stone-500 mt-1">Guru: {entry.teacher}</div>
                     </TableCell>
-                    <TableCell className="text-center font-medium text-slate-700">{entry.grades["Tugas"] ?? "-"}</TableCell>
-                    <TableCell className="text-center font-medium text-slate-700">{entry.grades["Quiz"] ?? "-"}</TableCell>
-                    <TableCell className="text-center font-medium text-slate-700">{entry.grades["UTS"] ?? "-"}</TableCell>
-                    <TableCell className="text-center text-slate-400">{entry.grades["UAS"] ?? "-"}</TableCell>
-                    <TableCell className={`text-right font-bold ${entry.average < 75 ? "text-rose-600" : "text-slate-900"}`}>
+                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["Tugas"] ?? "-"}</TableCell>
+                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["Quiz"] ?? "-"}</TableCell>
+                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["UTS"] ?? "-"}</TableCell>
+                    <TableCell className="text-center text-stone-400">{entry.grades["UAS"] ?? "-"}</TableCell>
+                    <TableCell className={`text-right font-bold ${entry.average < 75 ? "text-rose-600" : "text-stone-900"}`}>
                       {entry.average.toFixed(1)}
                     </TableCell>
                     <TableCell className="text-center">
@@ -179,9 +179,9 @@ export default function WaliNilaiPage() {
                         variant="outline"
                         className={
                           entry.average >= 90
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            ? "bg-teal-50 text-teal-700 border-teal-200"
                             : entry.average >= 80
-                            ? "bg-blue-50 text-blue-700 border-blue-200"
+                            ? "bg-sky-50 text-sky-700 border-sky-200"
                             : entry.average >= 75
                             ? "bg-amber-50 text-amber-700 border-amber-200"
                             : "bg-rose-50 text-rose-700 border-rose-200"

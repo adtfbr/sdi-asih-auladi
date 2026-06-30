@@ -78,12 +78,12 @@ export default function ViewNilaiPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Transkrip Nilai</h2>
-          <p className="text-slate-500">Pantau perkembangan akademik dan hasil evaluasi belajar.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Transkrip Nilai</h2>
+          <p className="text-stone-500">Pantau perkembangan akademik dan hasil evaluasi belajar.</p>
         </div>
         <div className="flex items-center gap-3">
           <Select defaultValue="semester-ganjil">
-            <SelectTrigger className="w-[180px] bg-white border-slate-200">
+            <SelectTrigger className="w-[180px] bg-white border-stone-200">
               <SelectValue placeholder="Pilih Semester" />
             </SelectTrigger>
             <SelectContent>
@@ -91,7 +91,7 @@ export default function ViewNilaiPage() {
               <SelectItem value="semester-genap-25">Semester Genap 2025</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" className="border-slate-200 bg-white">
+          <Button variant="outline" className="border-stone-200 bg-white">
             <Download className="mr-2 h-4 w-4" /> Cetak
           </Button>
         </div>
@@ -99,7 +99,7 @@ export default function ViewNilaiPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-emerald-500 to-emerald-700 text-white border-none shadow-md">
+        <Card className="bg-gradient-to-br from-teal-500 to-teal-700 text-white border-none shadow-md">
           <CardContent className="p-6 flex flex-col justify-between h-full">
             <div className="flex justify-between items-start mb-4">
               <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -108,55 +108,55 @@ export default function ViewNilaiPage() {
             </div>
             <div>
               <div className="text-3xl font-bold">{overallAvg.toFixed(1)}</div>
-              <div className="text-emerald-100 font-medium mt-1">Rata-rata Nilai Keseluruhan</div>
+              <div className="text-teal-100 font-medium mt-1">Rata-rata Nilai Keseluruhan</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-slate-100 shadow-sm">
+        <Card className="bg-white border-stone-100 shadow-sm">
           <CardContent className="p-6 flex items-center gap-4 h-full">
-            <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+            <div className="h-12 w-12 rounded-xl bg-sky-100 flex items-center justify-center text-sky-600 shrink-0">
               <TrendingUp className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-sm font-medium text-slate-500">Mata Pelajaran Terbaik</div>
-              <div className="text-lg font-bold text-slate-900 line-clamp-1">{bestSubject.subject}</div>
-              <div className="text-xs text-emerald-600 font-medium mt-0.5">Nilai: {bestSubject.average.toFixed(1)}</div>
+              <div className="text-sm font-medium text-stone-500">Mata Pelajaran Terbaik</div>
+              <div className="text-lg font-bold text-stone-900 line-clamp-1">{bestSubject.subject}</div>
+              <div className="text-xs text-teal-600 font-medium mt-0.5">Nilai: {bestSubject.average.toFixed(1)}</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-slate-100 shadow-sm">
+        <Card className="bg-white border-stone-100 shadow-sm">
           <CardContent className="p-6 flex items-center gap-4 h-full">
             <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
               <BookOpen className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-sm font-medium text-slate-500">Total Mata Pelajaran</div>
-              <div className="text-2xl font-bold text-slate-900">{subjectList.length}</div>
-              <div className="text-xs text-slate-500 mt-0.5">Semester Ganjil</div>
+              <div className="text-sm font-medium text-stone-500">Total Mata Pelajaran</div>
+              <div className="text-2xl font-bold text-stone-900">{subjectList.length}</div>
+              <div className="text-xs text-stone-500 mt-0.5">Semester Ganjil</div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-slate-100 shadow-sm bg-white overflow-hidden">
-        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
-          <CardTitle className="text-lg text-slate-900">Rincian Nilai per Mata Pelajaran</CardTitle>
+      <Card className="border-stone-100 shadow-sm bg-white overflow-hidden">
+        <CardHeader className="bg-stone-50/50 border-b border-stone-100 pb-4">
+          <CardTitle className="text-lg text-stone-900">Rincian Nilai per Mata Pelajaran</CardTitle>
           <CardDescription>Data nilai dari database.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
             </div>
           ) : subjectList.length === 0 ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               Belum ada data nilai.
             </div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead className="w-[300px]">Mata Pelajaran</TableHead>
                   <TableHead className="text-center">Tugas</TableHead>
@@ -169,24 +169,24 @@ export default function ViewNilaiPage() {
               </TableHeader>
               <TableBody>
                 {subjectList.map((entry, idx) => (
-                  <TableRow key={idx} className="hover:bg-slate-50/50">
+                  <TableRow key={idx} className="hover:bg-stone-50/50">
                     <TableCell>
-                      <div className="font-semibold text-slate-900">{entry.subject}</div>
-                      <div className="text-xs text-slate-500 mt-1">{entry.teacher}</div>
+                      <div className="font-semibold text-stone-900">{entry.subject}</div>
+                      <div className="text-xs text-stone-500 mt-1">{entry.teacher}</div>
                     </TableCell>
-                    <TableCell className="text-center font-medium text-slate-700">{entry.grades["Tugas"] ?? "-"}</TableCell>
-                    <TableCell className="text-center font-medium text-slate-700">{entry.grades["Quiz"] ?? "-"}</TableCell>
-                    <TableCell className="text-center font-medium text-slate-700">{entry.grades["UTS"] ?? "-"}</TableCell>
-                    <TableCell className="text-center text-slate-400">{entry.grades["UAS"] ?? "-"}</TableCell>
-                    <TableCell className="text-right font-bold text-slate-900">{entry.average.toFixed(1)}</TableCell>
+                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["Tugas"] ?? "-"}</TableCell>
+                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["Quiz"] ?? "-"}</TableCell>
+                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["UTS"] ?? "-"}</TableCell>
+                    <TableCell className="text-center text-stone-400">{entry.grades["UAS"] ?? "-"}</TableCell>
+                    <TableCell className="text-right font-bold text-stone-900">{entry.average.toFixed(1)}</TableCell>
                     <TableCell className="text-center">
                       <Badge
                         variant="outline"
                         className={
                           entry.average >= 90
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            ? "bg-teal-50 text-teal-700 border-teal-200"
                             : entry.average >= 80
-                            ? "bg-blue-50 text-blue-700 border-blue-200"
+                            ? "bg-sky-50 text-sky-700 border-sky-200"
                             : "bg-amber-50 text-amber-700 border-amber-200"
                         }
                       >
@@ -201,11 +201,11 @@ export default function ViewNilaiPage() {
         </CardContent>
       </Card>
 
-      <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl flex gap-3">
+      <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl flex gap-3">
         <div className="shrink-0 mt-0.5">
-          <div className="h-5 w-5 rounded-full bg-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs">i</div>
+          <div className="h-5 w-5 rounded-full bg-sky-200 flex items-center justify-center text-sky-700 font-bold text-xs">i</div>
         </div>
-        <div className="text-sm text-blue-800">
+        <div className="text-sm text-sky-800">
           <p className="font-semibold mb-1">Informasi Penilaian</p>
           <p className="opacity-90">Nilai akhir semester (Rapor) akan dihitung berdasarkan bobot: Tugas (30%), Kuis (20%), UTS (20%), dan UAS (30%).</p>
         </div>

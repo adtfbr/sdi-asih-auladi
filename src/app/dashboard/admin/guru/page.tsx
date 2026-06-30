@@ -144,51 +144,51 @@ export default function DataGuruPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Data Guru & Staf</h2>
-          <p className="text-slate-500">Kelola data tenaga pendidik, penugasan mata pelajaran, dan wali kelas.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Data Guru & Staf</h2>
+          <p className="text-stone-500">Kelola data tenaga pendidik, penugasan mata pelajaran, dan wali kelas.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" className="border-slate-200 bg-white">
+          <Button variant="outline" className="border-stone-200 bg-white">
             <Upload className="mr-2 h-4 w-4" /> Import Data
           </Button>
-          <Button variant="outline" className="border-slate-200 bg-white">
+          <Button variant="outline" className="border-stone-200 bg-white">
             <Download className="mr-2 h-4 w-4" /> Export
           </Button>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={openCreate}>
+          <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={openCreate}>
             <Plus className="mr-2 h-4 w-4" /> Tambah Guru
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card className="bg-white border-slate-100 shadow-sm">
+        <Card className="bg-white border-stone-100 shadow-sm">
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+            <div className="h-12 w-12 rounded-xl bg-teal-100 flex items-center justify-center text-teal-600 shrink-0">
               <GraduationCap className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-sm font-medium text-slate-500">Total Guru Aktif</div>
-              <div className="text-2xl font-bold text-slate-900">{activeCount}</div>
+              <div className="text-sm font-medium text-stone-500">Total Guru Aktif</div>
+              <div className="text-2xl font-bold text-stone-900">{activeCount}</div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
-        <CardHeader className="pb-3 border-b border-slate-50">
+      <Card className="border-stone-100 shadow-sm">
+        <CardHeader className="pb-3 border-b border-stone-50">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-2 flex-1 max-w-sm relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-stone-400" />
               <Input
                 placeholder="Cari nama atau NIP..."
-                className="pl-9 bg-slate-50 border-slate-200"
+                className="pl-9 bg-stone-50 border-stone-200"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
               <Select value={filterStatus} onValueChange={(val) => setFilterStatus(val || "")}>
-                <SelectTrigger className="w-[140px] bg-slate-50 border-slate-200">
+                <SelectTrigger className="w-[140px] bg-stone-50 border-stone-200">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -203,17 +203,17 @@ export default function DataGuruPage() {
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-stone-400">
               <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
             </div>
           ) : teachers.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-400">
+            <div className="flex flex-col items-center justify-center h-48 text-stone-400">
               <p className="text-lg font-medium">Belum ada data guru</p>
               <p className="text-sm">Klik &quot;Tambah Guru&quot; untuk menambahkan data.</p>
             </div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead className="w-[180px]">NIP</TableHead>
                   <TableHead>Nama Lengkap</TableHead>
@@ -225,20 +225,20 @@ export default function DataGuruPage() {
               </TableHeader>
               <TableBody>
                 {teachers.map((teacher) => (
-                  <TableRow key={teacher.id} className="hover:bg-slate-50/50">
-                    <TableCell className="font-medium text-slate-500">{teacher.nip}</TableCell>
-                    <TableCell className="font-semibold text-slate-900">{teacher.name}</TableCell>
-                    <TableCell className="text-slate-600">{teacher.email || "-"}</TableCell>
-                    <TableCell className="text-slate-600">{teacher.phone || "-"}</TableCell>
+                  <TableRow key={teacher.id} className="hover:bg-stone-50/50">
+                    <TableCell className="font-medium text-stone-500">{teacher.nip}</TableCell>
+                    <TableCell className="font-semibold text-stone-900">{teacher.name}</TableCell>
+                    <TableCell className="text-stone-600">{teacher.email || "-"}</TableCell>
+                    <TableCell className="text-stone-600">{teacher.phone || "-"}</TableCell>
                     <TableCell>
                       <Badge
                         variant="outline"
                         className={
                           teacher.status === "Aktif"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            ? "bg-teal-50 text-teal-700 border-teal-200"
                             : teacher.status === "Cuti"
                             ? "bg-amber-50 text-amber-700 border-amber-200"
-                            : "bg-slate-100 text-slate-700 border-slate-200"
+                            : "bg-stone-100 text-stone-700 border-stone-200"
                         }
                       >
                         {teacher.status}
@@ -246,7 +246,7 @@ export default function DataGuruPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600">
+                        <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-stone-100 text-stone-400 hover:text-stone-600">
                           <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -312,7 +312,7 @@ export default function DataGuruPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSave} disabled={saving}>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={handleSave} disabled={saving}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {dialogMode === "create" ? "Simpan" : "Perbarui"}
             </Button>

@@ -128,28 +128,28 @@ export default function AdminMapelPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Mata Pelajaran</h2>
-          <p className="text-slate-500">Kelola daftar mata pelajaran sekolah.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Mata Pelajaran</h2>
+          <p className="text-stone-500">Kelola daftar mata pelajaran sekolah.</p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={openCreate}>
+        <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" /> Tambah Mapel
         </Button>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
+      <Card className="border-stone-100 shadow-sm">
         <CardContent className="p-0">
           {loading ? (
-             <div className="flex items-center justify-center h-48 text-slate-400">
+             <div className="flex items-center justify-center h-48 text-stone-400">
                <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
              </div>
           ) : mapelList.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-400">
+            <div className="flex flex-col items-center justify-center h-48 text-stone-400">
               <p className="text-lg font-medium">Belum ada data mata pelajaran</p>
               <p className="text-sm">Klik "Tambah Mapel" untuk menambahkan data.</p>
             </div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead className="w-[150px]">Kode</TableHead>
                   <TableHead>Nama Mata Pelajaran</TableHead>
@@ -158,12 +158,12 @@ export default function AdminMapelPage() {
               </TableHeader>
               <TableBody>
                 {mapelList.map((m) => (
-                  <TableRow key={m.id} className="hover:bg-slate-50/50">
-                    <TableCell className="font-medium text-slate-900">{m.code}</TableCell>
-                    <TableCell className="text-slate-600">{m.name}</TableCell>
+                  <TableRow key={m.id} className="hover:bg-stone-50/50">
+                    <TableCell className="font-medium text-stone-900">{m.code}</TableCell>
+                    <TableCell className="text-stone-600">{m.name}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" className="text-blue-600 hover:bg-blue-50" onClick={() => openEdit(m)}>
+                        <Button variant="ghost" size="icon" className="text-sky-600 hover:bg-sky-50" onClick={() => openEdit(m)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon" className="text-rose-600 hover:bg-rose-50" onClick={() => openDelete(m)}>
@@ -203,7 +203,7 @@ export default function AdminMapelPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSave} disabled={saving}>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={handleSave} disabled={saving}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {dialogMode === "create" ? "Simpan" : "Perbarui"}
             </Button>

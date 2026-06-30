@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
 import { db } from "@/db";
 import { systemSettings } from "@/db/schema";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-heading" });
 
 export const metadata: Metadata = {
   title: "SDI Asih Auladi | Platform Manajemen Sekolah",
@@ -32,8 +33,8 @@ export default async function RootLayout({
     console.error("Layout failed to fetch systemSettings", error);
   }
   return (
-    <html lang="id" className="scroll-smooth">
-      <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
+    <html lang="id" className="scroll-smooth" data-scroll-behavior="smooth">
+      <body className={`${inter.variable} ${jakarta.variable} font-sans antialiased flex flex-col min-h-screen`}>
         <ConditionalLayout settings={settings}>
           {children}
         </ConditionalLayout>

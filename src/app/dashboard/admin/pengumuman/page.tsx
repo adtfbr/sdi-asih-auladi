@@ -144,34 +144,34 @@ export default function AdminPengumumanPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Manajemen Pengumuman</h2>
-          <p className="text-slate-500">Kelola informasi broadcast untuk guru, siswa, dan wali murid.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Manajemen Pengumuman</h2>
+          <p className="text-stone-500">Kelola informasi broadcast untuk guru, siswa, dan wali murid.</p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={openCreate}>
+        <Button className="bg-teal-600 hover:bg-teal-700" onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" /> Buat Pengumuman Baru
         </Button>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
-        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
+      <Card className="border-stone-100 shadow-sm">
+        <CardHeader className="bg-stone-50/50 border-b border-stone-100 pb-4">
           <div className="flex items-center gap-2">
-            <Megaphone className="h-5 w-5 text-emerald-600" />
-            <CardTitle className="text-lg text-slate-900">Daftar Pengumuman</CardTitle>
+            <Megaphone className="h-5 w-5 text-teal-600" />
+            <CardTitle className="text-lg text-stone-900">Daftar Pengumuman</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
-             <div className="flex items-center justify-center h-48 text-slate-400">
+             <div className="flex items-center justify-center h-48 text-stone-400">
                <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
              </div>
           ) : data.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-400">
-              <Megaphone className="h-10 w-10 mb-3 text-slate-300" />
+            <div className="flex flex-col items-center justify-center h-48 text-stone-400">
+              <Megaphone className="h-10 w-10 mb-3 text-stone-300" />
               <p className="text-lg font-medium">Belum ada pengumuman</p>
             </div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead>Judul</TableHead>
                   <TableHead>Target Penerima</TableHead>
@@ -181,19 +181,19 @@ export default function AdminPengumumanPage() {
               </TableHeader>
               <TableBody>
                 {data.map((item) => (
-                  <TableRow key={item.id} className="hover:bg-slate-50/50">
-                    <TableCell className="font-medium text-slate-900 max-w-[300px] truncate">{item.title}</TableCell>
+                  <TableRow key={item.id} className="hover:bg-stone-50/50">
+                    <TableCell className="font-medium text-stone-900 max-w-[300px] truncate">{item.title}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className={
-                        item.targetRole === "semua" ? "bg-slate-100 text-slate-800" :
-                        item.targetRole === "guru" ? "bg-blue-50 text-blue-800 border-blue-200" :
+                        item.targetRole === "semua" ? "bg-stone-100 text-stone-800" :
+                        item.targetRole === "guru" ? "bg-sky-50 text-sky-800 border-sky-200" :
                         item.targetRole === "wali" ? "bg-purple-50 text-purple-800 border-purple-200" :
-                        "bg-emerald-50 text-emerald-800 border-emerald-200"
+                        "bg-teal-50 text-teal-800 border-teal-200"
                       }>
                         {item.targetRole}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-slate-500">
+                    <TableCell className="text-stone-500">
                       <div className="flex items-center gap-1.5">
                         <Clock className="h-3 w-3" /> 
                         {new Date(item.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -201,7 +201,7 @@ export default function AdminPengumumanPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button size="icon" variant="ghost" className="h-8 w-8 text-blue-600 hover:bg-blue-50" onClick={() => openEdit(item)}>
+                        <Button size="icon" variant="ghost" className="h-8 w-8 text-sky-600 hover:bg-sky-50" onClick={() => openEdit(item)}>
                           <Edit2 className="h-4 w-4" />
                         </Button>
                         <Button size="icon" variant="ghost" className="h-8 w-8 text-rose-600 hover:bg-rose-50" onClick={() => openDelete(item)}>
@@ -256,7 +256,7 @@ export default function AdminPengumumanPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Batal</Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSave} disabled={saving}>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={handleSave} disabled={saving}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Kirim Pengumuman
             </Button>

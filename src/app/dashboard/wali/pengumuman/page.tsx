@@ -36,26 +36,26 @@ export default function WaliPengumumanPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900">Pengumuman Sekolah</h2>
-        <p className="text-slate-500">Informasi terbaru dan papan buletin untuk wali murid.</p>
+        <h2 className="text-2xl font-bold tracking-tight text-stone-900">Pengumuman Sekolah</h2>
+        <p className="text-stone-500">Informasi terbaru dan papan buletin untuk wali murid.</p>
       </div>
 
       <div className="grid gap-4">
         {loading ? (
-           <div className="flex items-center justify-center h-48 text-slate-400">
+           <div className="flex items-center justify-center h-48 text-stone-400">
              <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat pengumuman...
            </div>
         ) : announcements.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-48 text-slate-400 bg-white rounded-xl border border-slate-100">
-            <Bell className="h-10 w-10 mb-3 text-slate-300" />
+          <div className="flex flex-col items-center justify-center h-48 text-stone-400 bg-white rounded-xl border border-stone-100">
+            <Bell className="h-10 w-10 mb-3 text-stone-300" />
             <p className="text-lg font-medium">Belum ada pengumuman</p>
           </div>
         ) : announcements.map((item) => (
-          <Card key={item.id} className="border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-            <CardHeader className="pb-3 border-b border-slate-50">
+          <Card key={item.id} className="border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="pb-3 border-b border-stone-50">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center shrink-0">
                     <Bell className="h-5 w-5" />
                   </div>
                   <div>
@@ -69,7 +69,7 @@ export default function WaliPengumumanPage() {
               </div>
             </CardHeader>
             <CardContent className="pt-4">
-              <p className="text-slate-700 leading-relaxed text-sm whitespace-pre-wrap">
+              <p className="text-stone-700 leading-relaxed text-sm whitespace-pre-wrap">
                 {item.content}
               </p>
             </CardContent>

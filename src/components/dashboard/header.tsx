@@ -43,45 +43,47 @@ export function Header() {
   const title = titleMap[pathname || ""] || "Dashboard";
 
   return (
-    <header className="h-16 border-b border-slate-100 bg-white flex items-center justify-between px-4 md:px-6 sticky top-0 z-20 shadow-sm shadow-slate-100/50">
+    <header className="h-16 border-b border-stone-100 bg-white flex items-center justify-between px-4 md:px-6 sticky top-0 z-20 shadow-sm shadow-stone-100/50">
       <div className="flex items-center gap-4">
         {/* Mobile menu trigger */}
         <Sheet>
-          <SheetTrigger render={<Button variant="ghost" size="icon" className="md:hidden" />}>
-            <Menu className="h-5 w-5 text-slate-600" />
-          </SheetTrigger>
+          <SheetTrigger render={
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <Menu className="h-5 w-5 text-stone-600" />
+            </Button>
+          } />
           <SheetContent side="left" className="p-0 w-64">
             <Sidebar className="flex border-none w-full" />
           </SheetContent>
         </Sheet>
         
-        <h1 className="text-xl font-bold text-slate-900 tracking-tight hidden sm:block">
+        <h1 className="text-xl font-bold text-stone-900 tracking-tight hidden sm:block">
           {title}
         </h1>
       </div>
 
       <div className="flex items-center gap-3 md:gap-5">
         <div className="relative hidden md:flex items-center">
-          <Search className="absolute left-3 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 h-4 w-4 text-stone-400" />
           <input 
             type="text" 
             placeholder="Cari..." 
-            className="pl-9 pr-4 py-2 w-64 rounded-full bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+            className="pl-9 pr-4 py-2 w-64 rounded-full bg-stone-50 border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
           />
         </div>
         
-        <Button variant="ghost" size="icon" className="relative text-slate-500 hover:text-slate-900">
+        <Button variant="ghost" size="icon" className="relative text-stone-500 hover:text-stone-900">
           <Bell className="h-5 w-5" />
           <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
         </Button>
         
-        <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
+        <div className="h-8 w-px bg-stone-200 hidden sm:block"></div>
 
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="ghost" className="relative h-10 w-10 rounded-full" />}>
-            <Avatar className="h-10 w-10 border-2 border-emerald-100">
+            <Avatar className="h-10 w-10 border-2 border-teal-100">
               <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${user ? user.name : 'User'}&backgroundColor=10b981`} alt="User" />
-              <AvatarFallback className="bg-emerald-100 text-emerald-700">
+              <AvatarFallback className="bg-teal-100 text-teal-700">
                 {user ? user.name.charAt(0).toUpperCase() : 'U'}
               </AvatarFallback>
             </Avatar>
@@ -90,7 +92,7 @@ export function Header() {
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none line-clamp-1">{user ? user.name : "User"}</p>
-                <p className="text-xs leading-none text-slate-500">
+                <p className="text-xs leading-none text-stone-500">
                   {user ? user.email : "user@sdi-asih-auladi.sch.id"}
                 </p>
               </div>

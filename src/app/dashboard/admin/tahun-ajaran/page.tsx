@@ -134,28 +134,28 @@ export default function AdminTahunAjaranPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Tahun Ajaran</h2>
-          <p className="text-slate-500">Kelola daftar tahun ajaran dan semester akademik.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Tahun Ajaran</h2>
+          <p className="text-stone-500">Kelola daftar tahun ajaran dan semester akademik.</p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={openCreate}>
+        <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" /> Tambah Tahun Ajaran
         </Button>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
+      <Card className="border-stone-100 shadow-sm">
         <CardContent className="p-0">
           {loading ? (
-             <div className="flex items-center justify-center h-48 text-slate-400">
+             <div className="flex items-center justify-center h-48 text-stone-400">
                <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
              </div>
           ) : tahunList.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-400">
+            <div className="flex flex-col items-center justify-center h-48 text-stone-400">
               <p className="text-lg font-medium">Belum ada data tahun ajaran</p>
               <p className="text-sm">Klik "Tambah Tahun Ajaran" untuk menambahkan data.</p>
             </div>
           ) : (
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-stone-50">
                 <TableRow>
                   <TableHead>Tahun Ajaran</TableHead>
                   <TableHead>Semester</TableHead>
@@ -165,19 +165,19 @@ export default function AdminTahunAjaranPage() {
               </TableHeader>
               <TableBody>
                 {tahunList.map((t) => (
-                  <TableRow key={t.id} className="hover:bg-slate-50/50">
-                    <TableCell className="font-medium text-slate-900">{t.name}</TableCell>
-                    <TableCell className="text-slate-600">{t.semester}</TableCell>
+                  <TableRow key={t.id} className="hover:bg-stone-50/50">
+                    <TableCell className="font-medium text-stone-900">{t.name}</TableCell>
+                    <TableCell className="text-stone-600">{t.semester}</TableCell>
                     <TableCell>
                       {t.isActive ? (
-                        <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-50">Aktif</Badge>
+                        <Badge className="bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-50">Aktif</Badge>
                       ) : (
-                        <Badge variant="outline" className="text-slate-500">Nonaktif</Badge>
+                        <Badge variant="outline" className="text-stone-500">Nonaktif</Badge>
                       )}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" className="text-blue-600 hover:bg-blue-50" onClick={() => openEdit(t)}>
+                        <Button variant="ghost" size="icon" className="text-sky-600 hover:bg-sky-50" onClick={() => openEdit(t)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon" className="text-rose-600 hover:bg-rose-50" onClick={() => openDelete(t)}>
@@ -220,17 +220,17 @@ export default function AdminTahunAjaranPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center justify-between p-3 border border-slate-100 rounded-lg">
+            <div className="flex items-center justify-between p-3 border border-stone-100 rounded-lg">
               <div className="space-y-0.5">
                 <Label>Status Aktif</Label>
-                <p className="text-sm text-slate-500">Jadikan sebagai tahun ajaran berjalan.</p>
+                <p className="text-sm text-stone-500">Jadikan sebagai tahun ajaran berjalan.</p>
               </div>
-              <input type="checkbox" className="w-5 h-5 accent-emerald-600" checked={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} />
+              <input type="checkbox" className="w-5 h-5 accent-teal-600" checked={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSave} disabled={saving}>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={handleSave} disabled={saving}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {dialogMode === "create" ? "Simpan" : "Perbarui"}
             </Button>

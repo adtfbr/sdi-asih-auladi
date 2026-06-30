@@ -181,16 +181,16 @@ export default function UploadMateriPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Upload Materi Pembelajaran</h2>
-          <p className="text-slate-500">Bagikan modul, presentasi, atau video pembelajaran kepada siswa.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Upload Materi Pembelajaran</h2>
+          <p className="text-stone-500">Bagikan modul, presentasi, atau video pembelajaran kepada siswa.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Upload Form */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="border-slate-100 shadow-sm bg-white">
-            <CardHeader className="border-b border-slate-50 pb-4">
+          <Card className="border-stone-100 shadow-sm bg-white">
+            <CardHeader className="border-b border-stone-50 pb-4">
               <CardTitle className="text-lg">Form Upload Baru</CardTitle>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
@@ -204,7 +204,7 @@ export default function UploadMateriPage() {
                 <div className="space-y-2">
                   <Label>Pilih Kelas (Opsional)</Label>
                   <Select value={formData.classId} onValueChange={(val) => setFormData({...formData, classId: val === "all" ? "" : (val || "")})}>
-                    <SelectTrigger className="bg-slate-50 border-slate-200">
+                    <SelectTrigger className="bg-stone-50 border-stone-200">
                       <SelectValue placeholder="Semua Kelas" />
                     </SelectTrigger>
                     <SelectContent>
@@ -214,12 +214,12 @@ export default function UploadMateriPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <p className="text-[11px] text-slate-500">Kosongkan jika materi berlaku untuk semua kelas yang Anda ajar.</p>
+                  <p className="text-[11px] text-stone-500">Kosongkan jika materi berlaku untuk semua kelas yang Anda ajar.</p>
                 </div>
                 <div className="space-y-2">
                   <Label>Mata Pelajaran <span className="text-rose-500">*</span></Label>
                   <Select value={formData.subjectId} onValueChange={(val) => setFormData({...formData, subjectId: val || ""})}>
-                    <SelectTrigger className="bg-slate-50 border-slate-200">
+                    <SelectTrigger className="bg-stone-50 border-stone-200">
                       <SelectValue placeholder="Pilih Mata Pelajaran" />
                     </SelectTrigger>
                     <SelectContent>
@@ -233,12 +233,12 @@ export default function UploadMateriPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="judul">Judul Materi <span className="text-rose-500">*</span></Label>
-                <Input id="judul" placeholder="Contoh: Modul 2 - Ekosistem" className="bg-slate-50 border-slate-200" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+                <Input id="judul" placeholder="Contoh: Modul 2 - Ekosistem" className="bg-stone-50 border-stone-200" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="deskripsi">Deskripsi Singkat (Opsional)</Label>
-                <Textarea id="deskripsi" placeholder="Tuliskan instruksi atau ringkasan materi..." className="bg-slate-50 border-slate-200 min-h-[100px]" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+                <Textarea id="deskripsi" placeholder="Tuliskan instruksi atau ringkasan materi..." className="bg-stone-50 border-stone-200 min-h-[100px]" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
               </div>
 
               <div className="space-y-2">
@@ -253,11 +253,11 @@ export default function UploadMateriPage() {
                   }} 
                   required
                 />
-                <p className="text-xs text-slate-500">Pilih file materi yang ingin dibagikan.</p>
+                <p className="text-xs text-stone-500">Pilih file materi yang ingin dibagikan.</p>
               </div>
 
               <div className="flex justify-end pt-4">
-                <Button className="bg-emerald-600 hover:bg-emerald-700 h-12 px-8 text-white rounded-full" onClick={handleSave} disabled={saving}>
+                <Button className="bg-teal-600 hover:bg-teal-700 h-12 px-8 text-white rounded-full" onClick={handleSave} disabled={saving}>
                   {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UploadCloud className="mr-2 h-4 w-4" />}
                   {saving ? "Menyimpan..." : "Upload Materi"}
                 </Button>
@@ -268,30 +268,30 @@ export default function UploadMateriPage() {
 
         {/* Sidebar: Recent Uploads */}
         <div className="space-y-6">
-          <Card className="border-slate-100 shadow-sm">
-            <CardHeader className="pb-3 border-b border-slate-50">
+          <Card className="border-stone-100 shadow-sm">
+            <CardHeader className="pb-3 border-b border-stone-50">
               <CardTitle className="text-lg">Riwayat Upload Terakhir</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 p-0">
               {loading ? (
-                <div className="p-8 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-slate-300" /></div>
+                <div className="p-8 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-stone-300" /></div>
               ) : materials.length === 0 ? (
-                <div className="p-8 text-center text-slate-400 text-sm">Belum ada materi.</div>
+                <div className="p-8 text-center text-stone-400 text-sm">Belum ada materi.</div>
               ) : (
-                <div className="divide-y divide-slate-50">
+                <div className="divide-y divide-stone-50">
                   {materials.map((file) => (
-                    <div key={file.id} className="p-4 hover:bg-slate-50/80 transition-colors flex items-start gap-4">
+                    <div key={file.id} className="p-4 hover:bg-stone-50/80 transition-colors flex items-start gap-4">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${getIconBg(file.fileUrl)}`}>
                         {getIcon(file.fileUrl)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-semibold text-slate-900 line-clamp-1" title={file.title}>{file.title}</h4>
-                        <p className="text-xs text-slate-500 mt-1">{file.subjectName} • {file.className || 'Semua Kelas'}</p>
-                        <div className="text-[10px] text-slate-400 mt-1.5 flex items-center gap-2">
+                        <h4 className="text-sm font-semibold text-stone-900 line-clamp-1" title={file.title}>{file.title}</h4>
+                        <p className="text-xs text-stone-500 mt-1">{file.subjectName} • {file.className || 'Semua Kelas'}</p>
+                        <div className="text-[10px] text-stone-400 mt-1.5 flex items-center gap-2">
                           <span>{new Date(file.createdAt).toLocaleDateString('id-ID')}</span>
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-rose-600 hover:bg-rose-50 shrink-0" onClick={() => openDelete(file)}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-stone-400 hover:text-rose-600 hover:bg-rose-50 shrink-0" onClick={() => openDelete(file)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

@@ -97,11 +97,11 @@ export default function AdminPPDBPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Accepted":
-        return <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none"><CheckCircle2 className="w-3 h-3 mr-1"/> Diterima</Badge>;
+        return <Badge className="bg-teal-100 text-teal-800 hover:bg-teal-200 border-none"><CheckCircle2 className="w-3 h-3 mr-1"/> Diterima</Badge>;
       case "Rejected":
         return <Badge className="bg-rose-100 text-rose-800 hover:bg-rose-200 border-none"><XCircle className="w-3 h-3 mr-1"/> Ditolak</Badge>;
       case "Reviewed":
-        return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-none"><Search className="w-3 h-3 mr-1"/> Direview</Badge>;
+        return <Badge className="bg-sky-100 text-sky-800 hover:bg-sky-200 border-none"><Search className="w-3 h-3 mr-1"/> Direview</Badge>;
       default:
         return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-none"><Clock className="w-3 h-3 mr-1"/> Menunggu</Badge>;
     }
@@ -110,16 +110,16 @@ export default function AdminPPDBPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900">Verifikasi PPDB</h2>
-        <p className="text-slate-500">Kelola dan verifikasi pendaftaran calon siswa baru.</p>
+        <h2 className="text-2xl font-bold tracking-tight text-stone-900">Verifikasi PPDB</h2>
+        <p className="text-stone-500">Kelola dan verifikasi pendaftaran calon siswa baru.</p>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
-        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
+      <Card className="border-stone-100 shadow-sm">
+        <CardHeader className="bg-stone-50/50 border-b border-stone-100 pb-4">
           <div className="flex flex-col md:flex-row justify-between gap-4">
             <div className="flex items-center gap-2 max-w-sm w-full">
               <div className="relative w-full">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-stone-400" />
                 <Input
                   placeholder="Cari nama calon siswa..."
                   className="pl-9 bg-white"
@@ -146,7 +146,7 @@ export default function AdminPPDBPage() {
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader className="bg-slate-50">
+            <TableHeader className="bg-stone-50">
               <TableRow>
                 <TableHead>No. Daftar</TableHead>
                 <TableHead>Nama Siswa</TableHead>
@@ -161,21 +161,21 @@ export default function AdminPPDBPage() {
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={7} className="h-32 text-center">
-                    <Loader2 className="h-6 w-6 animate-spin mx-auto text-emerald-600 mb-2" />
-                    <p className="text-sm text-slate-500">Memuat data...</p>
+                    <Loader2 className="h-6 w-6 animate-spin mx-auto text-teal-600 mb-2" />
+                    <p className="text-sm text-stone-500">Memuat data...</p>
                   </TableCell>
                 </TableRow>
               ) : applications.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-32 text-center text-slate-500">
+                  <TableCell colSpan={7} className="h-32 text-center text-stone-500">
                     Tidak ada data pendaftar yang ditemukan.
                   </TableCell>
                 </TableRow>
               ) : (
                 applications.map((app) => (
                   <TableRow key={app.id}>
-                    <TableCell className="font-medium text-slate-700">{app.registrationNumber}</TableCell>
-                    <TableCell className="font-bold text-slate-900">{app.studentName}</TableCell>
+                    <TableCell className="font-medium text-stone-700">{app.registrationNumber}</TableCell>
+                    <TableCell className="font-bold text-stone-900">{app.studentName}</TableCell>
                     <TableCell>{app.previousSchool || "-"}</TableCell>
                     <TableCell>{app.parentName}</TableCell>
                     <TableCell>{app.phone}</TableCell>
@@ -184,7 +184,7 @@ export default function AdminPPDBPage() {
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                        className="border-teal-200 text-teal-700 hover:bg-teal-50"
                         onClick={() => openVerifyDialog(app)}
                       >
                         Verifikasi
@@ -221,7 +221,7 @@ export default function AdminPPDBPage() {
               </Select>
             </div>
             {verifyStatus === "Accepted" && (
-              <div className="bg-emerald-50 text-emerald-800 p-3 rounded-md text-sm border border-emerald-100 flex gap-2">
+              <div className="bg-teal-50 text-teal-800 p-3 rounded-md text-sm border border-teal-100 flex gap-2">
                 <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
                 <p>Status Diterima akan memvalidasi calon siswa. Anda dapat meng-generate NIS nanti pada menu Manajemen Siswa.</p>
               </div>
@@ -231,7 +231,7 @@ export default function AdminPPDBPage() {
             <Button variant="outline" onClick={() => setIsVerifyDialogOpen(false)} disabled={isUpdating}>
               Batal
             </Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleVerify} disabled={isUpdating}>
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={handleVerify} disabled={isUpdating}>
               {isUpdating ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
               Simpan Perubahan
             </Button>

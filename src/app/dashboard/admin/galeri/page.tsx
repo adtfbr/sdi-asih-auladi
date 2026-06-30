@@ -139,41 +139,41 @@ export default function AdminGaleriPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Kelola Galeri Foto</h2>
-          <p className="text-slate-500">Tambahkan foto kegiatan sekolah untuk ditampilkan di halaman depan.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Kelola Galeri Foto</h2>
+          <p className="text-stone-500">Tambahkan foto kegiatan sekolah untuk ditampilkan di halaman depan.</p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleOpenDialog()}>
+        <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" /> Tambah Foto
         </Button>
       </div>
 
-      <Card className="border-slate-100 shadow-sm">
+      <Card className="border-stone-100 shadow-sm">
         <CardContent className="p-6">
           {loading ? (
             <div className="flex justify-center items-center h-32">
-              <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+              <Loader2 className="h-6 w-6 animate-spin text-stone-400" />
             </div>
           ) : galleryList.length === 0 ? (
-            <div className="text-center text-slate-500 py-8">Belum ada foto galeri.</div>
+            <div className="text-center text-stone-500 py-8">Belum ada foto galeri.</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {galleryList.map((item) => (
-                <div key={item.id} className="relative group rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white hover:shadow-md transition-shadow">
-                  <div className="aspect-video bg-slate-100 flex items-center justify-center overflow-hidden">
+                <div key={item.id} className="relative group rounded-xl overflow-hidden border border-stone-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+                  <div className="aspect-video bg-stone-100 flex items-center justify-center overflow-hidden">
                     {item.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={item.imageUrl} alt={item.title} className="object-cover w-full h-full" />
                     ) : (
-                      <ImageIcon className="h-8 w-8 text-slate-300" />
+                      <ImageIcon className="h-8 w-8 text-stone-300" />
                     )}
                   </div>
                   <div className="p-4">
-                    <div className="font-semibold text-slate-900 truncate" title={item.title}>{item.title}</div>
-                    <div className="text-sm text-slate-500 truncate mt-1" title={item.description}>{item.description || "Tidak ada deskripsi"}</div>
+                    <div className="font-semibold text-stone-900 truncate" title={item.title}>{item.title}</div>
+                    <div className="text-sm text-stone-500 truncate mt-1" title={item.description}>{item.description || "Tidak ada deskripsi"}</div>
                   </div>
                   {/* Action Overlay */}
                   <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button variant="secondary" size="icon" className="h-8 w-8 bg-white/90 hover:bg-white shadow-sm text-blue-600" onClick={() => handleOpenDialog(item)}>
+                    <Button variant="secondary" size="icon" className="h-8 w-8 bg-white/90 hover:bg-white shadow-sm text-sky-600" onClick={() => handleOpenDialog(item)}>
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button variant="destructive" size="icon" className="h-8 w-8 shadow-sm" onClick={() => handleOpenDelete(item)}>
@@ -210,13 +210,13 @@ export default function AdminGaleriPage() {
               <Label>Unggah Gambar</Label>
               <Input type="file" accept="image/*" onChange={(e) => setFileToUpload(e.target.files?.[0] || null)} />
               {currentItem?.imageUrl && !fileToUpload && (
-                <p className="text-xs text-slate-500 mt-1">Gambar saat ini: <a href={currentItem.imageUrl} target="_blank" className="text-blue-600 hover:underline">Lihat Gambar</a></p>
+                <p className="text-xs text-stone-500 mt-1">Gambar saat ini: <a href={currentItem.imageUrl} target="_blank" className="text-sky-600 hover:underline">Lihat Gambar</a></p>
               )}
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Batal</Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+            <Button onClick={handleSave} disabled={saving} className="bg-teal-600 hover:bg-teal-700 text-white">
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Simpan
             </Button>
