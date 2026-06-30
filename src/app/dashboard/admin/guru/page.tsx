@@ -96,24 +96,37 @@ export default function DataGuruPage() {
     setSaving(true);
     setError("");
     try {
-      const url = dialogMode === "create" ? "/api/guru" : `/api/guru/${editingId}`;
-      const method = dialogMode === "create" ? "POST" : "PUT";
+      if (dialogMode === "create") {
+        // Create teacher and generate user account using Server Action
+        const { createTeacherWithAccount } = await import("@/app/actions/user-actions");
+        const res = await createTeacherWithAccount({
+          name: formData.name,
+          nip: formData.nip,
+          email: formData.email,
+          phone: formData.phone,
+        });
+        
+        if (!res.success) {
+          throw new Error(res.error || "Gagal membuat guru & akun login.");
+        }
+      } else {
+        // Edit existing teacher via API
+        const res = await fetch(`/api/guru/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Gagal menyimpan data");
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || "Gagal memperbarui data");
+        }
       }
 
       setDialogOpen(false);
       fetchTeachers();
-    } catch (err: unknown) {
-      setError((err as Error).message);
+    } catch (err: any) {
+      setError(err.message || "Terjadi kesalahan.");
     } finally {
       setSaving(false);
     }

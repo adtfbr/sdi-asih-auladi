@@ -133,24 +133,37 @@ export default function DataSiswaPage() {
         classId: formData.classId ? Number(formData.classId) : undefined,
       };
 
-      const url = dialogMode === "create" ? "/api/siswa" : `/api/siswa/${editingId}`;
-      const method = dialogMode === "create" ? "POST" : "PUT";
+      if (dialogMode === "create") {
+        const { createStudentWithAccount } = await import("@/app/actions/user-actions");
+        const res = await createStudentWithAccount({
+          name: payload.name,
+          nis: payload.nis,
+          nisn: payload.nisn,
+          gender: payload.gender,
+          birthDate: payload.birthDate,
+          address: payload.address,
+        });
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+        if (!res.success) {
+          throw new Error(res.error || "Gagal membuat siswa & akun login.");
+        }
+      } else {
+        const res = await fetch(`/api/siswa/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Gagal menyimpan data");
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || "Gagal menyimpan data");
+        }
       }
 
       setDialogOpen(false);
       fetchStudents();
-    } catch (err: unknown) {
-      setError((err as Error).message);
+    } catch (err: any) {
+      setError(err.message || "Terjadi kesalahan.");
     } finally {
       setSaving(false);
     }
