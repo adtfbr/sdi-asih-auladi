@@ -120,3 +120,50 @@ export async function createStudentWithAccount(data: {
     return { success: false, error: error.message || "Terjadi kesalahan internal." };
   }
 }
+
+export async function createParentWithAccount(data: {
+  name: string;
+  email: string;
+  studentId: number;
+  phone?: string;
+  address?: string;
+}) {
+  try {
+    const existingUser = await db.select().from(users).where(eq(users.email, data.email)).limit(1);
+    if (existingUser.length > 0) {
+      return { success: false, error: "Email sudah terdaftar." };
+    }
+
+    const studentRecord = await db.select().from(students).where(eq(students.id, data.studentId)).limit(1);
+    if (studentRecord.length === 0) {
+      return { success: false, error: "Data siswa tidak ditemukan." };
+    }
+
+    // Default password for Wali is "orangtua[NIS]"
+    const nis = studentRecord[0].nis;
+    const hashedPassword = await hashPassword(`orangtua${nis}`);
+
+    // Create user
+    const [newUser] = await db.insert(users).values({
+      name: data.name,
+      email: data.email,
+      password: hashedPassword,
+      role: "wali",
+    }).returning({ id: users.id });
+
+    // Create parent linked to user
+    await db.insert(parents).values({
+      userId: newUser.id,
+      studentId: data.studentId,
+      name: data.name,
+      phone: data.phone || null,
+      relationship: "Wali",
+    });
+
+    revalidatePath("/dashboard/admin/wali");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error creating parent:", error);
+    return { success: false, error: error.message || "Terjadi kesalahan internal." };
+  }
+}
