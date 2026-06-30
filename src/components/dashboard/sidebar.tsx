@@ -28,6 +28,7 @@ const roleMenus = {
     { name: "Data Kelas", href: "/dashboard/admin/kelas", icon: Users },
     { name: "Mata Pelajaran", href: "/dashboard/admin/mapel", icon: BookOpen },
     { name: "Jadwal", href: "/dashboard/admin/jadwal", icon: CalendarDays },
+    { name: "Keuangan & SPP", href: "/dashboard/admin/keuangan", icon: FileText },
     { name: "Pengumuman", href: "/dashboard/admin/pengumuman", icon: MessageSquare },
     { name: "Berita", href: "/dashboard/admin/berita", icon: Newspaper },
     { name: "Galeri", href: "/dashboard/admin/galeri", icon: ImageIcon },
@@ -53,6 +54,7 @@ const roleMenus = {
     { name: "Dashboard", href: "/dashboard/wali", icon: LayoutDashboard },
     { name: "Absensi Anak", href: "/dashboard/wali/absensi", icon: ClipboardList },
     { name: "Nilai & Rapor", href: "/dashboard/wali/nilai", icon: FileText },
+    { name: "Tagihan & SPP", href: "/dashboard/wali/keuangan", icon: FileText },
     { name: "Pengumuman", href: "/dashboard/wali/pengumuman", icon: MessageSquare },
     { name: "Buku Penghubung", href: "/dashboard/wali/buku-penghubung", icon: MessageSquare },
   ]

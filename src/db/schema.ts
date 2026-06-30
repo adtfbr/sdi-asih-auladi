@@ -192,3 +192,16 @@ export const communicationBooks = pgTable('communication_books', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+export const invoices = pgTable('invoices', {
+  id: serial('id').primaryKey(),
+  studentId: integer('student_id').references(() => students.id).notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  amount: numeric('amount').notNull(),
+  dueDate: date('due_date').notNull(),
+  status: varchar('status', { length: 50 }).notNull().default('Unpaid'), // Unpaid, Pending Verification, Paid, Rejected
+  proofDocumentUrl: text('proof_document_url'), // base64 string or public URL
+  verifiedBy: integer('verified_by').references(() => users.id),
+  verifiedAt: timestamp('verified_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
