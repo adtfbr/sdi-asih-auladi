@@ -23,6 +23,7 @@ const roleMenus = {
   admin: [
     { name: "Dashboard", href: "/dashboard/admin", icon: LayoutDashboard },
     { name: "Data Siswa", href: "/dashboard/admin/siswa", icon: Users },
+    { name: "Data Wali Murid", href: "/dashboard/admin/wali", icon: Users },
     { name: "Data Guru", href: "/dashboard/admin/guru", icon: GraduationCap },
     { name: "Data Kelas", href: "/dashboard/admin/kelas", icon: Users },
     { name: "Mata Pelajaran", href: "/dashboard/admin/mapel", icon: BookOpen },
