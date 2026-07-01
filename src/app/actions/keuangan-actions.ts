@@ -61,8 +61,15 @@ export async function uploadPaymentProof(invoiceId: number, proofBase64: string)
   }
 }
 
-export async function verifyPayment(invoiceId: number, status: "Paid" | "Rejected", adminUserId: number) {
+import { cookies } from "next/headers";
+
+export async function verifyPayment(invoiceId: number, status: "Paid" | "Rejected") {
   try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("auth_session");
+    if (!sessionCookie) throw new Error("Unauthorized");
+    const sessionData = JSON.parse(sessionCookie.value);
+    const adminUserId = sessionData.id;
     await db.update(invoices)
       .set({
         status: status,

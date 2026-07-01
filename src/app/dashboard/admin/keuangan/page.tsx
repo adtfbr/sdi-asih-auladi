@@ -82,12 +82,7 @@ export default function AdminKeuanganPage() {
   const handleVerify = async (status: "Paid" | "Rejected") => {
     if (!selectedInvoice) return;
     setSaving(true);
-    // In real app, we should pass the actual admin user id. 
-    // For MVP, we'll just pass 1 or handled by server action via session.
-    // Let's pass 1 temporarily, or let server action get it from session. 
-    // Let's modify server action to get session user. Wait, the server action takes adminUserId. 
-    // We will just pass 1 for now.
-    const res = await verifyPayment(selectedInvoice.id, status, 1);
+    const res = await verifyPayment(selectedInvoice.id, status);
     if (res.success) {
       setVerifyOpen(false);
       fetchData();
