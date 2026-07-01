@@ -90,9 +90,12 @@ export default function NilaiRaporPage() {
                       {subjGrades.map((g, idx) => (
                         <div key={idx} className="p-4 bg-white hover:bg-stone-50 transition-colors">
                           <div className="flex justify-between items-start mb-2">
-                            <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200">
-                              {g.type}
-                            </Badge>
+                            <div className="flex flex-col gap-1">
+                              <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 self-start">
+                                {g.type}
+                              </Badge>
+                              <span className="text-xs text-stone-500 font-medium">{g.academicYear} • Semester {g.semester}</span>
+                            </div>
                             <div className="text-2xl font-black text-stone-900">{Number(g.score)}</div>
                           </div>
                           {g.notes && (

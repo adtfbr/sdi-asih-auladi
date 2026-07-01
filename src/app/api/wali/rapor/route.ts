@@ -39,6 +39,7 @@ export async function GET() {
       id: grades.id,
       studentId: grades.studentId,
       subjectName: subjects.name,
+      academicYear: grades.academicYear,
       type: grades.type,
       semester: grades.semester,
       score: grades.score,

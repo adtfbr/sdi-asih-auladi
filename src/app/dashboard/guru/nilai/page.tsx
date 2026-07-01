@@ -22,6 +22,7 @@ export default function GuruNilaiPage() {
   // Filter states
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState("2026/2027");
   const [selectedType, setSelectedType] = useState("Formatif");
   const [selectedSemester, setSelectedSemester] = useState("Ganjil");
 
@@ -90,6 +91,7 @@ export default function GuruNilaiPage() {
           studentId: student.id,
           classId: Number(selectedClass),
           subjectId: Number(selectedSubject),
+          academicYear: selectedAcademicYear,
           semester: selectedSemester,
           type: selectedType,
           score: Number(g.score),
@@ -122,11 +124,15 @@ export default function GuruNilaiPage() {
               <Loader2 className="h-6 w-6 animate-spin" />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="space-y-2">
                 <Label>Kelas</Label>
                 <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || "")}>
-                  <SelectTrigger><SelectValue placeholder="Pilih Kelas" /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {selectedClass ? `Kelas ${classes.find(c => c.id.toString() === selectedClass)?.level} - ${classes.find(c => c.id.toString() === selectedClass)?.name}` : "Pilih Kelas"}
+                    </SelectValue>
+                  </SelectTrigger>
                   <SelectContent>
                     {classes.map(c => (
                       <SelectItem key={c.id} value={c.id.toString()}>Kelas {c.level} - {c.name}</SelectItem>
@@ -137,11 +143,26 @@ export default function GuruNilaiPage() {
               <div className="space-y-2">
                 <Label>Mata Pelajaran</Label>
                 <Select value={selectedSubject} onValueChange={(val) => setSelectedSubject(val || "")}>
-                  <SelectTrigger><SelectValue placeholder="Pilih Mapel" /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {selectedSubject ? subjects.find(s => s.id.toString() === selectedSubject)?.name : "Pilih Mapel"}
+                    </SelectValue>
+                  </SelectTrigger>
                   <SelectContent>
                     {subjects.map(s => (
                       <SelectItem key={s.id} value={s.id.toString()}>{s.name}</SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Tahun Ajaran</Label>
+                <Select value={selectedAcademicYear} onValueChange={(val) => setSelectedAcademicYear(val || "2026/2027")}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2025/2026">2025/2026</SelectItem>
+                    <SelectItem value="2026/2027">2026/2027</SelectItem>
+                    <SelectItem value="2027/2028">2027/2028</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -151,7 +172,8 @@ export default function GuruNilaiPage() {
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Formatif">Formatif (Harian)</SelectItem>
-                    <SelectItem value="Sumatif">Sumatif (Ujian)</SelectItem>
+                    <SelectItem value="Sumatif STS">Sumatif STS (UTS)</SelectItem>
+                    <SelectItem value="Sumatif SAS">Sumatif SAS (UAS)</SelectItem>
                     <SelectItem value="Proyek">Proyek (P5)</SelectItem>
                   </SelectContent>
                 </Select>

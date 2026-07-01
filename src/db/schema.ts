@@ -83,8 +83,9 @@ export const grades = pgTable('grades', {
   classId: integer('class_id').references(() => classes.id).notNull(),
   subjectId: integer('subject_id').references(() => subjects.id).notNull(),
   teacherId: integer('teacher_id').references(() => teachers.id).notNull(),
+  academicYear: varchar('academic_year', { length: 20 }).notNull().default('2026/2027'),
   semester: varchar('semester', { length: 20 }).notNull().default('Ganjil'), // Ganjil, Genap
-  type: varchar('type', { length: 50 }).notNull(), // Tugas, Quiz, UTS, UAS, Rapor
+  type: varchar('type', { length: 50 }).notNull(), // Formatif, Sumatif STS, Sumatif SAS, Proyek
   score: numeric('score').notNull(),
   notes: text('notes'),
 });

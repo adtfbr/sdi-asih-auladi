@@ -12,6 +12,7 @@ export async function createGrade(data: {
   studentId: number;
   classId: number;
   subjectId: number;
+  academicYear: string;
   semester: string;
   type: string; // Formatif, Sumatif
   score: number;
@@ -32,6 +33,7 @@ export async function createGrade(data: {
       classId: data.classId,
       subjectId: data.subjectId,
       teacherId: teacherId,
+      academicYear: data.academicYear,
       semester: data.semester,
       type: data.type,
       score: data.score.toString(),
