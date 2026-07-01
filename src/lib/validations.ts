@@ -20,6 +20,7 @@ export const createTeacherSchema = z.object({
   name: z.string().min(1, 'Nama wajib diisi'),
   phone: z.string().optional(),
   email: z.string().email('Email tidak valid').optional().or(z.literal('')),
+  position: z.string().optional(),
   status: z.enum(['Aktif', 'Cuti', 'Pensiun']).default('Aktif'),
 });
 

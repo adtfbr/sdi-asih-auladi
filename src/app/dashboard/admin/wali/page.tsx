@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Search, Loader2 } from "lucide-react";
+import { Plus, Search, Loader2, ArrowUpDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createParentWithAccount } from "@/app/actions/user-actions";
 
@@ -16,6 +16,15 @@ export default function DataWaliPage() {
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
+
+  const handleSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
   // Dialog
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -84,10 +93,16 @@ export default function DataWaliPage() {
     }
   };
 
-  const filteredWalis = walis.filter(w => 
-    w.name.toLowerCase().includes(search.toLowerCase()) || 
+  const filteredWalis = [...walis].filter(w => 
+    w.name?.toLowerCase().includes(search.toLowerCase()) || 
     (w.studentName && w.studentName.toLowerCase().includes(search.toLowerCase()))
-  );
+  ).sort((a, b) => {
+    if (!sortConfig) return 0;
+    const aValue = String(a[sortConfig.key] || "");
+    const bValue = String(b[sortConfig.key] || "");
+    const compareResult = aValue.localeCompare(bValue, undefined, { numeric: true });
+    return sortConfig.direction === 'asc' ? compareResult : -compareResult;
+  });
 
   return (
     <div className="space-y-6">
@@ -126,10 +141,18 @@ export default function DataWaliPage() {
             <Table>
               <TableHeader className="bg-stone-50">
                 <TableRow>
-                  <TableHead>Nama Wali</TableHead>
-                  <TableHead>Email Login</TableHead>
-                  <TableHead>No. HP</TableHead>
-                  <TableHead>Anak (Siswa)</TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100 transition-colors" onClick={() => handleSort('name')}>
+                    <div className="flex items-center">Nama Wali <ArrowUpDown className="ml-2 h-3 w-3" /></div>
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100 transition-colors" onClick={() => handleSort('email')}>
+                    <div className="flex items-center">Email Login <ArrowUpDown className="ml-2 h-3 w-3" /></div>
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100 transition-colors" onClick={() => handleSort('phone')}>
+                    <div className="flex items-center">No. HP <ArrowUpDown className="ml-2 h-3 w-3" /></div>
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100 transition-colors" onClick={() => handleSort('studentName')}>
+                    <div className="flex items-center">Anak (Siswa) <ArrowUpDown className="ml-2 h-3 w-3" /></div>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -168,10 +191,14 @@ export default function DataWaliPage() {
             <div className="space-y-2">
               <Label>Hubungkan dengan Siswa (Anak)</Label>
               <Select value={formData.studentId} onValueChange={(val) => setFormData({ ...formData, studentId: val || "" })}>
-                <SelectTrigger><SelectValue placeholder="Pilih Siswa" /></SelectTrigger>
-                <SelectContent>
+                <SelectTrigger className="w-full text-left h-auto min-h-10 whitespace-normal">
+                  <SelectValue placeholder="Pilih Siswa" />
+                </SelectTrigger>
+                <SelectContent className="max-w-[80vw] sm:max-w-md w-full">
                   {students.map((s) => (
-                    <SelectItem key={s.id} value={s.id.toString()}>{s.name} (NIS: {s.nis})</SelectItem>
+                    <SelectItem key={s.id} value={s.id.toString()} className="whitespace-normal break-words text-left">
+                      {s.name} (NIS: {s.nis})
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

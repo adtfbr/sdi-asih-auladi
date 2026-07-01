@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Edit, Trash2, Loader2 } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, ArrowUpDown } from "lucide-react";
 
 interface Kelas {
   id: number;
@@ -58,6 +58,24 @@ export default function AdminKelasPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingKelas, setDeletingKelas] = useState<Kelas | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  const [sortConfig, setSortConfig] = useState<{key: keyof Kelas, direction: 'asc'|'desc'} | null>(null);
+
+  const handleSort = (key: keyof Kelas) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedKelasList = [...kelasList].sort((a, b) => {
+    if (!sortConfig) return 0;
+    const aVal = String(a[sortConfig.key] || "");
+    const bVal = String(b[sortConfig.key] || "");
+    const compareResult = aVal.localeCompare(bVal, undefined, { numeric: true });
+    return sortConfig.direction === 'asc' ? compareResult : -compareResult;
+  });
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -197,16 +215,26 @@ export default function AdminKelasPage() {
             <Table>
               <TableHeader className="bg-stone-50">
                 <TableRow>
-                  <TableHead>Nama Kelas</TableHead>
-                  <TableHead>Tingkat</TableHead>
-                  <TableHead>Wali Kelas</TableHead>
-                  <TableHead>Tahun Ajaran</TableHead>
-                  <TableHead>Siswa</TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('name')}>
+                    Nama Kelas <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('level')}>
+                    Tingkat <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('homeroomTeacherName')}>
+                    Wali Kelas <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('academicYearName')}>
+                    Tahun Ajaran <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('studentCount')}>
+                    Siswa <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
                   <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {kelasList.map((k) => (
+                {sortedKelasList.map((k) => (
                   <TableRow key={k.id} className="hover:bg-stone-50/50">
                     <TableCell className="font-medium text-stone-900">{k.name}</TableCell>
                     <TableCell>Kelas {k.level}</TableCell>
@@ -264,7 +292,14 @@ export default function AdminKelasPage() {
             <div className="space-y-2">
               <Label>Tahun Ajaran</Label>
               <Select value={formData.academicYearId} onValueChange={(val) => setFormData({ ...formData, academicYearId: val || "" })}>
-                <SelectTrigger><SelectValue placeholder="Pilih Tahun Ajaran" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue>
+                    {formData.academicYearId ? (() => {
+                      const ay = academicYears.find(ay => ay.id.toString() === formData.academicYearId);
+                      return ay ? `${ay.name} (${ay.semester})` : "Pilih Tahun Ajaran";
+                    })() : "Pilih Tahun Ajaran"}
+                  </SelectValue>
+                </SelectTrigger>
                 <SelectContent>
                   {academicYears.map(ay => (
                     <SelectItem key={ay.id} value={ay.id.toString()}>{ay.name} ({ay.semester})</SelectItem>
@@ -275,7 +310,13 @@ export default function AdminKelasPage() {
             <div className="space-y-2">
               <Label>Wali Kelas (Opsional)</Label>
               <Select value={formData.homeroomTeacherId} onValueChange={(val) => setFormData({ ...formData, homeroomTeacherId: val || "" })}>
-                <SelectTrigger><SelectValue placeholder="Pilih Guru Wali" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue>
+                    {formData.homeroomTeacherId && formData.homeroomTeacherId !== "none" 
+                      ? teachers.find(t => t.id.toString() === formData.homeroomTeacherId)?.name 
+                      : "Pilih Guru Wali"}
+                  </SelectValue>
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Belum Ditentukan</SelectItem>
                   {teachers.map(t => (

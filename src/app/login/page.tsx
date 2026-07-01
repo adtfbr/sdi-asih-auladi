@@ -116,12 +116,11 @@ export default function LoginPage() {
           <div className="mt-12 bg-sky-50 border border-sky-100 p-5 rounded-2xl text-sm text-sky-900">
             <p className="font-bold mb-3 font-heading text-[15px]">Data Akses Demo:</p>
             <div className="grid grid-cols-2 gap-y-2 gap-x-4">
-              <div><span className="font-semibold">Admin:</span><br/>admin@sdiasih.com</div>
-              <div><span className="font-semibold">Guru:</span><br/>ahmad@sdiasih.com</div>
-              <div><span className="font-semibold">Siswa:</span><br/>budi@siswa.sdiasih.com</div>
-              <div><span className="font-semibold">Wali:</span><br/>ayah.budi@gmail.com</div>
+              <div><span className="font-semibold">Admin:</span><br/>admin@sdiasih.com<br/><span className="text-[11px] font-medium opacity-75">admin123</span></div>
+              <div><span className="font-semibold">Guru:</span><br/>ahmad@sdiasih.com<br/><span className="text-[11px] font-medium opacity-75">guru198001</span></div>
+              <div><span className="font-semibold">Siswa:</span><br/>siswa1@sdiasih.com<br/><span className="text-[11px] font-medium opacity-75">siswa2025001</span></div>
+              <div><span className="font-semibold">Wali:</span><br/>ortu1@sdiasih.com<br/><span className="text-[11px] font-medium opacity-75">orangtua2025001</span></div>
             </div>
-            <p className="mt-4 pt-3 border-t border-sky-200/50 text-xs italic font-medium">Password universal: password123</p>
           </div>
         </div>
       </div>

@@ -11,7 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Search, Download, Upload, MoreHorizontal, Pencil, Trash2, Loader2 } from "lucide-react";
+import { Plus, Search, Download, Upload, MoreHorizontal, Pencil, Trash2, Loader2, ArrowUpDown } from "lucide-react";
+import Papa from "papaparse";
+import { useRef } from "react";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -58,6 +60,81 @@ export default function DataSiswaPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  // Import/Export & Sorting
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [sortConfig, setSortConfig] = useState<{key: keyof Student, direction: 'asc'|'desc'} | null>(null);
+
+  const handleSort = (key: keyof Student) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedStudents = [...students].sort((a, b) => {
+    if (!sortConfig) return 0;
+    const aVal = String(a[sortConfig.key] || "");
+    const bVal = String(b[sortConfig.key] || "");
+    const compareResult = aVal.localeCompare(bVal, undefined, { numeric: true });
+    return sortConfig.direction === 'asc' ? compareResult : -compareResult;
+    return 0;
+  });
+
+  const handleExport = () => {
+    const csv = Papa.unparse(students.map(s => ({
+      NIS: s.nis,
+      NISN: s.nisn,
+      Name: s.name,
+      Gender: s.gender,
+      BirthDate: s.birthDate,
+      Class: s.className || '',
+      Status: s.status
+    })));
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'data_siswa.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        setLoading(true);
+        try {
+          const formattedData = results.data.map((row: any) => ({
+            nis: row.NIS || row.nis,
+            nisn: row.NISN || row.nisn,
+            name: row.Name || row.name,
+            gender: row.Gender || row.gender,
+            birthDate: row.BirthDate || row.birthDate,
+            status: row.Status || row.status || 'Aktif',
+            classId: classes.find(c => c.name === (row.Class || row.class || row.className))?.id
+          }));
+          const res = await fetch("/api/siswa/bulk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formattedData)
+          });
+          if (res.ok) fetchStudents();
+          else alert("Gagal import data.");
+        } catch (error) {
+          alert("Error import CSV.");
+        }
+        setLoading(false);
+      }
+    });
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const fetchStudents = useCallback(async () => {
     setLoading(true);
@@ -196,10 +273,11 @@ export default function DataSiswaPage() {
           <p className="text-stone-500">Kelola data induk siswa, kelas, dan status akademik.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" className="border-stone-200">
-            <Upload className="mr-2 h-4 w-4" /> Import Excel
+          <input type="file" accept=".csv" ref={fileInputRef} className="hidden" onChange={handleImport} />
+          <Button variant="outline" className="border-stone-200" onClick={() => fileInputRef.current?.click()}>
+            <Upload className="mr-2 h-4 w-4" /> Import CSV
           </Button>
-          <Button variant="outline" className="border-stone-200">
+          <Button variant="outline" className="border-stone-200" onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" /> Export
           </Button>
           <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={openCreate}>
@@ -263,17 +341,27 @@ export default function DataSiswaPage() {
           ) : (
             <Table>
               <TableHeader className="bg-stone-50">
-                <TableRow>
-                  <TableHead className="w-[80px]">NIS</TableHead>
-                  <TableHead>Nama Lengkap</TableHead>
-                  <TableHead>Kelas</TableHead>
-                  <TableHead>L/P</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Aksi</TableHead>
-                </TableRow>
+                  <TableRow>
+                    <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('nis')}>
+                      NIS <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                    </TableHead>
+                    <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('name')}>
+                      Nama Lengkap <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                    </TableHead>
+                    <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('className')}>
+                      Kelas <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                    </TableHead>
+                    <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('gender')}>
+                      L/P <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                    </TableHead>
+                    <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('status')}>
+                      Status <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                    </TableHead>
+                    <TableHead className="text-right">Aksi</TableHead>
+                  </TableRow>
               </TableHeader>
               <TableBody>
-                {students.map((student) => (
+                {sortedStudents.map((student) => (
                   <TableRow key={student.id} className="hover:bg-stone-50/50">
                     <TableCell className="font-medium text-stone-600">{student.nis}</TableCell>
                     <TableCell className="font-semibold text-stone-900">{student.name}</TableCell>
@@ -365,7 +453,11 @@ export default function DataSiswaPage() {
               <div className="space-y-2">
                 <Label>Kelas</Label>
                 <Select value={formData.classId} onValueChange={(val) => setFormData({ ...formData, classId: val || "" })}>
-                  <SelectTrigger><SelectValue placeholder="Pilih Kelas" /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {formData.classId ? `Kelas ${classes.find(c => c.id.toString() === formData.classId)?.name}` : "Pilih Kelas"}
+                    </SelectValue>
+                  </SelectTrigger>
                   <SelectContent>
                     {classes.map((c) => (
                       <SelectItem key={c.id} value={c.id.toString()}>Kelas {c.name}</SelectItem>

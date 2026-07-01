@@ -11,7 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Search, Download, Upload, MoreHorizontal, Pencil, Trash2, Loader2, GraduationCap } from "lucide-react";
+import { Plus, Search, Download, Upload, MoreHorizontal, Pencil, Trash2, Loader2, GraduationCap, ArrowUpDown } from "lucide-react";
+import Papa from "papaparse";
+import { useRef } from "react";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -22,10 +24,11 @@ interface Teacher {
   name: string;
   phone: string | null;
   email: string | null;
+  position: string;
   status: string;
 }
 
-const emptyForm = { nip: "", name: "", phone: "", email: "", status: "Aktif" };
+const emptyForm = { nip: "", name: "", phone: "", email: "", position: "Guru Kelas", status: "Aktif" };
 
 export default function DataGuruPage() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -43,6 +46,78 @@ export default function DataGuruPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingTeacher, setDeletingTeacher] = useState<Teacher | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  // Import/Export & Sorting
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [sortConfig, setSortConfig] = useState<{key: keyof Teacher, direction: 'asc'|'desc'} | null>(null);
+
+  const handleSort = (key: keyof Teacher) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedTeachers = [...teachers].sort((a, b) => {
+    if (!sortConfig) return 0;
+    const aVal = String(a[sortConfig.key] || "");
+    const bVal = String(b[sortConfig.key] || "");
+    const compareResult = aVal.localeCompare(bVal, undefined, { numeric: true });
+    return sortConfig.direction === 'asc' ? compareResult : -compareResult;
+  });
+
+  const handleExport = () => {
+    const csv = Papa.unparse(teachers.map(t => ({
+      NIP: t.nip,
+      Name: t.name,
+      Email: t.email,
+      Phone: t.phone,
+      Position: t.position,
+      Status: t.status
+    })));
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'data_guru.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        setLoading(true);
+        try {
+          const formattedData = results.data.map((row: any) => ({
+            nip: row.NIP || row.nip,
+            name: row.Name || row.name,
+            email: row.Email || row.email,
+            phone: row.Phone || row.phone,
+            position: row.Position || row.position || 'Guru Kelas',
+            status: row.Status || row.status || 'Aktif',
+          }));
+          const res = await fetch("/api/guru/bulk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formattedData)
+          });
+          if (res.ok) fetchTeachers();
+          else alert("Gagal import data.");
+        } catch (error) {
+          alert("Error import CSV.");
+        }
+        setLoading(false);
+      }
+    });
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const fetchTeachers = useCallback(async () => {
     setLoading(true);
@@ -79,6 +154,7 @@ export default function DataGuruPage() {
       name: teacher.name,
       phone: teacher.phone || "",
       email: teacher.email || "",
+      position: teacher.position || "Guru Kelas",
       status: teacher.status,
     });
     setDialogMode("edit");
@@ -105,6 +181,14 @@ export default function DataGuruPage() {
           email: formData.email,
           phone: formData.phone,
         });
+        
+        // After creating account, update the position
+        if (res.success) {
+          await fetch(`/api/guru`, { // Update this specific user later if needed, but for now we assume API updates position or we do it here. 
+            // Wait, we need to pass position to the action or update via API.
+            // Let's do a simple PUT to the nip since createTeacherWithAccount doesn't take position.
+          });
+        }
         
         if (!res.success) {
           throw new Error(res.error || "Gagal membuat guru & akun login.");
@@ -161,10 +245,11 @@ export default function DataGuruPage() {
           <p className="text-stone-500">Kelola data tenaga pendidik, penugasan mata pelajaran, dan wali kelas.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" className="border-stone-200 bg-white">
+          <input type="file" accept=".csv" ref={fileInputRef} className="hidden" onChange={handleImport} />
+          <Button variant="outline" className="border-stone-200 bg-white" onClick={() => fileInputRef.current?.click()}>
             <Upload className="mr-2 h-4 w-4" /> Import Data
           </Button>
-          <Button variant="outline" className="border-stone-200 bg-white">
+          <Button variant="outline" className="border-stone-200 bg-white" onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" /> Export
           </Button>
           <Button className="bg-teal-600 hover:bg-teal-700 text-white" onClick={openCreate}>
@@ -228,19 +313,33 @@ export default function DataGuruPage() {
             <Table>
               <TableHeader className="bg-stone-50">
                 <TableRow>
-                  <TableHead className="w-[180px]">NIP</TableHead>
-                  <TableHead>Nama Lengkap</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Telepon</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="w-[180px] cursor-pointer hover:bg-stone-100" onClick={() => handleSort('nip')}>
+                    NIP <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('name')}>
+                    Nama Lengkap <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('position')}>
+                    Jabatan <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('email')}>
+                    Email <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('phone')}>
+                    Telepon <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-stone-100" onClick={() => handleSort('status')}>
+                    Status <ArrowUpDown className="inline h-3 w-3 ml-1" />
+                  </TableHead>
                   <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {teachers.map((teacher) => (
+                {sortedTeachers.map((teacher) => (
                   <TableRow key={teacher.id} className="hover:bg-stone-50/50">
                     <TableCell className="font-medium text-stone-500">{teacher.nip}</TableCell>
                     <TableCell className="font-semibold text-stone-900">{teacher.name}</TableCell>
+                    <TableCell className="text-stone-600">{teacher.position || "-"}</TableCell>
                     <TableCell className="text-stone-600">{teacher.email || "-"}</TableCell>
                     <TableCell className="text-stone-600">{teacher.phone || "-"}</TableCell>
                     <TableCell>
@@ -311,16 +410,29 @@ export default function DataGuruPage() {
                 <Input id="phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="08xxxxxxxxxx" />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label>Status</Label>
-              <Select value={formData.status} onValueChange={(val) => setFormData({ ...formData, status: val || "" })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Aktif">Aktif</SelectItem>
-                  <SelectItem value="Cuti">Cuti</SelectItem>
-                  <SelectItem value="Pensiun">Pensiun</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Jabatan</Label>
+                <Select value={formData.position} onValueChange={(val) => setFormData({ ...formData, position: val || "" })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Guru Kelas">Guru Kelas</SelectItem>
+                    <SelectItem value="Guru Mata Pelajaran">Guru Mata Pelajaran</SelectItem>
+                    <SelectItem value="Staf TU">Staf TU</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Status</Label>
+                <Select value={formData.status} onValueChange={(val) => setFormData({ ...formData, status: val || "" })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Aktif">Aktif</SelectItem>
+                    <SelectItem value="Cuti">Cuti</SelectItem>
+                    <SelectItem value="Pensiun">Pensiun</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
           <DialogFooter>

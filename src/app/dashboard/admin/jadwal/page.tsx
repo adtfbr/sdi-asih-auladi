@@ -371,7 +371,11 @@ export default function JadwalAdminPage() {
               <div className="space-y-2">
                 <Label>Kelas</Label>
                 <Select value={formData.classId} onValueChange={(v) => setFormData({ ...formData, classId: v || "" })}>
-                  <SelectTrigger><SelectValue placeholder="Pilih..." /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {formData.classId ? classes.find(c => c.id.toString() === formData.classId)?.name || "Pilih..." : "Pilih..."}
+                    </SelectValue>
+                  </SelectTrigger>
                   <SelectContent>
                     {classes.map(c => <SelectItem key={c.id} value={c.id.toString()}>{c.name}</SelectItem>)}
                   </SelectContent>
@@ -393,7 +397,11 @@ export default function JadwalAdminPage() {
             <div className="space-y-2">
               <Label>Mata Pelajaran</Label>
               <Select value={formData.subjectId} onValueChange={(v) => setFormData({ ...formData, subjectId: v || "" })}>
-                <SelectTrigger><SelectValue placeholder="Pilih Mapel..." /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue>
+                    {formData.subjectId ? subjects.find(s => s.id.toString() === formData.subjectId)?.name || "Pilih Mapel..." : "Pilih Mapel..."}
+                  </SelectValue>
+                </SelectTrigger>
                 <SelectContent>
                   {subjects.map(s => <SelectItem key={s.id} value={s.id.toString()}>{s.name}</SelectItem>)}
                 </SelectContent>
@@ -403,7 +411,11 @@ export default function JadwalAdminPage() {
             <div className="space-y-2">
               <Label>Guru Pengajar</Label>
               <Select value={formData.teacherId} onValueChange={(v) => setFormData({ ...formData, teacherId: v || "" })}>
-                <SelectTrigger><SelectValue placeholder="Pilih Guru..." /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue>
+                    {formData.teacherId ? teachers.find(t => t.id.toString() === formData.teacherId)?.name || "Pilih Guru..." : "Pilih Guru..."}
+                  </SelectValue>
+                </SelectTrigger>
                 <SelectContent>
                   {teachers.map(t => <SelectItem key={t.id} value={t.id.toString()}>{t.name}</SelectItem>)}
                 </SelectContent>

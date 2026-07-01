@@ -28,6 +28,7 @@ export const teachers = pgTable('teachers', {
   name: text('name').notNull(),
   phone: varchar('phone', { length: 20 }),
   email: varchar('email', { length: 255 }).unique(),
+  position: varchar('position', { length: 100 }).notNull().default('Guru Kelas'), // Guru Kelas, Guru Mata Pelajaran, Staf TU
   status: varchar('status', { length: 20 }).notNull().default('Aktif'), // Aktif, Cuti, Pensiun
   createdAt: timestamp('created_at').defaultNow(),
 });

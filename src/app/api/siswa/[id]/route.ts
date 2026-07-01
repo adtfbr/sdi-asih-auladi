@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { students, classStudents, classes, grades, attendanceRecords } from "@/db/schema";
+import { students, classStudents, classes, grades, attendanceRecords, parents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { updateStudentSchema } from "@/lib/validations";
 
@@ -97,10 +97,14 @@ export async function DELETE(
     const { id } = await params;
     const studentId = Number(id);
 
-    // Delete related records first
+    const { parents, invoices, communicationBooks, tahfidzRecords } = await import("@/db/schema");
+    await db.delete(parents).where(eq(parents.studentId, studentId));
     await db.delete(grades).where(eq(grades.studentId, studentId));
     await db.delete(attendanceRecords).where(eq(attendanceRecords.studentId, studentId));
     await db.delete(classStudents).where(eq(classStudents.studentId, studentId));
+    await db.delete(invoices).where(eq(invoices.studentId, studentId));
+    await db.delete(communicationBooks).where(eq(communicationBooks.studentId, studentId));
+    await db.delete(tahfidzRecords).where(eq(tahfidzRecords.studentId, studentId));
 
     const [deleted] = await db
       .delete(students)
