@@ -2,270 +2,258 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Save, BookOpen, UserCircle2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Save, UploadCloud, Loader2, CheckCircle2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { createGrade } from "@/app/actions/penilaian-actions";
 
-interface ClassOption { id: number; name: string; }
-interface SubjectOption { id: number; name: string; code: string; }
-interface TeacherOption { id: number; name: string; }
-interface StudentRow { id: number; nis: string; name: string; }
+export default function GuruNilaiPage() {
+  const [classes, setClasses] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
+  
+  const [loadingConfig, setLoadingConfig] = useState(true);
+  const [loadingStudents, setLoadingStudents] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-export default function InputNilaiPage() {
-  const [classes, setClasses] = useState<ClassOption[]>([]);
-  const [subjects, setSubjects] = useState<SubjectOption[]>([]);
-  const [students, setStudents] = useState<StudentRow[]>([]);
-  const [session, setSession] = useState<{teacherId?: number} | null>(null);
-
+  // Filter states
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [gradeType, setGradeType] = useState("Tugas");
+  const [selectedType, setSelectedType] = useState("Formatif");
+  const [selectedSemester, setSelectedSemester] = useState("Ganjil");
 
-  const [scoresMap, setScoresMap] = useState<Record<number, string>>({});
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  // Form states per student
+  const [grades, setGrades] = useState<Record<number, { score: string, notes: string }>>({});
+  const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
-    fetch('/api/auth/session')
-      .then(res => res.ok ? res.json() : null)
+    // Fetch classes & subjects
+    fetch("/api/guru/penilaian/data")
+      .then(res => res.json())
       .then(data => {
-        if (data) setSession(data);
-      })
-      .catch(() => {});
-      
-    Promise.all([
-      fetch("/api/kelas").then((r) => r.json()),
-      fetch("/api/mapel").then((r) => r.json()),
-    ]).then(([classData, subjectData]) => {
-      setClasses(Array.isArray(classData) ? classData : []);
-      setSubjects(Array.isArray(subjectData) ? subjectData : []);
-    });
+        if (data.classes) setClasses(data.classes);
+        if (data.subjects) setSubjects(data.subjects);
+        setLoadingConfig(false);
+      });
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchStudents = async () => {
-      if (!selectedClass) {
-        setStudents([]);
-        setScoresMap({});
-        return;
-      }
-
-      setLoading(true);
-      setSaved(false);
-      try {
-        const res = await fetch(`/api/kelas/${selectedClass}/siswa`);
-        const data = await res.json();
-        const list = Array.isArray(data) ? data : [];
-        if (!isMounted) return;
-        
-        setStudents(list);
-        const map: Record<number, string> = {};
-        
-        // Fetch existing grades
-        const gradesRes = await fetch(`/api/nilai?classId=${selectedClass}&semester=Ganjil`);
-        const gradesData = await gradesRes.json();
-        const existingGrades = Array.isArray(gradesData) ? gradesData : [];
-
-        list.forEach((s: StudentRow) => { 
-          // If we had a specific subject and type we could filter here, 
-          // but for now we just initialize empty
-          map[s.id] = ""; 
+    if (selectedClass) {
+      setLoadingStudents(true);
+      fetch(`/api/guru/penilaian/data?classId=${selectedClass}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.students) {
+            setStudents(data.students);
+            // Inisialisasi state form
+            const initialGrades: Record<number, any> = {};
+            data.students.forEach((s: any) => {
+              initialGrades[s.id] = { score: "", notes: "" };
+            });
+            setGrades(initialGrades);
+          }
+          setLoadingStudents(false);
         });
-        setScoresMap(map);
-      } catch {
-        if (!isMounted) return;
-        setStudents([]);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    fetchStudents();
-
-    return () => {
-      isMounted = false;
-    };
+    } else {
+      setStudents([]);
+    }
   }, [selectedClass]);
 
-  const handleSave = async () => {
-    if (!selectedSubject || !session?.teacherId) {
-      alert("Pilih mata pelajaran dan guru terlebih dahulu.");
-      return;
-    }
+  const handleScoreChange = (studentId: number, val: string) => {
+    setGrades(prev => ({
+      ...prev,
+      [studentId]: { ...prev[studentId], score: val }
+    }));
+  };
 
+  const handleNotesChange = (studentId: number, val: string) => {
+    setGrades(prev => ({
+      ...prev,
+      [studentId]: { ...prev[studentId], notes: val }
+    }));
+  };
+
+  const handleSaveAll = async () => {
+    if (!selectedClass || !selectedSubject) return;
+    
     setSaving(true);
-    try {
-      const records = students
-        .filter((s) => scoresMap[s.id] !== "" && scoresMap[s.id] !== undefined)
-        .map((s) => ({
-          studentId: s.id,
-          score: Number(scoresMap[s.id]),
-        }));
+    setSuccessMsg("");
+    
+    // In real app, we get teacherId from session. 
+    // Using 1 for MVP.
+    const teacherId = 1;
 
-      if (records.length === 0) {
-        alert("Masukkan minimal satu nilai.");
-        setSaving(false);
-        return;
-      }
-
-      const res = await fetch("/api/nilai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+    let successCount = 0;
+    for (const student of students) {
+      const g = grades[student.id];
+      if (g.score !== "") {
+        const res = await createGrade({
+          studentId: student.id,
           classId: Number(selectedClass),
           subjectId: Number(selectedSubject),
-          teacherId: session?.teacherId,
-          semester: "Ganjil",
-          type: gradeType,
-          records,
-        }),
-      });
-
-      if (!res.ok) throw new Error("Gagal menyimpan");
-      setSaved(true);
-    } catch {
-      alert("Gagal menyimpan nilai. Coba lagi.");
-    } finally {
-      setSaving(false);
+          teacherId: teacherId,
+          semester: selectedSemester,
+          type: selectedType,
+          score: Number(g.score),
+          notes: g.notes
+        });
+        if (res.success) successCount++;
+      }
     }
+    
+    setSaving(false);
+    setSuccessMsg(`Berhasil menyimpan ${successCount} data nilai.`);
+    
+    // Reset form after 3s
+    setTimeout(() => {
+      setSuccessMsg("");
+    }, 3000);
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Input Nilai</h2>
-          <p className="text-stone-500">Kelola dan masukkan nilai siswa untuk berbagai jenis evaluasi.</p>
-        </div>
-        <Button variant="outline" className="border-stone-200 w-full md:w-auto">
-          <UploadCloud className="mr-2 h-4 w-4" /> Import Nilai (Excel)
-        </Button>
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight text-stone-900">Input Nilai Akademik</h2>
+        <p className="text-stone-500">Masukkan nilai Formatif/Sumatif dan Capaian Pembelajaran.</p>
       </div>
 
-      <Card className="border-stone-100 shadow-sm bg-white">
-        <CardHeader className="pb-4 border-b border-stone-50">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label>Pilih Kelas</Label>
-              <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || "")}>
-                <SelectTrigger className="bg-stone-50 border-stone-200">
-                  <SelectValue placeholder="Pilih Kelas">
-                    {classes.find(c => c.id.toString() === selectedClass)?.name ? `Kelas ${classes.find(c => c.id.toString() === selectedClass)?.name}` : selectedClass || "Pilih Kelas"}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {classes.map((c) => (
-                    <SelectItem key={c.id} value={c.id.toString()}>Kelas {c.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Mata Pelajaran</Label>
-              <Select value={selectedSubject} onValueChange={(val) => setSelectedSubject(val || "")}>
-                <SelectTrigger className="bg-stone-50 border-stone-200">
-                  <SelectValue placeholder="Pilih Mapel">
-                    {subjects.find(s => s.id.toString() === selectedSubject)?.name || selectedSubject || "Pilih Mapel"}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {subjects.map((s) => (
-                    <SelectItem key={s.id} value={s.id.toString()}>{s.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Jenis Penilaian</Label>
-              <Select value={gradeType} onValueChange={(val) => setGradeType(val || "")}>
-                <SelectTrigger className="bg-stone-50 border-stone-200">
-                  <SelectValue placeholder="Pilih Jenis" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Tugas">Tugas Harian</SelectItem>
-                  <SelectItem value="Quiz">Quiz</SelectItem>
-                  <SelectItem value="UTS">Ujian Tengah Semester (UTS)</SelectItem>
-                  <SelectItem value="UAS">Ujian Akhir Semester (UAS)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="pt-6">
-          {!selectedClass ? (
-            <div className="flex items-center justify-center h-48 text-stone-400">
-              Pilih kelas untuk menampilkan daftar siswa.
-            </div>
-          ) : loading ? (
-            <div className="flex items-center justify-center h-48 text-stone-400">
-              <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data siswa...
-            </div>
-          ) : students.length === 0 ? (
-            <div className="flex items-center justify-center h-48 text-stone-400">
-              Tidak ada siswa di kelas ini.
+      <Card className="border-stone-100 shadow-sm">
+        <CardContent className="p-6">
+          {loadingConfig ? (
+            <div className="flex justify-center items-center h-20 text-stone-400">
+              <Loader2 className="h-6 w-6 animate-spin" />
             </div>
           ) : (
-            <>
-              <Table>
-                <TableHeader className="bg-stone-50">
-                  <TableRow>
-                    <TableHead className="w-[60px]">No</TableHead>
-                    <TableHead className="w-[120px]">NIS</TableHead>
-                    <TableHead>Nama Lengkap</TableHead>
-                    <TableHead className="w-[150px]">Nilai (0-100)</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {students.map((student, index) => (
-                    <TableRow key={student.id}>
-                      <TableCell className="font-medium text-stone-500">{index + 1}</TableCell>
-                      <TableCell className="text-stone-600">{student.nis}</TableCell>
-                      <TableCell className="font-semibold text-stone-900">{student.name}</TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={scoresMap[student.id] || ""}
-                          onChange={(e) => {
-                            setScoresMap((prev) => ({ ...prev, [student.id]: e.target.value }));
-                            setSaved(false);
-                          }}
-                          className="h-10 text-center font-medium border-stone-200 bg-white"
-                          placeholder="0"
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              <div className="mt-6 flex items-center justify-end gap-3">
-                {saved && (
-                  <span className="flex items-center text-sm text-teal-600 font-medium">
-                    <CheckCircle2 className="h-4 w-4 mr-1" /> Nilai tersimpan!
-                  </span>
-                )}
-                <Button
-                  className="bg-teal-600 hover:bg-teal-700 text-white h-10 px-8 rounded-full"
-                  onClick={handleSave}
-                  disabled={saving}
-                >
-                  {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                  Simpan Nilai
-                </Button>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <Label>Kelas</Label>
+                <Select value={selectedClass} onValueChange={(val) => setSelectedClass(val || "")}>
+                  <SelectTrigger><SelectValue placeholder="Pilih Kelas" /></SelectTrigger>
+                  <SelectContent>
+                    {classes.map(c => (
+                      <SelectItem key={c.id} value={c.id.toString()}>Kelas {c.level} - {c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-            </>
+              <div className="space-y-2">
+                <Label>Mata Pelajaran</Label>
+                <Select value={selectedSubject} onValueChange={(val) => setSelectedSubject(val || "")}>
+                  <SelectTrigger><SelectValue placeholder="Pilih Mapel" /></SelectTrigger>
+                  <SelectContent>
+                    {subjects.map(s => (
+                      <SelectItem key={s.id} value={s.id.toString()}>{s.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Jenis Penilaian</Label>
+                <Select value={selectedType} onValueChange={(val) => setSelectedType(val || "Formatif")}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Formatif">Formatif (Harian)</SelectItem>
+                    <SelectItem value="Sumatif">Sumatif (Ujian)</SelectItem>
+                    <SelectItem value="Proyek">Proyek (P5)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Semester</Label>
+                <Select value={selectedSemester} onValueChange={(val) => setSelectedSemester(val || "Ganjil")}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Ganjil">Ganjil</SelectItem>
+                    <SelectItem value="Genap">Genap</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>
+
+      {selectedClass && selectedSubject ? (
+        <Card className="border-stone-100 shadow-sm overflow-hidden">
+          <CardHeader className="bg-stone-50 border-b border-stone-100 flex flex-row items-center justify-between">
+            <h3 className="font-semibold text-stone-800 flex items-center">
+              <BookOpen className="mr-2 h-4 w-4 text-teal-600" />
+              Daftar Siswa
+            </h3>
+            <Button onClick={handleSaveAll} disabled={saving || students.length === 0} className="bg-teal-600 hover:bg-teal-700 text-white">
+              {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Simpan Semua
+            </Button>
+          </CardHeader>
+          <CardContent className="p-0">
+            {successMsg && (
+              <div className="m-4 p-3 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">
+                {successMsg}
+              </div>
+            )}
+            
+            {loadingStudents ? (
+              <div className="flex justify-center items-center h-40 text-stone-400">
+                <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat siswa...
+              </div>
+            ) : students.length === 0 ? (
+              <div className="p-8 text-center text-stone-500">
+                Belum ada siswa di kelas ini.
+              </div>
+            ) : (
+              <div className="divide-y divide-stone-100">
+                {students.map((student) => (
+                  <div key={student.id} className="p-4 md:p-6 hover:bg-stone-50/50 transition-colors">
+                    <div className="flex flex-col md:flex-row gap-6">
+                      <div className="md:w-1/3 flex items-start gap-3">
+                        <div className="bg-stone-100 p-2 rounded-full text-stone-400">
+                          <UserCircle2 className="h-8 w-8" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-stone-900">{student.name}</h4>
+                          <p className="text-xs text-stone-500">NIS: {student.nis}</p>
+                        </div>
+                      </div>
+                      <div className="md:w-2/3 grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="space-y-2 md:col-span-1">
+                          <Label className="text-xs text-stone-500">Nilai Angka (0-100)</Label>
+                          <Input 
+                            type="number" 
+                            placeholder="Cth: 85" 
+                            className="font-bold text-teal-700 text-lg"
+                            value={grades[student.id]?.score || ""}
+                            onChange={(e) => handleScoreChange(student.id, e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2 md:col-span-3">
+                          <Label className="text-xs text-stone-500">Deskripsi Capaian Pembelajaran</Label>
+                          <Textarea 
+                            placeholder="Cth: Ananda sangat baik dalam memahami konsep pecahan..."
+                            className="resize-none h-20 text-sm"
+                            value={grades[student.id]?.notes || ""}
+                            onChange={(e) => handleNotesChange(student.id, e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      ) : (
+        !loadingConfig && (
+          <div className="text-center py-12 text-stone-500 bg-stone-50 rounded-xl border border-dashed border-stone-200">
+            <BookOpen className="mx-auto h-12 w-12 text-stone-300 mb-4" />
+            <p className="text-lg font-medium text-stone-700">Pilih Kelas dan Mata Pelajaran</p>
+            <p className="text-sm mt-1">Silakan pilih filter di atas untuk mulai menginput nilai.</p>
+          </div>
+        )
+      )}
     </div>
   );
 }

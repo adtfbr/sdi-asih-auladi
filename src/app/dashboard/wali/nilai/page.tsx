@@ -1,202 +1,199 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Award, Download, TrendingUp, GraduationCap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2, FileText, BookOpen, Award, CheckCircle2 } from "lucide-react";
 
-interface Grade {
-  id: number;
-  subjectName: string;
-  teacherName: string;
-  score: number;
-  type: string;
-}
-
-export default function WaliNilaiPage() {
-  const [grades, setGrades] = useState<Grade[]>([]);
+export default function NilaiRaporPage() {
+  const [students, setStudents] = useState<any[]>([]);
+  const [grades, setGrades] = useState<any[]>([]);
+  const [tahfidz, setTahfidz] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [session, setSession] = useState<{studentId?: number} | null>(null);
+  const [activeStudent, setActiveStudent] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch('/api/auth/session')
-      .then(res => res.ok ? res.json() : null)
+    fetch("/api/wali/rapor")
+      .then(res => res.json())
       .then(data => {
-        if (data) setSession(data);
-      })
-      .catch(() => {});
+        if (data.students) {
+          setStudents(data.students);
+          if (data.students.length > 0) {
+            setActiveStudent(data.students[0].id);
+          }
+        }
+        if (data.grades) setGrades(data.grades);
+        if (data.tahfidz) setTahfidz(data.tahfidz);
+        setLoading(false);
+      });
   }, []);
 
-  useEffect(() => {
-    if (!session?.studentId) return;
-    setLoading(true);
-    const url = `/api/nilai?studentId=${session.studentId}`;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-200px)] text-stone-400">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => setGrades(Array.isArray(data) ? data : []))
-      .finally(() => setLoading(false));
-  }, [session?.studentId]);
+  if (students.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-200px)] text-stone-400">
+        <p>Data siswa tidak ditemukan.</p>
+      </div>
+    );
+  }
 
-  // Group grades by subject
-  const subjectMap = new Map<string, { subject: string; teacher: string; grades: Record<string, number> }>();
-  grades.forEach((g) => {
-    const key = g.subjectName || "Unknown";
-    if (!subjectMap.has(key)) {
-      subjectMap.set(key, { subject: key, teacher: g.teacherName || "-", grades: {} });
-    }
-    subjectMap.get(key)!.grades[g.type] = g.score;
-  });
+  const studentGrades = grades.filter(g => g.studentId === activeStudent);
+  const studentTahfidz = tahfidz.filter(t => t.studentId === activeStudent);
 
-  const subjectList = Array.from(subjectMap.values()).map((entry) => {
-    const scores = Object.values(entry.grades);
-    const average = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
-    return { ...entry, average };
-  });
-
-  const overallAvg = subjectList.length > 0
-    ? subjectList.reduce((a, b) => a + b.average, 0) / subjectList.length
-    : 0;
-
-  const bestSubject = subjectList.reduce(
-    (best, curr) => (curr.average > best.average ? curr : best),
-    { subject: "-", average: 0 } as { subject: string; average: number }
-  );
+  // Pisahkan nilai akademik berdasarkan mata pelajaran
+  const subjectsSet = new Set(studentGrades.map(g => g.subjectName));
+  const subjectsArray = Array.from(subjectsSet);
 
   return (
     <div className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-stone-900">Nilai Akademik Anak</h2>
-          <p className="text-stone-500">Pantau perkembangan akademik anak Anda.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Select defaultValue="semester-ganjil">
-            <SelectTrigger className="w-[180px] bg-white border-stone-200">
-              <SelectValue placeholder="Pilih Semester" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="semester-ganjil">Semester Ganjil 2026</SelectItem>
-              <SelectItem value="semester-genap-25">Semester Genap 2025</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant="outline" className="border-stone-200 bg-white text-sky-600 hover:text-sky-700 hover:bg-sky-50">
-            <Download className="mr-2 h-4 w-4" /> Download PDF
-          </Button>
-        </div>
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight text-stone-900">Rapor & Tahfidz</h2>
+        <p className="text-stone-500">Pantau perkembangan akademik Kurikulum Merdeka dan hafalan Al-Quran.</p>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-sky-600 to-indigo-700 text-white border-none shadow-md">
-          <CardContent className="p-6 flex flex-col justify-between h-full">
-            <div className="flex justify-between items-start mb-4">
-              <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-                <GraduationCap className="h-6 w-6 text-white" />
+      {students.length > 1 && (
+        <div className="flex gap-2 pb-2 overflow-x-auto">
+          {students.map(s => (
+            <Button 
+              key={s.id} 
+              variant={activeStudent === s.id ? "default" : "outline"}
+              className={activeStudent === s.id ? "bg-teal-600 hover:bg-teal-700" : ""}
+              onClick={() => setActiveStudent(s.id)}
+            >
+              <UserIcon className="mr-2 h-4 w-4" /> {s.name}
+            </Button>
+          ))}
+        </div>
+      )}
+
+      <Tabs defaultValue="akademik" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 max-w-md bg-stone-100 p-1 rounded-xl">
+          <TabsTrigger value="akademik" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-teal-700 data-[state=active]:shadow-sm">
+            <FileText className="mr-2 h-4 w-4" /> Rapor Akademik
+          </TabsTrigger>
+          <TabsTrigger value="tahfidz" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-teal-700 data-[state=active]:shadow-sm">
+            <BookOpen className="mr-2 h-4 w-4" /> Mutaba&apos;ah Tahfidz
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="akademik" className="mt-6 space-y-6">
+          {studentGrades.length === 0 ? (
+            <Card className="border-stone-100 shadow-sm bg-stone-50/50">
+              <CardContent className="p-12 text-center text-stone-500">
+                <FileText className="mx-auto h-12 w-12 text-stone-300 mb-4" />
+                <p>Belum ada nilai akademik yang diinput oleh Guru.</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {subjectsArray.map(subj => {
+                const subjGrades = studentGrades.filter(g => g.subjectName === subj);
+                return (
+                  <Card key={subj} className="border-stone-200 shadow-sm overflow-hidden flex flex-col">
+                    <CardHeader className="bg-stone-50 border-b border-stone-100 p-4">
+                      <h3 className="font-bold text-lg text-stone-800">{subj}</h3>
+                    </CardHeader>
+                    <CardContent className="p-0 flex-1 divide-y divide-stone-100">
+                      {subjGrades.map((g, idx) => (
+                        <div key={idx} className="p-4 bg-white hover:bg-stone-50 transition-colors">
+                          <div className="flex justify-between items-start mb-2">
+                            <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200">
+                              {g.type}
+                            </Badge>
+                            <div className="text-2xl font-black text-stone-900">{Number(g.score)}</div>
+                          </div>
+                          {g.notes && (
+                            <div className="text-sm text-stone-600 bg-stone-50 p-3 rounded-lg mt-2 border border-stone-100 leading-relaxed italic">
+                              &quot;{g.notes}&quot;
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="tahfidz" className="mt-6">
+          {studentTahfidz.length === 0 ? (
+            <Card className="border-stone-100 shadow-sm bg-stone-50/50">
+              <CardContent className="p-12 text-center text-stone-500">
+                <BookOpen className="mx-auto h-12 w-12 text-stone-300 mb-4" />
+                <p>Belum ada rekaman setoran hafalan Tahfidz.</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
+              <div className="bg-emerald-50 border-b border-emerald-100 p-4 sm:p-6 flex items-start gap-4">
+                <div className="bg-emerald-100 p-3 rounded-full text-emerald-600 shrink-0">
+                  <Award className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-stone-900 leading-tight">Capaian Hafalan Terakhir</h3>
+                  <p className="text-stone-600 text-sm mt-1">
+                    Ananda terakhir menyetorkan <strong className="text-emerald-700">{studentTahfidz[0].surah} ayat {studentTahfidz[0].ayat}</strong> dengan predikat <strong className="text-emerald-700">{studentTahfidz[0].predicate}</strong>.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="divide-y divide-stone-100">
+                {studentTahfidz.map((t, idx) => (
+                  <div key={idx} className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-stone-50">
+                    <div>
+                      <div className="text-sm font-medium text-stone-500 mb-1">{new Date(t.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                      <h4 className="font-bold text-stone-900 text-lg">Surat {t.surah}</h4>
+                      <p className="text-stone-600">Ayat {t.ayat}</p>
+                      {t.notes && <p className="text-sm text-stone-500 mt-2 bg-stone-100 inline-block px-3 py-1 rounded-md">Catatan: {t.notes}</p>}
+                    </div>
+                    <div className="shrink-0">
+                      <Badge className={`text-sm px-4 py-1.5 ${
+                        t.predicate === 'Mumtaz' ? 'bg-emerald-500 hover:bg-emerald-600' :
+                        t.predicate === 'Jayyid Jiddan' ? 'bg-teal-500 hover:bg-teal-600' :
+                        t.predicate === 'Jayyid' ? 'bg-sky-500 hover:bg-sky-600' :
+                        'bg-amber-500 hover:bg-amber-600'
+                      }`}>
+                        {t.predicate}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            <div>
-              <div className="text-3xl font-bold">{overallAvg.toFixed(1)}</div>
-              <div className="text-sky-100 font-medium mt-1">Nilai Rata-rata Anak</div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white border-stone-100 shadow-sm">
-          <CardContent className="p-6 flex items-center gap-4 h-full">
-            <div className="h-12 w-12 rounded-xl bg-teal-100 flex items-center justify-center text-teal-600 shrink-0">
-              <TrendingUp className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="text-sm font-medium text-stone-500">Perkembangan Terbaik</div>
-              <div className="text-lg font-bold text-stone-900 line-clamp-1">{bestSubject.subject}</div>
-              <div className="text-xs text-teal-600 font-medium mt-0.5">Nilai: {bestSubject.average.toFixed(1)}</div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white border-stone-100 shadow-sm">
-          <CardContent className="p-6 flex items-center gap-4 h-full">
-            <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
-              <Award className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="text-sm font-medium text-stone-500">Total Mata Pelajaran</div>
-              <div className="text-2xl font-bold text-stone-900">{subjectList.length}</div>
-              <div className="text-xs text-stone-500 mt-0.5">Semester Ganjil</div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card className="border-stone-100 shadow-sm bg-white overflow-hidden">
-        <CardHeader className="bg-stone-50/50 border-b border-stone-100 pb-4">
-          <CardTitle className="text-lg text-stone-900">Daftar Nilai per Mata Pelajaran</CardTitle>
-          <CardDescription>Berdasarkan rentang nilai 0-100. KKM: 75.</CardDescription>
-        </CardHeader>
-        <CardContent className="p-0">
-          {loading ? (
-            <div className="flex items-center justify-center h-48 text-stone-400">
-              <Loader2 className="h-6 w-6 animate-spin mr-2" /> Memuat data...
-            </div>
-          ) : subjectList.length === 0 ? (
-            <div className="flex items-center justify-center h-48 text-stone-400">
-              Belum ada data nilai.
-            </div>
-          ) : (
-            <Table>
-              <TableHeader className="bg-stone-50">
-                <TableRow>
-                  <TableHead className="w-[280px]">Mata Pelajaran</TableHead>
-                  <TableHead className="text-center">Tugas</TableHead>
-                  <TableHead className="text-center">Quiz</TableHead>
-                  <TableHead className="text-center">UTS</TableHead>
-                  <TableHead className="text-center">UAS</TableHead>
-                  <TableHead className="text-right">Rata-rata</TableHead>
-                  <TableHead className="text-center">Predikat</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {subjectList.map((entry, idx) => (
-                  <TableRow key={idx} className="hover:bg-stone-50/50">
-                    <TableCell>
-                      <div className="font-semibold text-stone-900">{entry.subject}</div>
-                      <div className="text-xs text-stone-500 mt-1">Guru: {entry.teacher}</div>
-                    </TableCell>
-                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["Tugas"] ?? "-"}</TableCell>
-                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["Quiz"] ?? "-"}</TableCell>
-                    <TableCell className="text-center font-medium text-stone-700">{entry.grades["UTS"] ?? "-"}</TableCell>
-                    <TableCell className="text-center text-stone-400">{entry.grades["UAS"] ?? "-"}</TableCell>
-                    <TableCell className={`text-right font-bold ${entry.average < 75 ? "text-rose-600" : "text-stone-900"}`}>
-                      {entry.average.toFixed(1)}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge
-                        variant="outline"
-                        className={
-                          entry.average >= 90
-                            ? "bg-teal-50 text-teal-700 border-teal-200"
-                            : entry.average >= 80
-                            ? "bg-sky-50 text-sky-700 border-sky-200"
-                            : entry.average >= 75
-                            ? "bg-amber-50 text-amber-700 border-amber-200"
-                            : "bg-rose-50 text-rose-700 border-rose-200"
-                        }
-                      >
-                        {entry.average >= 90 ? "A (Sangat Baik)" : entry.average >= 80 ? "B (Baik)" : entry.average >= 75 ? "C (Cukup)" : "D (Kurang)"}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
           )}
-        </CardContent>
-      </Card>
+        </TabsContent>
+      </Tabs>
     </div>
+  );
+}
+
+function UserIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="8" r="5" />
+      <path d="M20 21a8 8 0 0 0-16 0" />
+    </svg>
   );
 }

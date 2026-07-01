@@ -205,3 +205,15 @@ export const invoices = pgTable('invoices', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+export const tahfidzRecords = pgTable('tahfidz_records', {
+  id: serial('id').primaryKey(),
+  studentId: integer('student_id').references(() => students.id).notNull(),
+  teacherId: integer('teacher_id').references(() => teachers.id).notNull(),
+  surah: varchar('surah', { length: 100 }).notNull(),
+  ayat: varchar('ayat', { length: 50 }).notNull(),
+  predicate: varchar('predicate', { length: 50 }).notNull(), // Mumtaz, Jayyid Jiddan, Jayyid, Maqbul
+  date: date('date').notNull(),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow(),
+});
