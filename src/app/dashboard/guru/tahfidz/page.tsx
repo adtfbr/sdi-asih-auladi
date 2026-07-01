@@ -70,7 +70,6 @@ export default function GuruTahfidzPage() {
     setSuccessMsg("");
     
     // In real app, get teacherId from session.
-    const teacherId = 1;
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
     let successCount = 0;
@@ -79,7 +78,6 @@ export default function GuruTahfidzPage() {
       if (rec.surah !== "" && rec.predicate !== "") {
         const res = await createTahfidzRecord({
           studentId: student.id,
-          teacherId: teacherId,
           surah: rec.surah,
           ayat: rec.ayat,
           predicate: rec.predicate,

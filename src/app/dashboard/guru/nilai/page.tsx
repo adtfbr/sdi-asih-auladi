@@ -82,10 +82,6 @@ export default function GuruNilaiPage() {
     setSaving(true);
     setSuccessMsg("");
     
-    // In real app, we get teacherId from session. 
-    // Using 1 for MVP.
-    const teacherId = 1;
-
     let successCount = 0;
     for (const student of students) {
       const g = grades[student.id];
@@ -94,7 +90,6 @@ export default function GuruNilaiPage() {
           studentId: student.id,
           classId: Number(selectedClass),
           subjectId: Number(selectedSubject),
-          teacherId: teacherId,
           semester: selectedSemester,
           type: selectedType,
           score: Number(g.score),

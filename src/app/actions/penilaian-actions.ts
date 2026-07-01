@@ -5,22 +5,33 @@ import { grades, tahfidzRecords } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
+import { cookies } from "next/headers";
+import { teachers } from "@/db/schema";
+
 export async function createGrade(data: {
   studentId: number;
   classId: number;
   subjectId: number;
-  teacherId: number;
   semester: string;
   type: string; // Formatif, Sumatif
   score: number;
   notes: string;
 }) {
   try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("auth_session");
+    if (!sessionCookie) throw new Error("Unauthorized");
+    const sessionData = JSON.parse(sessionCookie.value);
+    
+    const teacherProfile = await db.select().from(teachers).where(eq(teachers.userId, sessionData.id)).limit(1);
+    if (teacherProfile.length === 0) throw new Error("Teacher profile not found");
+    const teacherId = teacherProfile[0].id;
+
     await db.insert(grades).values({
       studentId: data.studentId,
       classId: data.classId,
       subjectId: data.subjectId,
-      teacherId: data.teacherId,
+      teacherId: teacherId,
       semester: data.semester,
       type: data.type,
       score: data.score.toString(),
@@ -37,7 +48,6 @@ export async function createGrade(data: {
 
 export async function createTahfidzRecord(data: {
   studentId: number;
-  teacherId: number;
   surah: string;
   ayat: string;
   predicate: string;
@@ -45,9 +55,18 @@ export async function createTahfidzRecord(data: {
   notes: string;
 }) {
   try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("auth_session");
+    if (!sessionCookie) throw new Error("Unauthorized");
+    const sessionData = JSON.parse(sessionCookie.value);
+    
+    const teacherProfile = await db.select().from(teachers).where(eq(teachers.userId, sessionData.id)).limit(1);
+    if (teacherProfile.length === 0) throw new Error("Teacher profile not found");
+    const teacherId = teacherProfile[0].id;
+
     await db.insert(tahfidzRecords).values({
       studentId: data.studentId,
-      teacherId: data.teacherId,
+      teacherId: teacherId,
       surah: data.surah,
       ayat: data.ayat,
       predicate: data.predicate,
